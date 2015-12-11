@@ -353,7 +353,7 @@ class eWayConnector {
           'AppVersion' => $this->appVersion
        );
        $jsonObject = json_encode($login, true);
-       $ch = $this->createPostRequest($this->webServiceAddress. "/Login", $jsonObject);
+       $ch = $this->createPostRequest($this->createSessionUrlAction("Login"), $jsonObject);
        $jsonResult = json_decode(curl_exec($ch));
        $returnCode = $jsonResult->ReturnCode;
        // Login failed, return empty session id
@@ -365,10 +365,7 @@ class eWayConnector {
    
    private function createSessionUrlAction($action)
    {       
-       $actionUrl = sprintf(
-                       "%s?sessionId=%s",
-                       $action,
-                       $this->sessionId);
+       $actionUrl = sprintf("%s", $action);
        
        return $this->createWebServiceUrl($actionUrl);
    }
@@ -395,10 +392,22 @@ class eWayConnector {
         
    private function postRequest($action, $transmitObject)
    {
-      
+       if (empty($this->sessionId))
+       {
+           $this->reloginAndSaveSessionId();
+       }
        $url = $this->createSessionUrlAction($action);
-       $jsonObject = json_encode($transmitObject, true);
-
+       if(strpos($action, "Get") !== false){
+          $completeObjectWithSessionID = array(
+             "sessionId" => $this->sessionId
+          );
+       }else{
+          $completeObjectWithSessionID = array(
+             "sessionId" => $this->sessionId,
+             "transmitObject" => $transmitObject
+          );
+       }
+       $jsonObject = json_encode($completeObjectWithSessionID, true);
        $ch = $this->createPostRequest($url, $jsonObject);
       
        return $this->doRequest($ch, $action);
@@ -419,10 +428,8 @@ class eWayConnector {
        $result = curl_exec($ch);
        //$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
          
-       $jsonResult = json_decode($result);
-       $returnCode = $jsonResult->ReturnCode;
-      
-           
+       $jsonResult = json_decode($result,true);
+       $returnCode = $jsonResult['SaveContactResult'];
        // Session timed out, re-log again
        if ($returnCode == 'rcBadSession')
        {
@@ -462,8 +469,7 @@ class eWayConnector {
    private function reloginAndSaveSessionId()
    {
        $sessionId = $this->relogin();
-            
-        if (empty($sessionId))
+        if (empty($sessionId) && empty($this->sessionId))
             throw new Exception('Log in failed, please check your username and password');
 
         // Save this sessionId for next time
