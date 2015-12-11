@@ -8,10 +8,8 @@
  */
 class eWayConnector {
     
-   private $appVersion = 'PHP1.0';
-    
+   private $appVersion = 'PHP1.0';    
    private $sessionId;
-   
    private $webServiceAddress;
    private $username;
    private $passwordHash;
@@ -349,20 +347,19 @@ class eWayConnector {
    
    private function relogin()
    {
-       $action = sprintf(
-           "LogIn?userName=%s&password=%s&appVersion=%s",
-           $this->username,
-           $this->passwordHash,
-           $this->appVersion);
-       
-       $ch = $this->createPostRequest($this->createWebServiceUrl($action));
+       $login = array(
+          'UserName' => $this->username,
+          'PasswordHash' => $this->passwordHash,
+          'AppVersion' => $this->appVersion
+       );
+       $jsonObject = json_encode($login, true);
+       $ch = $this->createPostRequest($this->webServiceAddress. "/Login", $jsonObject);
        $jsonResult = json_decode(curl_exec($ch));
        $returnCode = $jsonResult->ReturnCode;
-       
        // Login failed, return empty session id
-       if ($returnCode != 'rcSuccess')
+       if ($returnCode != 'rcSuccess'){
            return '';
-       
+         }
        return $jsonResult->SessionId;
    }
    
@@ -395,27 +392,15 @@ class eWayConnector {
        $paths = array_filter($paths);
        return join('/', $paths);
    }
-    
-   private function getRequest($action)
-   {
-       $url = $this->createSessionUrlAction($action);
-       $ch = $this->createGetRequest($url);
-       return $this->doRequest($ch, $action);
-   }
-    
+        
    private function postRequest($action, $transmitObject)
    {
       
        $url = $this->createSessionUrlAction($action);
        $jsonObject = json_encode($transmitObject, true);
-     
-       //print($jsonObject);
-       // Set POST type request
-       $ch = $this->createGetRequest($url);
-    
-       curl_setopt($ch,CURLOPT_POST, true);
-       curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
-       
+
+       $ch = $this->createPostRequest($url, $jsonObject);
+      
        return $this->doRequest($ch, $action);
    }
     
@@ -458,20 +443,8 @@ class eWayConnector {
        
        return $jsonResult;
    }
-    
-   private function createGetRequest($url)
-   {       
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Accept: application/json'));
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        
-        return $ch;
-   }
    
-    private function createPostRequest($url)
+   private function createPostRequest($url, $jsonObject)
    {       
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -479,7 +452,7 @@ class eWayConnector {
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Accept: application/json'));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch,CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
         
         return $ch;
