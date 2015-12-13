@@ -427,9 +427,8 @@ class eWayConnector {
         
        $result = curl_exec($ch);
        //$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-         
-       $jsonResult = json_decode($result,true);
-       $returnCode = $jsonResult['SaveContactResult'];
+       $jsonResult = json_decode($result);
+       $returnCode = $jsonResult->SaveContactResult->ReturnCode;
        // Session timed out, re-log again
        if ($returnCode == 'rcBadSession')
        {
