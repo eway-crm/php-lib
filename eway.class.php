@@ -464,3 +464,4 @@ class eWayConnector
         $this->sessionId = $sessionId;
     }
 }
+?>
