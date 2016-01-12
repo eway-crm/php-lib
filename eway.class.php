@@ -20,11 +20,12 @@ class eWayConnector
      * @param $webServiceAddress Address of web service
      * @param $username User name
      * @param $password Plain password
+     * @param $passwordAlreadyEncrypted - if true, user already encrypted password
      * @throws Exception If web service address is empty
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password)
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = true)
     {
         if (empty($webServiceAddress))
             throw new Exception('Empty web service address');
@@ -37,7 +38,11 @@ class eWayConnector
 
         $this->webServiceAddress = $webServiceAddress;
         $this->username = $username;
-        $this->passwordHash = md5($password);
+
+        if ($passwordAlreadyEncrypted)
+            $this->passwordHash = md5($password);
+        else
+            $this->passwordHash = $password;
     }
 
     /**
@@ -352,7 +357,6 @@ class eWayConnector
             'passwordHash' => $this->passwordHash,
             'appVersion' => $this->appVersion
         );
-
         $jsonObject = json_encode($login, true);
         $ch = $this->createPostRequest($this->createWebServiceUrl("Login"), $jsonObject);
         $jsonResult = json_decode(curl_exec($ch));
@@ -417,11 +421,11 @@ class eWayConnector
             // Create URL again with new sessionId
             curl_setopt($ch, CURLOPT_URL, $this->createSessionUrlAction($action));
         }
-
+        
         $result = curl_exec($ch);
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
-		
+        
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
             $this->reLoginAndSaveSessionId();
@@ -450,7 +454,6 @@ class eWayConnector
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
-
         return $ch;
     }
 
