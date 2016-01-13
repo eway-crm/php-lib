@@ -25,7 +25,7 @@ class eWayConnector
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = true)
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false)
     {
         if (empty($webServiceAddress))
             throw new Exception('Empty web service address');
@@ -40,9 +40,9 @@ class eWayConnector
         $this->username = $username;
 
         if ($passwordAlreadyEncrypted)
-            $this->passwordHash = md5($password);
-        else
             $this->passwordHash = $password;
+        else
+            $this->passwordHash = md5($password);
     }
 
     /**
