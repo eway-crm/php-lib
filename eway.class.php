@@ -128,6 +128,47 @@ class eWayConnector
     }
 
     /**
+     * Gets all projects
+     *
+     * @return Json format with all projects
+     */
+    public function getProjects()
+    {
+        return $this->postRequest('GetProjects');
+    }
+
+    /**
+     * Searches projects
+     *
+     * @param $projects Array with specified properties for search
+     * @throws Exception If project is empty
+     * @return Json format with found projects
+     */
+    public function searchProjects($project)
+    {
+        if (empty($project))
+            throw new Exception('Empty project');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchProjects', $project);
+    }
+
+    /**
+     * Saves project
+     *
+     * @param $project project array data to save
+     * @throws Exception If project is empty
+     * @return Json format with successful response
+     */
+    public function saveProject($project)
+    {
+        if (empty($project))
+            throw new Exception('Empty Project');
+
+        return $this->postRequest('SaveProject', $project);
+    }
+
+    /**
      * Saves lead
      *
      * @param $lead Lead array data to save
@@ -269,6 +310,62 @@ class eWayConnector
     }
 
     /**
+     * Saves relation between project and contact
+     *
+     * @param $projectGUID Project GUID identification
+     * @param $contactGUID Contact GUID identification
+     * @throws Exception If projectGUID is empty
+     * @throws Exception If contactGUID is empty
+     * @return Json format with successful response
+     */
+    public function saveProjectContactPersonRelation($projectGUID, $contactGUID)
+    {
+        if (empty($projectGUID))
+            throw new Exception('Empty projectGUID');
+
+        if (empty($contactGUID))
+            throw new Exception('Empty contactGUID');
+
+        $relation = array(
+            'ItemGUID1' => $projectGUID,
+            'ItemGUID2' => $contactGUID,
+            'FolderName1' => 'Projects',
+            'FolderName2' => 'Contacts',
+            'RelationType' => 'CONTACTPERSON',
+            'DifferDirection' => 1);
+
+        $this->saveRelation($relation);
+    }
+
+    /**
+     * Saves relation between project and company
+     *
+     * @param $projectGUID Project GUID identification
+     * @param $companyGUID Company GUID identification
+     * @throws Exception If projectGUID is empty
+     * @throws Exception If companyGUID is empty
+     * @return Json format with successful response
+     */
+    public function saveProjectCustomerRelation($projectGUID, $companyGUID)
+    {
+        if (empty($projectGUID))
+            throw new Exception('Empty projectGUID');
+
+        if (empty($companyGUID))
+            throw new Exception('Empty contactGUID');
+
+        $relation = array(
+            'ItemGUID1' => $projectGUID,
+            'ItemGUID2' => $companyGUID,
+            'FolderName1' => 'Projects',
+            'FolderName2' => 'Companies',
+            'RelationType' => 'CUSTOMER',
+            'DifferDirection' => 1);
+
+        $this->saveRelation($relation);
+    }
+
+    /**
      * Gets all groups
      *
      * @return Json format with all groups
@@ -350,6 +447,21 @@ class eWayConnector
         return $this->postRequest('SaveJournal', $journal);
     }
 
+    /**
+     * Formats date and time for the API calls
+     *
+     * @param $date Date to be formatted
+     * @throws Exception If date is empty
+     * @return Formatted date and time as string
+     */
+    public function formatDate($date)
+    {
+        if (empty($date))
+            throw new Exception('Empty date');
+
+        return date('Y-m-d H:i:s', $date);
+    }
+
     private function reLogin()
     {
         $login = array(
@@ -358,7 +470,7 @@ class eWayConnector
             'appVersion' => $this->appVersion
         );
         $jsonObject = json_encode($login, true);
-        $ch = $this->createPostRequest($this->createWebServiceUrl("Login"), $jsonObject);
+        $ch = $this->createPostRequest($this->createWebServiceUrl('Login'), $jsonObject);
         $jsonResult = json_decode(curl_exec($ch));
         $returnCode = $jsonResult->ReturnCode;
 
@@ -397,12 +509,12 @@ class eWayConnector
         $url = $this->createWebServiceUrl($action);
         if ($transmitObject == null) {
             $completeTransmitObject = array(
-                "sessionId" => $this->sessionId
+                'sessionId' => $this->sessionId
             );
         } else {
             $completeTransmitObject = array(
-                "sessionId" => $this->sessionId,
-                "transmitObject" => $transmitObject
+                'sessionId' => $this->sessionId,
+                'transmitObject' => $transmitObject
             );
         }
 
