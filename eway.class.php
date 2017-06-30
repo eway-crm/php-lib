@@ -469,16 +469,18 @@ class eWayConnector
             'passwordHash' => $this->passwordHash,
             'appVersion' => $this->appVersion
         );
+
         $jsonObject = json_encode($login, true);
         $ch = $this->createPostRequest($this->createWebServiceUrl('Login'), $jsonObject);
         $jsonResult = json_decode(curl_exec($ch));
         $returnCode = $jsonResult->ReturnCode;
 
-        // Login failed, return empty session id
         if ($returnCode != 'rcSuccess') {
-            return '';
+            throw new Exception('Login failed: '.$jsonResult->Description);
         }
-        return $jsonResult->SessionId;
+
+        // Save this sessionId for next time
+        $this->sessionId = $jsonResult->SessionId;
     }
 
     private function createWebServiceUrl($action)
@@ -503,7 +505,7 @@ class eWayConnector
     private function postRequest($action, $transmitObject = null)
     {
         if (empty($this->sessionId)) {
-            $this->reLoginAndSaveSessionId();
+            $this->reLogin();
         }
 
         $url = $this->createWebServiceUrl($action);
@@ -528,7 +530,7 @@ class eWayConnector
     {
         // This is first request, login before
         if (empty($this->sessionId)) {
-            $this->reLoginAndSaveSessionId();
+            $this->reLogin();
 
             // Create URL again with new sessionId
             curl_setopt($ch, CURLOPT_URL, $this->createSessionUrlAction($action));
@@ -540,7 +542,7 @@ class eWayConnector
         
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
-            $this->reLoginAndSaveSessionId();
+            $this->reLogin();
 
             // Create URL again with new sessionId
             curl_setopt($ch, CURLOPT_URL, $this->createSessionUrlAction($action));
@@ -567,16 +569,6 @@ class eWayConnector
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
         return $ch;
-    }
-
-    private function reLoginAndSaveSessionId()
-    {
-        $sessionId = $this->reLogin();
-        if (empty($sessionId) && empty($this->sessionId))
-            throw new Exception('Log in failed, please check your username and password');
-
-        // Save this sessionId for next time
-        $this->sessionId = $sessionId;
     }
 }
 ?>
