@@ -507,8 +507,7 @@ class eWayConnector
         if (empty($this->sessionId)) {
             $this->reLogin();
         }
-
-        $url = $this->createWebServiceUrl($action);
+  
         if ($transmitObject == null) {
             $completeTransmitObject = array(
                 'sessionId' => $this->sessionId
@@ -520,42 +519,41 @@ class eWayConnector
             );
         }
 
-        $jsonObject = json_encode($completeTransmitObject, true);
-        $ch = $this->createPostRequest($url, $jsonObject);
-
-        return $this->doRequest($ch, $action);
+        return $this->doRequest($completeTransmitObject, $action);
     }
 
-    private function doRequest($ch, $action)
+    private function doRequest($completeTransmitObject, $action)
     {
         // This is first request, login before
         if (empty($this->sessionId)) {
             $this->reLogin();
+			
+			$completeTransmitObject['sessionId'] = $this->sessionId;
 
-            // Create URL again with new sessionId
-            curl_setopt($ch, CURLOPT_URL, $this->createSessionUrlAction($action));
+			return $this->doRequest($completeTransmitObject, $action);
         }
         
+		$url = $this->createWebServiceUrl($action);
+		$jsonObject = json_encode($completeTransmitObject, true);
+		$ch = $this->createPostRequest($url, $jsonObject);
+		
         $result = curl_exec($ch);
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
-        
+
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
             $this->reLogin();
 
-            // Create URL again with new sessionId
-            curl_setopt($ch, CURLOPT_URL, $this->createSessionUrlAction($action));
+			$completeTransmitObject['sessionId'] = $this->sessionId;
         }
 
-        // For these types of return code we'll try to perform action once again
-        if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
-            // Perform action again
-            $result = curl_exec($ch);
-            $jsonResult = json_decode($result);
+        if ($returnCode != 'rcBadSession' && $returnCode != 'rcDatabaseTimeout') {
+			return $jsonResult;
         }
-
-        return $jsonResult;
+		
+		// For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
+		return $this->doRequest($completeTransmitObject, $action);
     }
 
     private function createPostRequest($url, $jsonObject)
