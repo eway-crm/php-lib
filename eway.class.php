@@ -13,6 +13,7 @@ class eWayConnector
     private $webServiceAddress;
     private $username;
     private $passwordHash;
+    private $dieOnItemConflict;
 
     /**
      * Initialize eWayConnector class
@@ -21,11 +22,12 @@ class eWayConnector
      * @param $username User name
      * @param $password Plain password
      * @param $passwordAlreadyEncrypted - if true, user already encrypted password
+     * @param $dieOnItemConflict If true, throws rcItemConflict when item has been changed before saving, if false, merges data 
      * @throws Exception If web service address is empty
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false)
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false)
     {
         if (empty($webServiceAddress))
             throw new Exception('Empty web service address');
@@ -38,6 +40,7 @@ class eWayConnector
 
         $this->webServiceAddress = $webServiceAddress;
         $this->username = $username;
+        $this->dieOnItemConflict = $dieOnItemConflict;
 
         if ($passwordAlreadyEncrypted)
             $this->passwordHash = $password;
@@ -46,44 +49,18 @@ class eWayConnector
     }
 
     /**
-     * Gets all contacts
+     * Saves cart
      *
-     * @return Json format with all contacts
-     */
-    public function getContacts()
-    {
-        return $this->postRequest('GetContacts');
-    }
-
-    /**
-     * Searches contacts
-     *
-     * @param $contact Array with specified properties for search
-     * @throws Exception If contact is empty
-     * @return Json format with found contacts
-     */
-    public function searchContacts($contact)
-    {
-        if (empty($contact))
-            throw new Exception('Empty contact');
-
-        // Any search request is defined as POST
-        return $this->postRequest('SearchContacts', $contact);
-    }
-
-    /**
-     * Saves contacts
-     *
-     * @param $contact Contact array data to save
-     * @throws Exception If contact is empty
+     * @param $cart Cart array data to save
+     * @throws Exception If vart is empty
      * @return Json format with successful response
      */
-    public function saveContact($contact)
+    public function saveCart($cart)
     {
-        if (empty($contact))
-            throw new Exception('Empty contact');
+        if (empty($cart))
+            throw new Exception('Empty cart');
 
-        return $this->postRequest('SaveContact', $contact);
+        return $this->postRequest('SaveCart', $cart);
     }
 
     /**
@@ -128,241 +105,167 @@ class eWayConnector
     }
 
     /**
-     * Gets all projects
+     * Gets all contacts
      *
-     * @return Json format with all projects
+     * @return Json format with all contacts
      */
-    public function getProjects()
+    public function getContacts()
     {
-        return $this->postRequest('GetProjects');
+        return $this->postRequest('GetContacts');
     }
 
     /**
-     * Searches projects
+     * Searches contacts
      *
-     * @param $projects Array with specified properties for search
-     * @throws Exception If project is empty
-     * @return Json format with found projects
+     * @param $contact Array with specified properties for search
+     * @throws Exception If contact is empty
+     * @return Json format with found contacts
      */
-    public function searchProjects($project)
+    public function searchContacts($contact)
     {
-        if (empty($project))
-            throw new Exception('Empty project');
+        if (empty($contact))
+            throw new Exception('Empty contact');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchProjects', $project);
+        return $this->postRequest('SearchContacts', $contact);
     }
 
     /**
-     * Saves project
+     * Saves contact
      *
-     * @param $project project array data to save
-     * @throws Exception If project is empty
+     * @param $contact Contact array data to save
+     * @throws Exception If contact is empty
      * @return Json format with successful response
      */
-    public function saveProject($project)
+    public function saveContact($contact)
     {
-        if (empty($project))
-            throw new Exception('Empty Project');
+        if (empty($contact))
+            throw new Exception('Empty contact');
 
-        return $this->postRequest('SaveProject', $project);
+        return $this->postRequest('SaveContact', $contact);
     }
 
     /**
-     * Saves lead
+     * Gets all documents
      *
-     * @param $lead Lead array data to save
-     * @throws Exception If lead is empty
-     * @return Json format with successful response
+     * @return Json format with all documents
      */
-    public function saveLead($lead)
+    public function getDocuments()
     {
-        if (empty($lead))
-            throw new Exception('Empty company');
-
-        return $this->postRequest('SaveLead', $lead);
+        return $this->postRequest('getDocuments');
     }
 
     /**
-     * Searches leads
+     * Searches documents
      *
-     * @param $lead Array with specified properties for search
-     * @throws Exception If leads is empty
-     * @return Json format with found companies
+     * @param $document Array with specified properties for search
+     * @throws Exception If document is empty
+     * @return Json format with found documents
      */
-    public function searchLeads($lead)
+    public function searchDocuments($document)
     {
-        if (empty($lead))
-            throw new Exception('Empty lead');
+        if (empty($document))
+            throw new Exception('Empty document');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchLeads', $lead);
+        return $this->postRequest('SearchDocuments', $document);
     }
 
     /**
-     * Gets all leads
+     * Saves document
      *
-     * @return Json format with all leads
-     */
-    public function getLeads()
-    {
-        return $this->postRequest('GetLeads');
-    }
-
-    /**
-     * Saves relation
-     *
-     * @param $relation Relation array data to save
-     * @throws Exception If relation is empty
+     * @param $document Document array data to save
+     * @throws Exception If document is empty
      * @return Json format with successful response
      */
-    public function saveRelation($relation)
+    public function saveDocument($document)
     {
-        if (empty($relation))
-            throw new Exception('Empty relation');
+        if (empty($document))
+            throw new Exception('Empty document');
 
-        return $this->postRequest('SaveRelation', $relation);
+        return $this->postRequest('SaveDocument', $document);
     }
 
     /**
-     * Saves relation between contact and group
+     * Gets all goods
      *
-     * @param $contactGUID Contact GUID identification
-     * @param $groupGUID Group GUID identification
-     * @throws Exception If contactGUID is empty
-     * @throws Exception If groupGUID is empty
-     * @return Json format with successful response
+     * @return Json format with all goods
      */
-    public function saveContactGroupRelation($contactGUID, $groupGUID)
+    public function getGoods()
     {
-        if (empty($contactGUID))
-            throw new Exception('Empty contactGUID');
-
-        if (empty($groupGUID))
-            throw new Exception('Empty groupGUID');
-
-        $relation = array(
-            'ItemGUID1' => $contactGUID,
-            'ItemGUID2' => $groupGUID,
-            'FolderName1' => 'Contacts',
-            'FolderName2' => 'Groups',
-            'RelationType' => 'GROUP',
-            'DifferDirection' => 0);
-
-        $this->saveRelation($relation);
+        return $this->postRequest('GetGoods');
     }
 
     /**
-     * Saves relation between company and group
+     * Searches goods
      *
-     * @param $companyGUID Company GUID identification
-     * @param $groupGUID Group GUID identification
-     * @throws Exception If companyGUID is empty
-     * @throws Exception If groupGUID is empty
-     * @return Json format with successful response
+     * @param $good Array with specified properties for search
+     * @throws Exception If good is empty
+     * @return Json format with found goods
      */
-    public function saveCompanyGroupRelation($companyGUID, $groupGUID)
+    public function searchGoods($good)
     {
-        if (empty($companyGUID))
-            throw new Exception('Empty companyGUID');
+        if (empty($good))
+            throw new Exception('Empty good');
 
-        if (empty($groupGUID))
-            throw new Exception('Empty groupGUID');
-
-        $relation = array(
-            'ItemGUID1' => $companyGUID,
-            'ItemGUID2' => $groupGUID,
-            'FolderName1' => 'Companies',
-            'FolderName2' => 'Groups',
-            'RelationType' => 'GROUP',
-            'DifferDirection' => 0);
-
-        $this->saveRelation($relation);
+        // Any search request is defined as POST
+        return $this->postRequest('SearchGoods', $good);
     }
 
     /**
-     * Saves relation between contact and company
+     * Saves good
      *
-     * @param $contactGUID Contact GUID identification
-     * @param $companyGUID Company GUID identification
-     * @throws Exception If contactGUID is empty
-     * @throws Exception If companyGUID is empty
+     * @param $good Good array data to save
+     * @throws Exception If good is empty
      * @return Json format with successful response
      */
-    public function saveContactCompanyRelation($contactGUID, $companyGUID)
+    public function saveGood($good)
     {
-        if (empty($contactGUID))
-            throw new Exception('Empty contactGUID');
+        if (empty($good))
+            throw new Exception('Empty good');
 
-        if (empty($companyGUID))
-            throw new Exception('Empty companyGUID');
-
-        $relation = array(
-            'ItemGUID1' => $contactGUID,
-            'ItemGUID2' => $companyGUID,
-            'FolderName1' => 'Contacts',
-            'FolderName2' => 'Companies',
-            'RelationType' => 'GENERAL',
-            'DifferDirection' => 0
-        );
-
-        $this->saveRelation($relation);
+        return $this->postRequest('SaveGood', $good);
     }
 
     /**
-     * Saves relation between project and contact
+     * Gets all goods in cart
      *
-     * @param $projectGUID Project GUID identification
-     * @param $contactGUID Contact GUID identification
-     * @throws Exception If projectGUID is empty
-     * @throws Exception If contactGUID is empty
-     * @return Json format with successful response
+     * @return Json format with all goods in cart
      */
-    public function saveProjectContactPersonRelation($projectGUID, $contactGUID)
+    public function getGoodsInCart()
     {
-        if (empty($projectGUID))
-            throw new Exception('Empty projectGUID');
-
-        if (empty($contactGUID))
-            throw new Exception('Empty contactGUID');
-
-        $relation = array(
-            'ItemGUID1' => $projectGUID,
-            'ItemGUID2' => $contactGUID,
-            'FolderName1' => 'Projects',
-            'FolderName2' => 'Contacts',
-            'RelationType' => 'CONTACTPERSON',
-            'DifferDirection' => 1);
-
-        $this->saveRelation($relation);
+        return $this->postRequest('getGoodsInCart');
     }
 
     /**
-     * Saves relation between project and company
+     * Searches goods in cart
      *
-     * @param $projectGUID Project GUID identification
-     * @param $companyGUID Company GUID identification
-     * @throws Exception If projectGUID is empty
-     * @throws Exception If companyGUID is empty
+     * @param $document Array with specified properties for search
+     * @throws Exception If good in cart is empty
+     * @return Json format with found good in cart
+     */
+    public function searchGoodsInCart($goodInCart)
+    {
+        if (empty($goodInCart))
+            throw new Exception('Empty good in cart');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchGoodsInCart', $goodInCart);
+    }
+
+    /**
+     * Saves good in cart
+     *
+     * @param $goodInCart GoodInCart array data to save
+     * @throws Exception If good in cart is empty
      * @return Json format with successful response
      */
-    public function saveProjectCustomerRelation($projectGUID, $companyGUID)
+    public function saveGoodInCart($goodInCart)
     {
-        if (empty($projectGUID))
-            throw new Exception('Empty projectGUID');
+        if (empty($goodInCart))
+            throw new Exception('Empty goodInCart');
 
-        if (empty($companyGUID))
-            throw new Exception('Empty contactGUID');
-
-        $relation = array(
-            'ItemGUID1' => $projectGUID,
-            'ItemGUID2' => $companyGUID,
-            'FolderName1' => 'Projects',
-            'FolderName2' => 'Companies',
-            'RelationType' => 'CUSTOMER',
-            'DifferDirection' => 1);
-
-        $this->saveRelation($relation);
+        return $this->postRequest('SaveGoodInCart', $goodInCart);
     }
 
     /**
@@ -448,6 +351,185 @@ class eWayConnector
     }
 
     /**
+     * Gets all leads
+     *
+     * @return Json format with all leads
+     */
+    public function getLeads()
+    {
+        return $this->postRequest('GetLeads');
+    }
+
+    /**
+     * Searches leads
+     *
+     * @param $lead Array with specified properties for search
+     * @throws Exception If leads is empty
+     * @return Json format with found leads
+     */
+    public function searchLeads($lead)
+    {
+        if (empty($lead))
+            throw new Exception('Empty lead');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchLeads', $lead);
+    }
+
+    /**
+     * Saves lead
+     *
+     * @param $lead Lead array data to save
+     * @throws Exception If lead is empty
+     * @return Json format with successful response
+     */
+    public function saveLead($lead)
+    {
+        if (empty($lead))
+            throw new Exception('Empty lead');
+
+        return $this->postRequest('SaveLead', $lead);
+    }
+
+    /**
+     * Gets all projects
+     *
+     * @return Json format with all projects
+     */
+    public function getProjects()
+    {
+        return $this->postRequest('GetProjects');
+    }
+
+    /**
+     * Searches projects
+     *
+     * @param $projects Array with specified properties for search
+     * @throws Exception If project is empty
+     * @return Json format with found projects
+     */
+    public function searchProjects($project)
+    {
+        if (empty($project))
+            throw new Exception('Empty project');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchProjects', $project);
+    }
+
+    /**
+     * Saves project
+     *
+     * @param $project project array data to save
+     * @throws Exception If project is empty
+     * @return Json format with successful response
+     */
+    public function saveProject($project)
+    {
+        if (empty($project))
+            throw new Exception('Empty Project');
+
+        return $this->postRequest('SaveProject', $project);
+    }
+
+    /**
+     * Saves relation
+     *
+     * @param $relation Relation array data to save
+     * @throws Exception If relation is empty
+     * @return Json format with successful response
+     */
+    public function saveRelation($relation)
+    {
+        if (empty($relation))
+            throw new Exception('Empty relation');
+
+        return $this->postRequest('SaveRelation', $relation);
+    }
+
+    /**
+     * Gets all work reports
+     *
+     * @return Json format with all work reports
+     */
+    public function getWorkReports()
+    {
+        return $this->postRequest('GetWorkReports');
+    }
+
+    /**
+     * Searches work reports
+     *
+     * @param $projects Array with specified properties for search
+     * @throws Exception If work report is empty
+     * @return Json format with found work reports
+     */
+    public function searchWorkReports($workReport)
+    {
+        if (empty($workReport))
+            throw new Exception('Empty workReport');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchWorkReports', $project);
+    }
+
+    /**
+     * Saves work report
+     *
+     * @param $workReport work report array data to save
+     * @throws Exception If work report is empty
+     * @return Json format with successful response
+     */
+    public function saveWorkReport($workReport)
+    {
+        if (empty($workReport))
+            throw new Exception('Empty workReport');
+
+        return $this->postRequest('SaveWorkReport', $WorkReport);
+    }
+
+    /**
+     * Gets all work tasks
+     *
+     * @return Json format with all tasks
+     */
+    public function getTasks()
+    {
+        return $this->postRequest('GetTasks');
+    }
+
+    /**
+     * Searches tasks
+     *
+     * @param $projects Array with specified properties for search
+     * @throws Exception If task is empty
+     * @return Json format with found tasks
+     */
+    public function searchTasks($task)
+    {
+        if (empty($task))
+            throw new Exception('Empty task');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchTasks', $project);
+    }
+
+    /**
+     * Saves task
+     *
+     * @param $task Task array data to save
+     * @throws Exception If task is empty
+     * @return Json format with successful response
+     */
+    public function saveTask($task)
+    {
+        if (empty($task))
+            throw new Exception('Empty task');
+
+        return $this->postRequest('SaveTask', $task);
+    }
+
+    /**
      * Formats date and time for the API calls
      *
      * @param $date Date to be formatted
@@ -515,45 +597,41 @@ class eWayConnector
         } else {
             $completeTransmitObject = array(
                 'sessionId' => $this->sessionId,
-                'transmitObject' => $transmitObject
+                'transmitObject' => $transmitObject,
+                'dieOnItemConflict' => $this->dieOnItemConflict
             );
         }
 
         return $this->doRequest($completeTransmitObject, $action);
     }
-
     private function doRequest($completeTransmitObject, $action)
     {
         // This is first request, login before
         if (empty($this->sessionId)) {
             $this->reLogin();
-			
-			$completeTransmitObject['sessionId'] = $this->sessionId;
-
-			return $this->doRequest($completeTransmitObject, $action);
+            
+            $completeTransmitObject['sessionId'] = $this->sessionId;
+            return $this->doRequest($completeTransmitObject, $action);
         }
         
-		$url = $this->createWebServiceUrl($action);
-		$jsonObject = json_encode($completeTransmitObject, true);
-		$ch = $this->createPostRequest($url, $jsonObject);
-		
+        $url = $this->createWebServiceUrl($action);
+        $jsonObject = json_encode($completeTransmitObject, true);
+        $ch = $this->createPostRequest($url, $jsonObject);
+        
         $result = curl_exec($ch);
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
-
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
             $this->reLogin();
-
-			$completeTransmitObject['sessionId'] = $this->sessionId;
+            $completeTransmitObject['sessionId'] = $this->sessionId;
         }
-
         if ($returnCode != 'rcBadSession' && $returnCode != 'rcDatabaseTimeout') {
-			return $jsonResult;
+            return $jsonResult;
         }
-		
-		// For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
-		return $this->doRequest($completeTransmitObject, $action);
+        
+        // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
+        return $this->doRequest($completeTransmitObject, $action);
     }
 
     private function createPostRequest($url, $jsonObject)
