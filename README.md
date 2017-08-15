@@ -14,14 +14,14 @@ Prepare Company item, set your attributes, create connector and call save method
     
     // This is new company, that we want to create
     $newCompany = array(
-    					'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
-    					'FileAs' => 'Company', 
-    					'CompanyName' => 'Company',
-    					'Purchaser' => '1',
-    					'Phone' => '111 222 333',
-    					'Email' => 'Email@company.com',
-    					'ItemVersion' => '1'
-    					);
+                        'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
+                        'FileAs' => 'Company', 
+                        'CompanyName' => 'Company',
+                        'Purchaser' => '1',
+                        'Phone' => '111 222 333',
+                        'Email' => 'Email@company.com',
+                        'ItemVersion' => '1'
+                        );
 
     require_once "eway.class.php";
 
@@ -31,7 +31,7 @@ Prepare Company item, set your attributes, create connector and call save method
     $connector->saveCompany($newCompany);
 
     /*
-    	This is example of given result:
+        This is example of given result:
             public 'Description' => null
             public 'ReturnCode' => string 'rcSuccess' (length=9)
             public 'Guid' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
@@ -44,7 +44,7 @@ Next there is example of how to edit an item (company).
 It is basically the same as the previous sample. The only difference is handling ItemVersion. If you do not specify ItemVersion, item will be merged as shown in this example.
 ```php
 <?php
-	// Lets say that you have already created company with these attributes and now you want to edit that company
+    // Lets say that you have already created company with these attributes and now you want to edit that company
     /*
        public 'ItemGUID' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
        public 'ItemVersion' => int 1
@@ -55,12 +55,12 @@ It is basically the same as the previous sample. The only difference is handling
        public 'Purchaser' => boolean true
     */
     
-	// Create connector
+    // Create connector
     $connector = new eWayConnector('ServiceAddress/Service.svc/', 'admin', 'password');
     
     // Edit the company
     $company = array(
-                      'ItemGUID' => 'abdd18f3-92e9-412d-afec-e1aaf6139b09',
+                      'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
                       'FileAs' => 'Company', 
                       'CompanyName' => 'Company',
                       'Purchaser' => '1',
@@ -68,10 +68,10 @@ It is basically the same as the previous sample. The only difference is handling
                       'Email' => 'randomCompanyEmail@company.com'
                     );
 
-	$connector->saveCompany($company);
+    $connector->saveCompany($company);
 
-	// And this is result of saving. As you can see, null property of phone has been ignored and email has been overwriten.
-	/*
+    // And this is result of saving. As you can see, null property of phone has been ignored and email has been overwriten.
+    /*
           public 'ItemGUID' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
           public 'ItemVersion' => int 2
           public 'FileAs' => string 'Company' (length=14)
@@ -88,7 +88,7 @@ If you want to edit an item and overwrite all given attributes, you have to spec
 
 ```php
 <?php
-	// Lets say that you have already created company with these attributes and now you want to edit that company
+    // Lets say that you have already created company with these attributes and now you want to edit that company
     /*
        public 'ItemGUID' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
        public 'ItemVersion' => int 1    (ItemVersion of our object is now set to 1)
@@ -99,12 +99,12 @@ If you want to edit an item and overwrite all given attributes, you have to spec
        public 'Purchaser' => boolean true
     */
 
-	// Create connector
+    // Create connector
     $connector = new eWayConnector('ServiceAddress/Service.svc/', 'admin', 'password');
     
     // Edit our created company and increase ItemVersion.
     $company = array(
-                      'ItemGUID' => 'abdd18f3-92e9-412d-afec-e1aaf6139b09',
+                      'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
                       'FileAs' => 'Company', 
                       'CompanyName' => 'Company',
                       'Purchaser' => '1',
@@ -113,10 +113,10 @@ If you want to edit an item and overwrite all given attributes, you have to spec
                       'ItemVersion => '2'
                     );
 
-	$connector->saveCompany($company);
+    $connector->saveCompany($company);
 
-	// And this is result of saving. As you can see, null property of phone has been edited and email has been overwriten.
-	/*
+    // And this is result of saving. As you can see, null property of phone has been edited and email has been overwriten.
+    /*
           public 'ItemGUID' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
           public 'ItemVersion' => int 2
           public 'FileAs' => string 'Company' (length=14)
@@ -146,14 +146,14 @@ First we prepare company attributes that we want to save and set ItemVersion to 
     
     // This is new company, that we want to create
     $newCompany = array(
-    					'ItemGUID' => 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e',
-    					'FileAs' => 'Company', 
-    					'CompanyName' => 'Company',
-    					'Purchaser' => '1',
-    					'Phone' => '111 222 333',
-    					'Email' => 'Emailusil@company.com',
+                        'ItemGUID' => 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e',
+                        'FileAs' => 'Company', 
+                        'CompanyName' => 'Company',
+                        'Purchaser' => '1',
+                        'Phone' => '111 222 333',
+                        'Email' => 'Emailusil@company.com',
                         'ItemVersion' => '1'
-    					);
+                        );
 
     require_once "eway.class.php";
     
@@ -164,20 +164,20 @@ First we prepare company attributes that we want to save and set ItemVersion to 
     $connector->saveCompany($newCompany);
 
     /*
-    	This is example of given result:
-			public 'Description' => null
-			public 'ReturnCode' => string 'rcSuccess' (length=9)
-			public 'Guid' => string 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e' (length=36)
+        This is example of given result:
+            public 'Description' => null
+            public 'ReturnCode' => string 'rcSuccess' (length=9)
+            public 'Guid' => string 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e' (length=36)
     */ 
 
-	// If you try to create the same company again, result will be the same. But the object itself is handled not like creation but as editing of an object. So ItemVersion is increased automatically.
-	$connector->saveCompany($newCompany);
+    // If you try to create the same company again, result will be the same. But the object itself is handled not like creation but as editing of an object. So ItemVersion is increased automatically.
+    $connector->saveCompany($newCompany);
 
-	/*
-    	This is example of given result:
-			public 'Description' => null
-			public 'ReturnCode' => string 'rcSuccess' (length=9)
-			public 'Guid' => string 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e' (length=36)
+    /*
+        This is example of given result:
+            public 'Description' => null
+            public 'ReturnCode' => string 'rcSuccess' (length=9)
+            public 'Guid' => string 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e' (length=36)
     */
 ?>
 ```
@@ -193,14 +193,14 @@ Now we have the same situation, the only difference is in dieOnItemConflict, tha
     
     // This is new company, that we want to create.
     $newCompany = array(
-    					'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
-    					'FileAs' => 'Company', 
-    					'CompanyName' => 'Company',
-    					'Purchaser' => '1',
-    					'Phone' => '111 222 333',
-    					'Email' => 'Email@company.com',
-    					'ItemVersion' => '1'
-    					);
+                        'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
+                        'FileAs' => 'Company', 
+                        'CompanyName' => 'Company',
+                        'Purchaser' => '1',
+                        'Phone' => '111 222 333',
+                        'Email' => 'Email@company.com',
+                        'ItemVersion' => '1'
+                        );
 
     require_once "eway.class.php";
     // Create connector and set dieOnItemConflict to true
@@ -211,17 +211,17 @@ Now we have the same situation, the only difference is in dieOnItemConflict, tha
     $connector->saveCompany($newCompany);
 
     /*
-    	This is example of given result:
+        This is example of given result:
             public 'Description' => null
             public 'ReturnCode' => string 'rcSuccess' (length=9)
             public 'Guid' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
     */ 
 
-	// If you try to create the same company again, rcItemAlreadyUploaded error will be returned.
-	$connector->saveCompany($newCompany);
+    // If you try to create the same company again, rcItemAlreadyUploaded error will be returned.
+    $connector->saveCompany($newCompany);
 
-	/*
-    	This is example of given result:
+    /*
+        This is example of given result:
             public 'Description' => string 'Web service returned an error (rcItemAlreadyUploaded): Item with the same GUID 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' has already been uploaded' (length=143)
             public 'ReturnCode' => string 'rcItemAlreadyUploaded' (length=21)
             public 'Guid' => string '00000000-0000-0000-0000-000000000000' (length=36)
@@ -240,13 +240,13 @@ Now we want to edit company, that already exists and dieOnItemConflict is false.
     
     // Lets create new company to have something to edit
     $company = array(
-    					'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
-    					'FileAs' => 'Company', 
-    					'CompanyName' => 'Company',
-    					'Purchaser' => '1',
-    					'Phone' => '111 222 333',
-    					'Email' => 'Email@company.com',
-    					);
+                        'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
+                        'FileAs' => 'Company', 
+                        'CompanyName' => 'Company',
+                        'Purchaser' => '1',
+                        'Phone' => '111 222 333',
+                        'Email' => 'Email@company.com',
+                        );
 
     require_once "eway.class.php";
     
@@ -270,12 +270,12 @@ Now we want to edit company, that already exists and dieOnItemConflict is false.
     $company['Email'] = 'randomCompanyEmail@company.com';
     $company['Phone'] = null;
 
-	// Our item version is still 1 - not increased.
+    // Our item version is still 1 - not increased.
     // Api handles this request by dieItemOnConflict set to false. So Api will process little merge between versions and old data will be replaced by new.
     // If you send null value (as we did with Phone), merge does not change value inserted before, everything else is changed.
-	$connector->saveCompany($company);
+    $connector->saveCompany($company);
 
-	/*
+    /*
           public 'ItemGUID' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
           public 'ItemVersion' => int 2
           public 'FileAs' => string 'Company' (length=14)
@@ -299,7 +299,7 @@ Now we want to edit company, that already exists and dieOnItemConflict is true. 
     
     // Lets create new company to have something to edit
     $company = array(
-                        'ItemGUID' => 'abdd18f3-92e9-412d-afec-e1aaf6139b09',
+                        'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
                         'FileAs' => 'Company', 
                         'CompanyName' => 'Company',
                         'Purchaser' => '1',
@@ -335,7 +335,7 @@ Now we want to edit company, that already exists and dieOnItemConflict is true. 
     $connector->saveCompany($company);
 
     /*
-          public 'Description' => string 'Web service returned an error (rcItemConflict): ItemVersion of item 'abdd18f3-92e9-412d-afec-e1aaf6139b09' is set to '1' while current item modified by 'a71c4a87-f360-4f67-8fce-e99f48c6e4fb' has version '2', you have to increase the version by one during edit
+          public 'Description' => string 'Web service returned an error (rcItemConflict): ItemVersion of item 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' is set to '1' while current item modified by 'a71c4a87-f360-4f67-8fce-e99f48c6e4fb' has version '2', you have to increase the version by one during edit
           public 'ReturnCode' => string 'rcItemConflict' (length=14)
           public 'Guid' => string '00000000-0000-0000-0000-000000000000' (length=36)
 
