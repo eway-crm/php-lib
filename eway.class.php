@@ -14,6 +14,7 @@ class eWayConnector
     private $username;
     private $passwordHash;
     private $dieOnItemConflict;
+    private $throwExceptionOnFail;
 
     /**
      * Initialize eWayConnector class
@@ -22,12 +23,13 @@ class eWayConnector
      * @param $username User name
      * @param $password Plain password
      * @param $passwordAlreadyEncrypted - if true, user already encrypted password
-     * @param $dieOnItemConflict If true, throws rcItemConflict when item has been changed before saving, if false, merges data 
+     * @param $dieOnItemConflict If true, throws rcItemConflict when item has been changed before saving, if false, merges data
+     * @param $throwExceptionOnFail If true, throws exception when the web service does not return rcSuccess
      * @throws Exception If web service address is empty
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false)
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true)
     {
         if (empty($webServiceAddress))
             throw new Exception('Empty web service address');
@@ -41,6 +43,7 @@ class eWayConnector
         $this->webServiceAddress = $webServiceAddress;
         $this->username = $username;
         $this->dieOnItemConflict = $dieOnItemConflict;
+        $this->throwExceptionOnFail = $throwExceptionOnFail;
 
         if ($passwordAlreadyEncrypted)
             $this->passwordHash = $password;
@@ -621,17 +624,23 @@ class eWayConnector
         $result = curl_exec($ch);
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
+        
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
             $this->reLogin();
             $completeTransmitObject['sessionId'] = $this->sessionId;
         }
-        if ($returnCode != 'rcBadSession' && $returnCode != 'rcDatabaseTimeout') {
-            return $jsonResult;
+        
+        if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
+            // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
+            return $this->doRequest($completeTransmitObject, $action);
         }
         
-        // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
-        return $this->doRequest($completeTransmitObject, $action);
+        if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
+            throw new Exception($returnCode.': '.$jsonResult->Description);
+        }
+        
+        return $jsonResult;
     }
 
     private function createPostRequest($url, $jsonObject)
