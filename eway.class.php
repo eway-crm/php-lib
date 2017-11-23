@@ -52,10 +52,62 @@ class eWayConnector
     }
 
     /**
+     * Gets all additional fields
+     *
+     * @return Json format with all additional fields
+     */
+    public function getAdditionalFields()
+    {
+        return $this->postRequest('GetAdditionalFields');
+    }
+
+    /**
+     * Searches additional fields
+     *
+     * @param $additionalField Array with specified properties for search
+     * @throws Exception If additionalField is empty
+     * @return Json format with found additional fields
+     */
+    public function searchAdditionalFields($additionalField)
+    {
+        if (empty($additionalField))
+            throw new Exception('Empty additional field');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchAdditionalFields', $additionalField);
+    }
+
+    /**
+     * Gets all carts
+     *
+     * @return Json format with all carts
+     */
+    public function getCarts()
+    {
+        return $this->postRequest('GetCarts');
+    }
+
+    /**
+     * Searches carts
+     *
+     * @param $cart Array with specified properties for search
+     * @throws Exception If cart is empty
+     * @return Json format with found carts
+     */
+    public function searchCarts($cart)
+    {
+        if (empty($cart))
+            throw new Exception('Empty cart');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchCarts', $cart);
+    }
+
+    /**
      * Saves cart
      *
      * @param $cart Cart array data to save
-     * @throws Exception If vart is empty
+     * @throws Exception If cart is empty
      * @return Json format with successful response
      */
     public function saveCart($cart)
@@ -64,6 +116,47 @@ class eWayConnector
             throw new Exception('Empty cart');
 
         return $this->postRequest('SaveCart', $cart);
+    }
+
+    /**
+     * Gets all calendars
+     *
+     * @return Json format with all calendars
+     */
+    public function getCalendars()
+    {
+        return $this->postRequest('GetCalendars');
+    }
+
+    /**
+     * Searches calendars
+     *
+     * @param $calendar Array with specified properties for search
+     * @throws Exception If calendar is empty
+     * @return Json format with found calendars
+     */
+    public function searchCalendars($calendar)
+    {
+        if (empty($calendar))
+            throw new Exception('Empty calendar');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchCalendars', $calendar);
+    }
+
+    /**
+     * Saves calendar
+     *
+     * @param $calendar Calendar array data to save
+     * @throws Exception If calendar is empty
+     * @return Json format with successful response
+     */
+    public function saveCalendar($calendar)
+    {
+        if (empty($calendar))
+            throw new Exception('Empty calendar');
+
+        return $this->postRequest('SaveCalendar', $calendar);
     }
 
     /**
@@ -155,7 +248,7 @@ class eWayConnector
      */
     public function getDocuments()
     {
-        return $this->postRequest('getDocuments');
+        return $this->postRequest('GetDocuments');
     }
 
     /**
@@ -187,6 +280,152 @@ class eWayConnector
             throw new Exception('Empty document');
 
         return $this->postRequest('SaveDocument', $document);
+    }
+
+
+    /**
+     * Gets all emails
+     *
+     * @return Json format with all emails
+     */
+    public function getEmails()
+    {
+        return $this->postRequest('GetEmails');
+    }
+
+    /**
+     * Searches emails
+     *
+     * @param $email Array with specified properties for search
+     * @throws Exception If email is empty
+     * @return Json format with found email
+     */
+    public function searchEmails($email)
+    {
+        if (empty($email))
+            throw new Exception('Empty email');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchEmails', $email);
+    }
+
+    /**
+     * Saves email
+     *
+     * @param $email Email array data to save
+     * @throws Exception If email is empty
+     * @return Json format with successful response
+     */
+    public function saveEmail($email)
+    {
+        if (empty($email))
+            throw new Exception('Empty email');
+
+        return $this->postRequest('SaveEmail', $email);
+    }
+
+    /**
+     * Gets all Enum Values
+     *
+     * @return Json format with all enum values
+     */
+    public function getEnumValues()
+    {
+        return $this->postRequest('GetEnumValues');
+    }
+
+    /**
+     * Searches Enum Values
+     *
+     * @param $enumValue Array with specified properties for search
+     * @throws Exception If enumValue is empty
+     * @return Json format with found enum values
+     */
+    public function searchEnumValues($enumValue)
+    {
+        if (empty($enumValue))
+            throw new Exception('Empty enumValue');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchEnumValues', $enumValue);
+    }
+
+    /**
+     * Gets all Features
+     *
+     * @return Json format with all features
+     */
+    public function getFeatures()
+    {
+        return $this->postRequest('GetFeatures');
+    }
+
+    /**
+     * Searches Features
+     *
+     * @param $features Array with specified properties for search
+     * @throws Exception If features is empty
+     * @return Json format with found features
+     */
+    public function searchFeatures($features)
+    {
+        if (empty($features))
+            throw new Exception('Empty features');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchFeatures', $features);
+    }
+
+    /**
+     * Gets all Flows
+     *
+     * @return Json format with all flows
+     */
+    public function getFlows()
+    {
+        return $this->postRequest('GetFlows');
+    }
+
+    /**
+     * Searches Flows
+     *
+     * @param $flow Array with specified properties for search
+     * @throws Exception If flow is empty
+     * @return Json format with found flows
+     */
+    public function searchFlows($flow)
+    {
+        if (empty($flow))
+            throw new Exception('Empty flow');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchFlows', $flow);
+    }
+
+    /**
+     * Gets all Global settings
+     *
+     * @return Json format with all global settings
+     */
+    public function getGlobalSettings()
+    {
+        return $this->postRequest('GetGlobalSettings');
+    }
+
+    /**
+     * Searches Global settings
+     *
+     * @param $globalSetting Array with specified properties for search
+     * @throws Exception If globalSetting is empty
+     * @return Json format with found global settings
+     */
+    public function searchGlobalSettings($globalSetting)
+    {
+        if (empty($globalSetting))
+            throw new Exception('Empty global setting');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchGlobalSettings', $globalSetting);
     }
 
     /**
@@ -237,20 +476,20 @@ class eWayConnector
      */
     public function getGoodsInCart()
     {
-        return $this->postRequest('getGoodsInCart');
+        return $this->postRequest('GetGoodsInCart');
     }
 
     /**
      * Searches goods in cart
      *
-     * @param $document Array with specified properties for search
-     * @throws Exception If good in cart is empty
+     * @param $goodInCart Array with specified properties for search
+     * @throws Exception If goodInCart is empty
      * @return Json format with found good in cart
      */
     public function searchGoodsInCart($goodInCart)
     {
         if (empty($goodInCart))
-            throw new Exception('Empty good in cart');
+            throw new Exception('Empty goodInCart');
 
         // Any search request is defined as POST
         return $this->postRequest('SearchGoodsInCart', $goodInCart);
@@ -260,7 +499,7 @@ class eWayConnector
      * Saves good in cart
      *
      * @param $goodInCart GoodInCart array data to save
-     * @throws Exception If good in cart is empty
+     * @throws Exception If goodInCart is empty
      * @return Json format with successful response
      */
     public function saveGoodInCart($goodInCart)
@@ -367,7 +606,7 @@ class eWayConnector
      * Searches leads
      *
      * @param $lead Array with specified properties for search
-     * @throws Exception If leads is empty
+     * @throws Exception If lead is empty
      * @return Json format with found leads
      */
     public function searchLeads($lead)
@@ -436,6 +675,32 @@ class eWayConnector
     }
 
     /**
+     * Gets all sale prices
+     *
+     * @return Json format with all sale prices
+     */
+    public function getSalePrices()
+    {
+        return $this->postRequest('GetSalePrices');
+    }
+
+    /**
+     * Searches sale prices
+     *
+     * @param $salePrice Array with specified properties for search
+     * @throws Exception If salePrice is empty
+     * @return Json format with found sale prices
+     */
+    public function searchSalePrices($salePrice)
+    {
+        if (empty($salePrice))
+            throw new Exception('Empty salePrice');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchSalePrices', $salePrice);
+    }
+
+    /**
      * Saves relation
      *
      * @param $relation Relation array data to save
@@ -451,48 +716,7 @@ class eWayConnector
     }
 
     /**
-     * Gets all work reports
-     *
-     * @return Json format with all work reports
-     */
-    public function getWorkReports()
-    {
-        return $this->postRequest('GetWorkReports');
-    }
-
-    /**
-     * Searches work reports
-     *
-     * @param $projects Array with specified properties for search
-     * @throws Exception If work report is empty
-     * @return Json format with found work reports
-     */
-    public function searchWorkReports($workReport)
-    {
-        if (empty($workReport))
-            throw new Exception('Empty workReport');
-
-        // Any search request is defined as POST
-        return $this->postRequest('SearchWorkReports', $project);
-    }
-
-    /**
-     * Saves work report
-     *
-     * @param $workReport work report array data to save
-     * @throws Exception If work report is empty
-     * @return Json format with successful response
-     */
-    public function saveWorkReport($workReport)
-    {
-        if (empty($workReport))
-            throw new Exception('Empty workReport');
-
-        return $this->postRequest('SaveWorkReport', $WorkReport);
-    }
-
-    /**
-     * Gets all work tasks
+     * Gets all tasks
      *
      * @return Json format with all tasks
      */
@@ -504,7 +728,7 @@ class eWayConnector
     /**
      * Searches tasks
      *
-     * @param $projects Array with specified properties for search
+     * @param $task Array with specified properties for search
      * @throws Exception If task is empty
      * @return Json format with found tasks
      */
@@ -514,7 +738,7 @@ class eWayConnector
             throw new Exception('Empty task');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchTasks', $project);
+        return $this->postRequest('SearchTasks', $task);
     }
 
     /**
@@ -530,6 +754,100 @@ class eWayConnector
             throw new Exception('Empty task');
 
         return $this->postRequest('SaveTask', $task);
+    }
+
+    /**
+     * Gets all users
+     *
+     * @return Json format with all users
+     */
+    public function getUsers()
+    {
+        return $this->postRequest('GetUsers');
+    }
+
+    /**
+     * Searches users
+     *
+     * @param $user Array with specified properties for search
+     * @throws Exception If user is empty
+     * @return Json format with found users
+     */
+    public function searchUsers($user)
+    {
+        if (empty($user))
+            throw new Exception('Empty user');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchUsers', $user);
+    }
+
+
+    /**
+     * Gets all work flow models
+     *
+     * @return Json format with all work flows
+     */
+    public function getWorkFlowModels()
+    {
+        return $this->postRequest('GetWorkFlowModels');
+    }
+
+    /**
+     * Searches work flow models
+     *
+     * @param $workFlowModel Array with specified properties for search
+     * @throws Exception If workFlowModel is empty
+     * @return Json format with found work flow models
+     */
+    public function searchWorkFlowModels($workFlowModel)
+    {
+        if (empty($workFlowModel))
+            throw new Exception('Empty workFlowModel');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchWorkFlowModels', $workFlowModel);
+    }
+
+    /**
+     * Gets all work reports
+     *
+     * @return Json format with all work reports
+     */
+    public function getWorkReports()
+    {
+        return $this->postRequest('GetWorkReports');
+    }
+
+    /**
+     * Searches work reports
+     *
+     * @param $workReport Array with specified properties for search
+     * @throws Exception If workReport is empty
+     * @return Json format with found work reports
+     */
+    public function searchWorkReports($workReport)
+    {
+        if (empty($workReport))
+            throw new Exception('Empty workReport');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchWorkReports', $workReport);
+    }
+
+    /**
+     * Saves work report
+     *
+     * @param $workReport work report array data to save
+     * @throws Exception If workReport is empty
+     * @return Json format with successful response
+     */
+    public function saveWorkReport($workReport)
+    {
+        if (empty($workReport))
+            throw new Exception('Empty workReport');
+
+        return $this->postRequest('SaveWorkReport', $workReport);
     }
 
     /**
@@ -557,9 +875,12 @@ class eWayConnector
 
         $jsonObject = json_encode($login, true);
         $ch = $this->createPostRequest($this->createWebServiceUrl('Login'), $jsonObject);
-        $jsonResult = json_decode(curl_exec($ch));
-        $returnCode = $jsonResult->ReturnCode;
 
+        $result = $this->executeCurl($ch);
+        $jsonResult = json_decode($result);
+        $returnCode = $jsonResult->ReturnCode;
+        
+        // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
             throw new Exception('Login failed: '.$jsonResult->Description);
         }
@@ -607,6 +928,24 @@ class eWayConnector
 
         return $this->doRequest($completeTransmitObject, $action);
     }
+
+    private function executeCurl($ch)
+    {
+        $result = curl_exec($ch);
+        // Check if request has been executed successfully.
+        if ($result === false) {
+            throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
+        }
+
+        // Also Check if return code is OK.
+        $curlReturnInfo = curl_getinfo($ch);
+        if ($curlReturnInfo['http_code'] != 200) {
+            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
+        }
+
+        return $result;
+    }
+
     private function doRequest($completeTransmitObject, $action)
     {
         // This is first request, login before
@@ -621,10 +960,10 @@ class eWayConnector
         $jsonObject = json_encode($completeTransmitObject, true);
         $ch = $this->createPostRequest($url, $jsonObject);
         
-        $result = curl_exec($ch);
+        $result = $this->executeCurl($ch);
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
-        
+
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
             $this->reLogin();
@@ -653,6 +992,7 @@ class eWayConnector
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
+        
         return $ch;
     }
 }
