@@ -60,6 +60,29 @@ class eWayConnector
     {
         return $this->postRequest('GetAdditionalFields');
     }
+    
+    /**
+     * Gets additional fields by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getAdditionalFieldsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetAdditionalFieldsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets all additional fields identifiers
+     *
+     * @return Json format with all additional fields identifiers
+     */
+    public function getAdditionalFieldsIdentifiers()
+    {
+        return $this->postRequest('GetAdditionalFieldsIdentifiers');
+    }
 
     /**
      * Searches additional fields
@@ -76,6 +99,17 @@ class eWayConnector
         // Any search request is defined as POST
         return $this->postRequest('SearchAdditionalFields', $additionalField);
     }
+    
+    /**
+     * Deletes cart
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteCart($guid)
+    {
+        return $this->deleteItem('DeleteCart', $guid);
+    }
 
     /**
      * Gets all carts
@@ -85,6 +119,36 @@ class eWayConnector
     public function getCarts()
     {
         return $this->postRequest('GetCarts');
+    }
+    
+    /**
+     * Gets carts by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $omitGoodsInCart array of additional parameters (default: null)
+     * @return Json format with items selected by guids
+     */
+    public function getCartsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false, $omitGoodsInCart = false)
+    {
+        if($omitGoodsInCart == true) {
+            $additionalParameters = array('omitGoodsInCart' => true);
+        } else {
+            $additionalParameters = null;
+        }
+        
+        return $this->getItemsByItemGuids('GetCartsByItemGuids', $guids, $includeForeignKeys, $includeRelations, $additionalParameters);
+    }
+    
+    /**
+     * Gets carts identifiers
+     *
+     * @return Json format with all carts identifiers
+     */
+    public function getCartsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetCartsIdentifiers');
     }
 
     /**
@@ -127,6 +191,29 @@ class eWayConnector
     {
         return $this->postRequest('GetCalendars');
     }
+    
+    /**
+     * Gets calendars by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getCalendarsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetCalendarsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets calendars identifiers
+     *
+     * @return Json format with all calendars identifiers
+     */
+    public function getCalendarsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetCalendarsIdentifiers');
+    }
 
     /**
      * Searches calendars
@@ -160,6 +247,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes company
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteCompany($guid)
+    {
+        return $this->deleteItem('DeleteCompany', $guid);
+    }
+    
+    /**
      * Gets all companies
      *
      * @return Json format with all companies
@@ -168,7 +266,30 @@ class eWayConnector
     {
         return $this->postRequest('GetCompanies');
     }
+    
+    /**
+     * Gets companies by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getCompaniesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetCompaniesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
 
+    /**
+     * Gets companies identifiers
+     *
+     * @return Json format with all companies identifiers
+     */
+    public function getCompaniesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetCompaniesIdentifiers');
+    }
+    
     /**
      * Searches companies
      *
@@ -201,6 +322,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes contact
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteContact($guid)
+    {
+        return $this->deleteItem('DeleteContact', $guid);
+    }
+    
+    /**
      * Gets all contacts
      *
      * @return Json format with all contacts
@@ -208,6 +340,29 @@ class eWayConnector
     public function getContacts()
     {
         return $this->postRequest('GetContacts');
+    }
+    
+    /**
+     * Gets contacts by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getContactsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetContactsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets contacts identifiers
+     *
+     * @return Json format with all contacts identifiers
+     */
+    public function getContactsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetContactsIdentifiers');
     }
 
     /**
@@ -242,6 +397,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes document
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteDocument($guid)
+    {
+        return $this->deleteItem('DeleteDocument', $guid);
+    }
+    
+    /**
      * Gets all documents
      *
      * @return Json format with all documents
@@ -249,6 +415,29 @@ class eWayConnector
     public function getDocuments()
     {
         return $this->postRequest('GetDocuments');
+    }
+    
+    /**
+     * Gets Documents by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getDocumentsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetDocumentsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets documents identifiers
+     *
+     * @return Json format with all documents identifiers
+     */
+    public function getDocumentsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetDocumentsIdentifiers');
     }
 
     /**
@@ -282,6 +471,16 @@ class eWayConnector
         return $this->postRequest('SaveDocument', $document);
     }
 
+    /**
+     * Deletes email
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteEmail($guid)
+    {
+        return $this->deleteItem('DeleteEmail', $guid);
+    }
 
     /**
      * Gets all emails
@@ -291,6 +490,29 @@ class eWayConnector
     public function getEmails()
     {
         return $this->postRequest('GetEmails');
+    }
+    
+    /**
+     * Gets emails by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getEmailsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetEmailsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets emails identifiers
+     *
+     * @return Json format with all emails identifiers
+     */
+    public function getEmailsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetEmailsIdentifiers');
     }
 
     /**
@@ -333,6 +555,29 @@ class eWayConnector
     {
         return $this->postRequest('GetEnumValues');
     }
+    
+    /**
+     * Gets enum values by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getEnumValuesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetEnumValuesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets enum values identifiers
+     *
+     * @return Json format with all enum values identifiers
+     */
+    public function getEnumValuesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetEnumValuesIdentifiers');
+    }
 
     /**
      * Searches Enum Values
@@ -358,6 +603,29 @@ class eWayConnector
     public function getFeatures()
     {
         return $this->postRequest('GetFeatures');
+    }
+    
+    /**
+     * Gets features by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getFeaturesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetFeaturesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets features identifiers
+     *
+     * @return Json format with all features identifiers
+     */
+    public function getFeaturesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetFeaturesIdentifiers');
     }
 
     /**
@@ -385,7 +653,30 @@ class eWayConnector
     {
         return $this->postRequest('GetFlows');
     }
+    
+    /**
+     * Gets additional flows by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getFlowsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetFlowsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
 
+    /**
+     * Gets flows identifiers
+     *
+     * @return Json format with all flows identifiers
+     */
+    public function getFlowsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetFlowsIdentifiers');
+    }
+    
     /**
      * Searches Flows
      *
@@ -411,6 +702,29 @@ class eWayConnector
     {
         return $this->postRequest('GetGlobalSettings');
     }
+    
+    /**
+     * Gets global settings by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGlobalSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGlobalSettingsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets global settings identifiers
+     *
+     * @return Json format with all global settings identifiers
+     */
+    public function getGlobalSettingsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGlobalSettingsIdentifiers');
+    }
 
     /**
      * Searches Global settings
@@ -429,6 +743,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes good
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteGood($guid)
+    {
+        return $this->deleteItem('DeleteGood', $guid);
+    }
+    
+    /**
      * Gets all goods
      *
      * @return Json format with all goods
@@ -436,6 +761,29 @@ class eWayConnector
     public function getGoods()
     {
         return $this->postRequest('GetGoods');
+    }
+    
+    /**
+     * Gets additional goods by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGoodsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGoodsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets goods identifiers
+     *
+     * @return Json format with all goods identifiers
+     */
+    public function getGoodsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGoodsIdentifiers');
     }
 
     /**
@@ -469,6 +817,18 @@ class eWayConnector
         return $this->postRequest('SaveGood', $good);
     }
 
+    
+    /**
+     * Deletes good in cart
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteGoodInCart($guid)
+    {
+        return $this->deleteItem('DeleteGoodInCart', $guid);
+    }
+    
     /**
      * Gets all goods in cart
      *
@@ -477,6 +837,29 @@ class eWayConnector
     public function getGoodsInCart()
     {
         return $this->postRequest('GetGoodsInCart');
+    }
+    
+    /**
+     * Gets goods in cart by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGoodsInCartByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGoodsInCartByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets goods in cart identifiers
+     *
+     * @return Json format with all goods in cart identifiers
+     */
+    public function getGoodsInCartIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGoodsInCartIdentifiers');
     }
 
     /**
@@ -519,6 +902,29 @@ class eWayConnector
     {
         return $this->postRequest('GetGroups');
     }
+    
+    /**
+     * Gets additional groups by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGroupsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGroupsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets groups identifiers
+     *
+     * @return Json format with all groups identifiers
+     */
+    public function getGroupsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGroupsIdentifiers');
+    }
 
     /**
      * Searches groups
@@ -552,6 +958,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes journal
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteJournal($guid)
+    {
+        return $this->deleteItem('DeleteJournal', $guid);
+    }
+    
+    /**
      * Gets all journals
      *
      * @return Json format with all journals
@@ -560,7 +977,30 @@ class eWayConnector
     {
         return $this->postRequest('GetJournals');
     }
+    
+    /**
+     * Gets journals by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getJournalsItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetJournalsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
 
+    /**
+     * Gets journals identifiers
+     *
+     * @return Json format with all journals identifiers
+     */
+    public function getJournalsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetJournalsIdentifiers');
+    }
+    
     /**
      * Searches journals
      *
@@ -593,6 +1033,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes lead
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteLead($guid)
+    {
+        return $this->deleteItem('DeleteLead', $guid);
+    }
+    
+    /**
      * Gets all leads
      *
      * @return Json format with all leads
@@ -600,6 +1051,29 @@ class eWayConnector
     public function getLeads()
     {
         return $this->postRequest('GetLeads');
+    }
+    
+    /**
+     * Gets leads by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getLeadsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetLeadsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets leads identifiers
+     *
+     * @return Json format with all leads identifiers
+     */
+    public function getLeadsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetLeadsIdentifiers');
     }
 
     /**
@@ -632,7 +1106,168 @@ class eWayConnector
 
         return $this->postRequest('SaveLead', $lead);
     }
+    
+    /**
+     * Deletes marketing campaign
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteMarketingCampaign($guid)
+    {
+        return $this->deleteItem('DeleteMarketingCampaign', $guid);
+    }
+    
+    /**
+     * Gets all marketing campaigns
+     *
+     * @return Json format with all marketing campaigns
+     */
+    public function getMarketingCampaigns()
+    {
+        return $this->postRequest('GetMarketingCampaigns');
+    }
+    
+    /**
+     * Gets marketing campaigns by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getMerketingCampaignsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetMarketingCampaignsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets marketing campaigns identifiers
+     *
+     * @return Json format with all marketing campaigns identifiers
+     */
+    public function getMarketingCampaignsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetMarketingCampaignsIdentifiers');
+    }
 
+    /**
+     * Searches marketing campaigns
+     *
+     * @param $marketingCampaign Array with specified properties for search
+     * @throws Exception If marketing campaign is empty
+     * @return Json format with found marketing campaigns
+     */
+    public function searchMarketingCampaigns($marketingCampaign)
+    {
+        if (empty($marketingCampaign))
+            throw new Exception('Empty marketing campaign');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchMarketingCampaigns', $marketingCampaign);
+    }
+    
+    /**
+     * Saves marketing campaign
+     *
+     * @param $marketingCampaign marketing campaign array data to save
+     * @throws Exception If marketing campaign is empty
+     * @return Json format with successful response
+     */
+    public function saveMarketingCampaign($marketingCampaign)
+    {
+        if (empty($marketingCampaign))
+            throw new Exception('Empty marketing campaign');
+
+        return $this->postRequest('SaveMarketingCampaign', $marketingCampaign);
+    }
+    
+    /**
+     * Deletes marketing list record
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteMarketingListRecord($guid)
+    {
+        return $this->deleteItem('DeleteMarketingListRecord', $guid);
+    }
+    
+    /**
+     * Gets all marketing lists records
+     *
+     * @return Json format with all marketing lists records
+     */
+    public function getMarketingListsRecords()
+    {
+        return $this->postRequest('GetMarketingListsRecords');
+    }
+    
+    /**
+     * Gets marketing lists by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getMarketingListsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetMarketingListsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets marketing lists records identifiers
+     *
+     * @return Json format with all marketing lists records identifiers
+     */
+    public function getMarketingListsRecordsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetMarketingListsRecordsIdentifiers');
+    }
+
+    /**
+     * Searches marketing lists records
+     *
+     * @param $marketingListRecord Array with specified properties for search
+     * @throws Exception If marketing list record is empty
+     * @return Json format with found marketing list records
+     */
+    public function searchMarketingListsRecords($marketingListRecord)
+    {
+        if (empty($marketingListRecord))
+            throw new Exception('Empty marketing list record');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchMarketingListsRecords', $marketingListRecords);
+    }
+    
+    /**
+     * Saves marketing list record
+     *
+     * @param $marketingListRecord marketing list record array data to save
+     * @throws Exception If marketing list record is empty
+     * @return Json format with successful response
+     */
+    public function saveMarketingListRecord($marketingListRecord)
+    {
+        if (empty($marketingListRecord))
+            throw new Exception('Empty marketing list record');
+
+        return $this->postRequest('SaveMarketingListRecord', $marketingListRecord);
+    }
+    
+    /**
+     * Deletes project
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteProject($guid)
+    {
+        return $this->deleteItem('DeleteProject', $guid);
+    }
+    
     /**
      * Gets all projects
      *
@@ -641,6 +1276,29 @@ class eWayConnector
     public function getProjects()
     {
         return $this->postRequest('GetProjects');
+    }
+    
+    /**
+     * Gets projects by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getProjectsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetProjectsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets projects identifiers
+     *
+     * @return Json format with all projects identifiers
+     */
+    public function getProjectsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetProjectsIdentifiers');
     }
 
     /**
@@ -683,6 +1341,29 @@ class eWayConnector
     {
         return $this->postRequest('GetSalePrices');
     }
+    
+    /**
+     * Gets sale prices by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getSalePricesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetSalePricesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets sale prices identifiers
+     *
+     * @return Json format with all sale prices identifiers
+     */
+    public function getSalePricesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetSalePricesIdentifiers');
+    }
 
     /**
      * Searches sale prices
@@ -723,6 +1404,29 @@ class eWayConnector
     public function getTasks()
     {
         return $this->postRequest('GetTasks');
+    }
+    
+    /**
+     * Gets tasks by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getTasksByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetTasksByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets tasks identifiers
+     *
+     * @return Json format with all tasks identifiers
+     */
+    public function getTasksIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetTasksIdentifiers');
     }
 
     /**
@@ -765,6 +1469,29 @@ class eWayConnector
     {
         return $this->postRequest('GetUsers');
     }
+    
+    /**
+     * Gets users by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getUsersByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetUsersByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets users identifiers
+     *
+     * @return Json format with all users identifiers
+     */
+    public function getUsersIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetUsersIdentifiers');
+    }
 
     /**
      * Searches users
@@ -792,6 +1519,29 @@ class eWayConnector
     {
         return $this->postRequest('GetWorkFlowModels');
     }
+    
+    /**
+     * Gets workflow models by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getWorkflowModelsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetWorkflowModelsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets workflow models identifiers
+     *
+     * @return Json format with all sale workflow models identifiers
+     */
+    public function getWorkflowModelsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetWorkflowModelsIdentifiers');
+    }
 
     /**
      * Searches work flow models
@@ -810,6 +1560,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes work report
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteWorkReport($guid)
+    {
+        return $this->deleteItem('DeleteWorkReport', $guid);
+    }
+    
+    /**
      * Gets all work reports
      *
      * @return Json format with all work reports
@@ -817,6 +1578,29 @@ class eWayConnector
     public function getWorkReports()
     {
         return $this->postRequest('GetWorkReports');
+    }
+    
+    /**
+     * Gets work reports by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getWorkReportsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetWorkReportsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+    }
+    
+    /**
+     * Gets work reports identifiers
+     *
+     * @return Json format with all sale work reports identifiers
+     */
+    public function getWorkReportsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetWorkReportsIdentifiers');
     }
 
     /**
@@ -910,10 +1694,6 @@ class eWayConnector
 
     private function postRequest($action, $transmitObject = null)
     {
-        if (empty($this->sessionId)) {
-            $this->reLogin();
-        }
-  
         if ($transmitObject == null) {
             $completeTransmitObject = array(
                 'sessionId' => $this->sessionId
@@ -926,6 +1706,47 @@ class eWayConnector
             );
         }
 
+        return $this->doRequest($completeTransmitObject, $action);
+    }
+    
+    private function getItemIdentifiers($action) {
+        $completeTransmitObject = array(
+            'sessionId' => $this->sessionId
+        );
+            
+        return $this->doRequest($completeTransmitObject, $action);
+    }
+    
+    private function getItemsByItemGuids($action, $guids, $includeForeignKeys = true, $includeRelations = false, $additionalParameters = null) {
+        if ($guids == null) {
+            throw new Exception('Action '.$action.' requires item to be executed on.');
+        } else {
+            $completeTransmitObject = array(
+                'sessionId' => $this->sessionId,
+                'itemGuids' => $guids,
+                'includeForeignKeys' => $includeForeignKeys,
+                'includeRelations' => $includeRelations
+            );
+            
+            if($additionalParameters != null){
+                foreach($additionalParameters as $key => $parameter)
+                    $completeTransmitObject[$key] = $parameter;
+            }
+        }
+        
+        return $this->doRequest($completeTransmitObject, $action);
+    }
+    
+    private function deleteItem($action, $guid) {
+        if ($guid == null) {
+            throw new Exception('Action '.$action.' requires item to be executed on.');
+        } else {
+            $completeTransmitObject = array(
+                'sessionId' => $this->sessionId,
+                'itemGuid' => $guid
+            );
+        }
+        
         return $this->doRequest($completeTransmitObject, $action);
     }
 
@@ -946,7 +1767,7 @@ class eWayConnector
         return $result;
     }
 
-    private function doRequest($completeTransmitObject, $action)
+    private function doRequest($completeTransmitObject, $action, $repeatSession = true)
     {
         // This is first request, login before
         if (empty($this->sessionId)) {
@@ -972,7 +1793,9 @@ class eWayConnector
         
         if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
             // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
-            return $this->doRequest($completeTransmitObject, $action);
+            if($repeatSession == true) {
+                return $this->doRequest($completeTransmitObject, $action, false);
+            }
         }
         
         if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
