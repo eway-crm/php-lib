@@ -71,7 +71,7 @@ class eWayConnector
      */
     public function getAdditionalFieldsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetAdditionalFieldsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetAdditionalFieldsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -202,7 +202,7 @@ class eWayConnector
      */
     public function getCalendarsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetCalendarsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetCalendarsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -277,7 +277,7 @@ class eWayConnector
      */
     public function getCompaniesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetCompaniesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetCompaniesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
 
     /**
@@ -352,7 +352,7 @@ class eWayConnector
      */
     public function getContactsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetContactsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetContactsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -427,7 +427,7 @@ class eWayConnector
      */
     public function getDocumentsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetDocumentsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetDocumentsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -502,7 +502,7 @@ class eWayConnector
      */
     public function getEmailsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetEmailsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetEmailsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -566,7 +566,7 @@ class eWayConnector
      */
     public function getEnumValuesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetEnumValuesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetEnumValuesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -615,7 +615,7 @@ class eWayConnector
      */
     public function getFeaturesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetFeaturesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetFeaturesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -664,7 +664,7 @@ class eWayConnector
      */
     public function getFlowsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetFlowsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetFlowsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
 
     /**
@@ -713,7 +713,7 @@ class eWayConnector
      */
     public function getGlobalSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetGlobalSettingsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetGlobalSettingsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -773,7 +773,7 @@ class eWayConnector
      */
     public function getGoodsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetGoodsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetGoodsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -849,7 +849,7 @@ class eWayConnector
      */
     public function getGoodsInCartByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetGoodsInCartByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetGoodsInCartByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -913,7 +913,7 @@ class eWayConnector
      */
     public function getGroupsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetGroupsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetGroupsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -988,7 +988,7 @@ class eWayConnector
      */
     public function getJournalsItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetJournalsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetJournalsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
 
     /**
@@ -1063,7 +1063,7 @@ class eWayConnector
      */
     public function getLeadsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetLeadsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetLeadsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1138,7 +1138,7 @@ class eWayConnector
      */
     public function getMerketingCampaignsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetMarketingCampaignsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetMarketingCampaignsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1213,7 +1213,7 @@ class eWayConnector
      */
     public function getMarketingListsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetMarketingListsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetMarketingListsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1288,7 +1288,7 @@ class eWayConnector
      */
     public function getProjectsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetProjectsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetProjectsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1352,7 +1352,7 @@ class eWayConnector
      */
     public function getSalePricesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetSalePricesByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetSalePricesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1416,7 +1416,7 @@ class eWayConnector
      */
     public function getTasksByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetTasksByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetTasksByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1480,7 +1480,7 @@ class eWayConnector
      */
     public function getUsersByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetUsersByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetUsersByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1530,7 +1530,7 @@ class eWayConnector
      */
     public function getWorkflowModelsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetWorkflowModelsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetWorkflowModelsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
@@ -1590,7 +1590,7 @@ class eWayConnector
      */
     public function getWorkReportsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
-        return $this->getItemsByItemGuids('GetWorkReportsByItemGuids', $guids, $includeForeignKeys = true, $includeRelations = false);
+        return $this->getItemsByItemGuids('GetWorkReportsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
     /**
