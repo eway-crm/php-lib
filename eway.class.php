@@ -15,6 +15,7 @@ class eWayConnector
     private $passwordHash;
     private $dieOnItemConflict;
     private $throwExceptionOnFail;
+    private $wcfVersion = null;
 
     /**
      * Initialize eWayConnector class
@@ -52,10 +53,128 @@ class eWayConnector
     }
 
     /**
+     * Gets all additional fields
+     *
+     * @return Json format with all additional fields
+     */
+    public function getAdditionalFields()
+    {
+        return $this->postRequest('GetAdditionalFields');
+    }
+    
+    /**
+     * Gets additional fields by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getAdditionalFieldsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetAdditionalFieldsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets all additional fields identifiers
+     *
+     * @return Json format with all additional fields identifiers
+     */
+    public function getAdditionalFieldsIdentifiers()
+    {
+        return $this->postRequest('GetAdditionalFieldsIdentifiers');
+    }
+
+    /**
+     * Searches additional fields
+     *
+     * @param $additionalField Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If additionalField is empty
+     * @return Json format with found additional fields
+     */
+    public function searchAdditionalFields($additionalField, $includeRelations = false)
+    {
+        if (empty($additionalField))
+            throw new Exception('Empty additional field');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchAdditionalFields', $additionalField, $includeRelations);
+    }
+    
+    /**
+     * Deletes cart
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteCart($guid)
+    {
+        return $this->deleteItem('DeleteCart', $guid);
+    }
+
+    /**
+     * Gets all carts
+     *
+     * @return Json format with all carts
+     */
+    public function getCarts()
+    {
+        return $this->postRequest('GetCarts');
+    }
+    
+    /**
+     * Gets carts by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $omitGoodsInCart array of additional parameters (default: null)
+     * @return Json format with items selected by guids
+     */
+    public function getCartsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false, $omitGoodsInCart = false)
+    {
+        if($omitGoodsInCart == true) {
+            $additionalParameters = array('omitGoodsInCart' => true);
+        } else {
+            $additionalParameters = null;
+        }
+        
+        return $this->getItemsByItemGuids('GetCartsByItemGuids', $guids, $includeForeignKeys, $includeRelations, $additionalParameters);
+    }
+    
+    /**
+     * Gets carts identifiers
+     *
+     * @return Json format with all carts identifiers
+     */
+    public function getCartsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetCartsIdentifiers');
+    }
+
+    /**
+     * Searches carts
+     *
+     * @param $cart Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If cart is empty
+     * @return Json format with found carts
+     */
+    public function searchCarts($cart, $includeRelations = false)
+    {
+        if (empty($cart))
+            throw new Exception('Empty cart');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchCarts', $cart, $includeRelations);
+    }
+
+    /**
      * Saves cart
      *
      * @param $cart Cart array data to save
-     * @throws Exception If vart is empty
+     * @throws Exception If cart is empty
      * @return Json format with successful response
      */
     public function saveCart($cart)
@@ -67,6 +186,82 @@ class eWayConnector
     }
 
     /**
+     * Gets all calendars
+     *
+     * @return Json format with all calendars
+     */
+    public function getCalendars()
+    {
+        return $this->postRequest('GetCalendars');
+    }
+    
+    /**
+     * Gets calendars by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getCalendarsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetCalendarsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets calendars identifiers
+     *
+     * @return Json format with all calendars identifiers
+     */
+    public function getCalendarsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetCalendarsIdentifiers');
+    }
+
+    /**
+     * Searches calendars
+     *
+     * @param $calendar Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If calendar is empty
+     * @return Json format with found calendars
+     */
+    public function searchCalendars($calendar, $includeRelations = false)
+    {
+        if (empty($calendar))
+            throw new Exception('Empty calendar');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchCalendars', $calendar, $includeRelations);
+    }
+
+    /**
+     * Saves calendar
+     *
+     * @param $calendar Calendar array data to save
+     * @throws Exception If calendar is empty
+     * @return Json format with successful response
+     */
+    public function saveCalendar($calendar)
+    {
+        if (empty($calendar))
+            throw new Exception('Empty calendar');
+
+        return $this->postRequest('SaveCalendar', $calendar);
+    }
+
+    /**
+     * Deletes company
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteCompany($guid)
+    {
+        return $this->deleteItem('DeleteCompany', $guid);
+    }
+    
+    /**
      * Gets all companies
      *
      * @return Json format with all companies
@@ -75,21 +270,45 @@ class eWayConnector
     {
         return $this->postRequest('GetCompanies');
     }
+    
+    /**
+     * Gets companies by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getCompaniesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetCompaniesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
 
+    /**
+     * Gets companies identifiers
+     *
+     * @return Json format with all companies identifiers
+     */
+    public function getCompaniesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetCompaniesIdentifiers');
+    }
+    
     /**
      * Searches companies
      *
      * @param $company Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If company is empty
      * @return Json format with found companies
      */
-    public function searchCompanies($company)
+    public function searchCompanies($company, $includeRelations = false)
     {
         if (empty($company))
             throw new Exception('Empty company');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchCompanies', $company);
+        return $this->postRequest('SearchCompanies', $company, $includeRelations);
     }
 
     /**
@@ -108,6 +327,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes contact
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteContact($guid)
+    {
+        return $this->deleteItem('DeleteContact', $guid);
+    }
+    
+    /**
      * Gets all contacts
      *
      * @return Json format with all contacts
@@ -116,21 +346,45 @@ class eWayConnector
     {
         return $this->postRequest('GetContacts');
     }
+    
+    /**
+     * Gets contacts by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getContactsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetContactsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets contacts identifiers
+     *
+     * @return Json format with all contacts identifiers
+     */
+    public function getContactsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetContactsIdentifiers');
+    }
 
     /**
      * Searches contacts
      *
      * @param $contact Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If contact is empty
      * @return Json format with found contacts
      */
-    public function searchContacts($contact)
+    public function searchContacts($contact, $includeRelations = false)
     {
         if (empty($contact))
             throw new Exception('Empty contact');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchContacts', $contact);
+        return $this->postRequest('SearchContacts', $contact, $includeRelations);
     }
 
     /**
@@ -149,29 +403,64 @@ class eWayConnector
     }
 
     /**
+     * Deletes document
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteDocument($guid)
+    {
+        return $this->deleteItem('DeleteDocument', $guid);
+    }
+    
+    /**
      * Gets all documents
      *
      * @return Json format with all documents
      */
     public function getDocuments()
     {
-        return $this->postRequest('getDocuments');
+        return $this->postRequest('GetDocuments');
+    }
+    
+    /**
+     * Gets Documents by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getDocumentsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetDocumentsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets documents identifiers
+     *
+     * @return Json format with all documents identifiers
+     */
+    public function getDocumentsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetDocumentsIdentifiers');
     }
 
     /**
      * Searches documents
      *
      * @param $document Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If document is empty
      * @return Json format with found documents
      */
-    public function searchDocuments($document)
+    public function searchDocuments($document, $includeRelations = false)
     {
         if (empty($document))
             throw new Exception('Empty document');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchDocuments', $document);
+        return $this->postRequest('SearchDocuments', $document, $includeRelations);
     }
 
     /**
@@ -190,6 +479,293 @@ class eWayConnector
     }
 
     /**
+     * Deletes email
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteEmail($guid)
+    {
+        return $this->deleteItem('DeleteEmail', $guid);
+    }
+
+    /**
+     * Gets all emails
+     *
+     * @return Json format with all emails
+     */
+    public function getEmails()
+    {
+        return $this->postRequest('GetEmails');
+    }
+    
+    /**
+     * Gets emails by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getEmailsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetEmailsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets emails identifiers
+     *
+     * @return Json format with all emails identifiers
+     */
+    public function getEmailsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetEmailsIdentifiers');
+    }
+
+    /**
+     * Searches emails
+     *
+     * @param $email Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If email is empty
+     * @return Json format with found email
+     */
+    public function searchEmails($email, $includeRelations = false)
+    {
+        if (empty($email))
+            throw new Exception('Empty email');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchEmails', $email, $includeRelations);
+    }
+
+    /**
+     * Saves email
+     *
+     * @param $email Email array data to save
+     * @throws Exception If email is empty
+     * @return Json format with successful response
+     */
+    public function saveEmail($email)
+    {
+        if (empty($email))
+            throw new Exception('Empty email');
+
+        return $this->postRequest('SaveEmail', $email);
+    }
+
+    /**
+     * Gets all Enum Values
+     *
+     * @return Json format with all enum values
+     */
+    public function getEnumValues()
+    {
+        return $this->postRequest('GetEnumValues');
+    }
+    
+    /**
+     * Gets enum values by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getEnumValuesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetEnumValuesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets enum values identifiers
+     *
+     * @return Json format with all enum values identifiers
+     */
+    public function getEnumValuesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetEnumValuesIdentifiers');
+    }
+
+    /**
+     * Searches Enum Values
+     *
+     * @param $enumValue Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If enumValue is empty
+     * @return Json format with found enum values
+     */
+    public function searchEnumValues($enumValue, $includeRelations = false)
+    {
+        if (empty($enumValue))
+            throw new Exception('Empty enumValue');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchEnumValues', $enumValue, $includeRelations);
+    }
+
+    /**
+     * Gets all Features
+     *
+     * @return Json format with all features
+     */
+    public function getFeatures()
+    {
+        return $this->postRequest('GetFeatures');
+    }
+    
+    /**
+     * Gets features by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getFeaturesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetFeaturesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets features identifiers
+     *
+     * @return Json format with all features identifiers
+     */
+    public function getFeaturesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetFeaturesIdentifiers');
+    }
+
+    /**
+     * Searches Features
+     *
+     * @param $features Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If features is empty
+     * @return Json format with found features
+     */
+    public function searchFeatures($features, $includeRelations = false)
+    {
+        if (empty($features))
+            throw new Exception('Empty features');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchFeatures', $features, $includeRelations);
+    }
+
+    /**
+     * Gets all Flows
+     *
+     * @return Json format with all flows
+     */
+    public function getFlows()
+    {
+        return $this->postRequest('GetFlows');
+    }
+    
+    /**
+     * Gets additional flows by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getFlowsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetFlowsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+
+    /**
+     * Gets flows identifiers
+     *
+     * @return Json format with all flows identifiers
+     */
+    public function getFlowsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetFlowsIdentifiers');
+    }
+    
+    /**
+     * Searches Flows
+     *
+     * @param $flow Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If flow is empty
+     * @return Json format with found flows
+     */
+    public function searchFlows($flow, $includeRelations = false)
+    {
+        if (empty($flow))
+            throw new Exception('Empty flow');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchFlows', $flow, $includeRelations);
+    }
+
+    /**
+     * Gets all Global settings
+     *
+     * @return Json format with all global settings
+     */
+    public function getGlobalSettings()
+    {
+        return $this->postRequest('GetGlobalSettings');
+    }
+    
+    /**
+     * Gets global settings by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGlobalSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGlobalSettingsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets global settings identifiers
+     *
+     * @return Json format with all global settings identifiers
+     */
+    public function getGlobalSettingsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGlobalSettingsIdentifiers');
+    }
+
+    /**
+     * Searches Global settings
+     *
+     * @param $globalSetting Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If globalSetting is empty
+     * @return Json format with found global settings
+     */
+    public function searchGlobalSettings($globalSetting, $includeRelations = false)
+    {
+        if (empty($globalSetting))
+            throw new Exception('Empty global setting');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchGlobalSettings', $globalSetting, $includeRelations);
+    }
+
+    /**
+     * Deletes good
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteGood($guid)
+    {
+        return $this->deleteItem('DeleteGood', $guid);
+    }
+    
+    /**
      * Gets all goods
      *
      * @return Json format with all goods
@@ -198,21 +774,45 @@ class eWayConnector
     {
         return $this->postRequest('GetGoods');
     }
+    
+    /**
+     * Gets additional goods by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGoodsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGoodsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets goods identifiers
+     *
+     * @return Json format with all goods identifiers
+     */
+    public function getGoodsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGoodsIdentifiers');
+    }
 
     /**
      * Searches goods
      *
      * @param $good Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If good is empty
      * @return Json format with found goods
      */
-    public function searchGoods($good)
+    public function searchGoods($good, $includeRelations = false)
     {
         if (empty($good))
             throw new Exception('Empty good');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchGoods', $good);
+        return $this->postRequest('SearchGoods', $good, $includeRelations);
     }
 
     /**
@@ -230,6 +830,18 @@ class eWayConnector
         return $this->postRequest('SaveGood', $good);
     }
 
+    
+    /**
+     * Deletes good in cart
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteGoodInCart($guid)
+    {
+        return $this->deleteItem('DeleteGoodInCart', $guid);
+    }
+    
     /**
      * Gets all goods in cart
      *
@@ -237,30 +849,54 @@ class eWayConnector
      */
     public function getGoodsInCart()
     {
-        return $this->postRequest('getGoodsInCart');
+        return $this->postRequest('GetGoodsInCart');
+    }
+    
+    /**
+     * Gets goods in cart by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGoodsInCartByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGoodsInCartByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets goods in cart identifiers
+     *
+     * @return Json format with all goods in cart identifiers
+     */
+    public function getGoodsInCartIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGoodsInCartIdentifiers');
     }
 
     /**
      * Searches goods in cart
      *
-     * @param $document Array with specified properties for search
-     * @throws Exception If good in cart is empty
+     * @param $goodInCart Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If goodInCart is empty
      * @return Json format with found good in cart
      */
-    public function searchGoodsInCart($goodInCart)
+    public function searchGoodsInCart($goodInCart, $includeRelations = false)
     {
         if (empty($goodInCart))
-            throw new Exception('Empty good in cart');
+            throw new Exception('Empty goodInCart');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchGoodsInCart', $goodInCart);
+        return $this->postRequest('SearchGoodsInCart', $goodInCart, $includeRelations = false);
     }
 
     /**
      * Saves good in cart
      *
      * @param $goodInCart GoodInCart array data to save
-     * @throws Exception If good in cart is empty
+     * @throws Exception If goodInCart is empty
      * @return Json format with successful response
      */
     public function saveGoodInCart($goodInCart)
@@ -280,21 +916,45 @@ class eWayConnector
     {
         return $this->postRequest('GetGroups');
     }
+    
+    /**
+     * Gets additional groups by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getGroupsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetGroupsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets groups identifiers
+     *
+     * @return Json format with all groups identifiers
+     */
+    public function getGroupsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetGroupsIdentifiers');
+    }
 
     /**
      * Searches groups
      *
      * @param $group Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If group is empty
      * @return Json format with found groups
      */
-    public function searchGroups($group)
+    public function searchGroups($group, $includeRelations = false)
     {
         if (empty($group))
             throw new Exception('Empty group');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchGroups', $group);
+        return $this->postRequest('SearchGroups', $group, $includeRelations);
     }
 
     /**
@@ -313,6 +973,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes journal
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteJournal($guid)
+    {
+        return $this->deleteItem('DeleteJournal', $guid);
+    }
+    
+    /**
      * Gets all journals
      *
      * @return Json format with all journals
@@ -321,21 +992,45 @@ class eWayConnector
     {
         return $this->postRequest('GetJournals');
     }
+    
+    /**
+     * Gets journals by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getJournalsItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetJournalsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
 
+    /**
+     * Gets journals identifiers
+     *
+     * @return Json format with all journals identifiers
+     */
+    public function getJournalsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetJournalsIdentifiers');
+    }
+    
     /**
      * Searches journals
      *
      * @param $journal Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If journal is empty
      * @return Json format with found journals
      */
-    public function searchJournals($journal)
+    public function searchJournals($journal, $includeRelations = false)
     {
         if (empty($journal))
             throw new Exception('Empty journal');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchJournals', $journal);
+        return $this->postRequest('SearchJournals', $journal, $includeRelations);
     }
 
     /**
@@ -354,6 +1049,17 @@ class eWayConnector
     }
 
     /**
+     * Deletes lead
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteLead($guid)
+    {
+        return $this->deleteItem('DeleteLead', $guid);
+    }
+    
+    /**
      * Gets all leads
      *
      * @return Json format with all leads
@@ -362,21 +1068,45 @@ class eWayConnector
     {
         return $this->postRequest('GetLeads');
     }
+    
+    /**
+     * Gets leads by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getLeadsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetLeadsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets leads identifiers
+     *
+     * @return Json format with all leads identifiers
+     */
+    public function getLeadsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetLeadsIdentifiers');
+    }
 
     /**
      * Searches leads
      *
      * @param $lead Array with specified properties for search
-     * @throws Exception If leads is empty
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If lead is empty
      * @return Json format with found leads
      */
-    public function searchLeads($lead)
+    public function searchLeads($lead, $includeRelations = false)
     {
         if (empty($lead))
             throw new Exception('Empty lead');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchLeads', $lead);
+        return $this->postRequest('SearchLeads', $lead, $includeRelations);
     }
 
     /**
@@ -393,7 +1123,170 @@ class eWayConnector
 
         return $this->postRequest('SaveLead', $lead);
     }
+    
+    /**
+     * Deletes marketing campaign
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteMarketingCampaign($guid)
+    {
+        return $this->deleteItem('DeleteMarketingCampaign', $guid);
+    }
+    
+    /**
+     * Gets all marketing campaigns
+     *
+     * @return Json format with all marketing campaigns
+     */
+    public function getMarketingCampaigns()
+    {
+        return $this->postRequest('GetMarketingCampaigns');
+    }
+    
+    /**
+     * Gets marketing campaigns by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getMerketingCampaignsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetMarketingCampaignsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets marketing campaigns identifiers
+     *
+     * @return Json format with all marketing campaigns identifiers
+     */
+    public function getMarketingCampaignsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetMarketingCampaignsIdentifiers');
+    }
 
+    /**
+     * Searches marketing campaigns
+     *
+     * @param $marketingCampaign Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If marketing campaign is empty
+     * @return Json format with found marketing campaigns
+     */
+    public function searchMarketingCampaigns($marketingCampaign, $includeRelations = false)
+    {
+        if (empty($marketingCampaign))
+            throw new Exception('Empty marketing campaign');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchMarketingCampaigns', $marketingCampaign, $includeRelations);
+    }
+    
+    /**
+     * Saves marketing campaign
+     *
+     * @param $marketingCampaign marketing campaign array data to save
+     * @throws Exception If marketing campaign is empty
+     * @return Json format with successful response
+     */
+    public function saveMarketingCampaign($marketingCampaign)
+    {
+        if (empty($marketingCampaign))
+            throw new Exception('Empty marketing campaign');
+
+        return $this->postRequest('SaveMarketingCampaign', $marketingCampaign);
+    }
+    
+    /**
+     * Deletes marketing list record
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteMarketingListRecord($guid)
+    {
+        return $this->deleteItem('DeleteMarketingListRecord', $guid);
+    }
+    
+    /**
+     * Gets all marketing lists records
+     *
+     * @return Json format with all marketing lists records
+     */
+    public function getMarketingListsRecords()
+    {
+        return $this->postRequest('GetMarketingListsRecords');
+    }
+    
+    /**
+     * Gets marketing lists by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getMarketingListsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetMarketingListsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets marketing lists records identifiers
+     *
+     * @return Json format with all marketing lists records identifiers
+     */
+    public function getMarketingListsRecordsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetMarketingListsRecordsIdentifiers');
+    }
+
+    /**
+     * Searches marketing lists records
+     *
+     * @param $marketingListRecord Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If marketing list record is empty
+     * @return Json format with found marketing list records
+     */
+    public function searchMarketingListsRecords($marketingListRecord, $includeRelations = false)
+    {
+        if (empty($marketingListRecord))
+            throw new Exception('Empty marketing list record');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchMarketingListsRecords', $marketingListRecords, $includeRelations);
+    }
+    
+    /**
+     * Saves marketing list record
+     *
+     * @param $marketingListRecord marketing list record array data to save
+     * @throws Exception If marketing list record is empty
+     * @return Json format with successful response
+     */
+    public function saveMarketingListRecord($marketingListRecord)
+    {
+        if (empty($marketingListRecord))
+            throw new Exception('Empty marketing list record');
+
+        return $this->postRequest('SaveMarketingListRecord', $marketingListRecord);
+    }
+    
+    /**
+     * Deletes project
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteProject($guid)
+    {
+        return $this->deleteItem('DeleteProject', $guid);
+    }
+    
     /**
      * Gets all projects
      *
@@ -403,21 +1296,45 @@ class eWayConnector
     {
         return $this->postRequest('GetProjects');
     }
+    
+    /**
+     * Gets projects by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getProjectsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetProjectsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets projects identifiers
+     *
+     * @return Json format with all projects identifiers
+     */
+    public function getProjectsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetProjectsIdentifiers');
+    }
 
     /**
      * Searches projects
      *
      * @param $projects Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If project is empty
      * @return Json format with found projects
      */
-    public function searchProjects($project)
+    public function searchProjects($project, $includeRelations = false)
     {
         if (empty($project))
             throw new Exception('Empty project');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchProjects', $project);
+        return $this->postRequest('SearchProjects', $project, $includeRelations);
     }
 
     /**
@@ -436,6 +1353,56 @@ class eWayConnector
     }
 
     /**
+     * Gets all sale prices
+     *
+     * @return Json format with all sale prices
+     */
+    public function getSalePrices()
+    {
+        return $this->postRequest('GetSalePrices');
+    }
+    
+    /**
+     * Gets sale prices by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getSalePricesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetSalePricesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets sale prices identifiers
+     *
+     * @return Json format with all sale prices identifiers
+     */
+    public function getSalePricesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetSalePricesIdentifiers');
+    }
+
+    /**
+     * Searches sale prices
+     *
+     * @param $salePrice Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If salePrice is empty
+     * @return Json format with found sale prices
+     */
+    public function searchSalePrices($salePrice, $includeRelations = false)
+    {
+        if (empty($salePrice))
+            throw new Exception('Empty salePrice');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchSalePrices', $salePrice, $includeRelations);
+    }
+
+    /**
      * Saves relation
      *
      * @param $relation Relation array data to save
@@ -451,48 +1418,7 @@ class eWayConnector
     }
 
     /**
-     * Gets all work reports
-     *
-     * @return Json format with all work reports
-     */
-    public function getWorkReports()
-    {
-        return $this->postRequest('GetWorkReports');
-    }
-
-    /**
-     * Searches work reports
-     *
-     * @param $projects Array with specified properties for search
-     * @throws Exception If work report is empty
-     * @return Json format with found work reports
-     */
-    public function searchWorkReports($workReport)
-    {
-        if (empty($workReport))
-            throw new Exception('Empty workReport');
-
-        // Any search request is defined as POST
-        return $this->postRequest('SearchWorkReports', $project);
-    }
-
-    /**
-     * Saves work report
-     *
-     * @param $workReport work report array data to save
-     * @throws Exception If work report is empty
-     * @return Json format with successful response
-     */
-    public function saveWorkReport($workReport)
-    {
-        if (empty($workReport))
-            throw new Exception('Empty workReport');
-
-        return $this->postRequest('SaveWorkReport', $WorkReport);
-    }
-
-    /**
-     * Gets all work tasks
+     * Gets all tasks
      *
      * @return Json format with all tasks
      */
@@ -500,11 +1426,34 @@ class eWayConnector
     {
         return $this->postRequest('GetTasks');
     }
+    
+    /**
+     * Gets tasks by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getTasksByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetTasksByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets tasks identifiers
+     *
+     * @return Json format with all tasks identifiers
+     */
+    public function getTasksIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetTasksIdentifiers');
+    }
 
     /**
      * Searches tasks
      *
-     * @param $projects Array with specified properties for search
+     * @param $task Array with specified properties for search
      * @throws Exception If task is empty
      * @return Json format with found tasks
      */
@@ -514,22 +1463,276 @@ class eWayConnector
             throw new Exception('Empty task');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchTasks', $project);
+        return $this->postRequest('SearchTasks', $task);
     }
 
     /**
      * Saves task
      *
      * @param $task Task array data to save
+     * @param $includeRelations indicator wether you want to include relations (default: false)
      * @throws Exception If task is empty
      * @return Json format with successful response
      */
-    public function saveTask($task)
+    public function saveTask($task, $includeRelations = false)
     {
         if (empty($task))
             throw new Exception('Empty task');
 
-        return $this->postRequest('SaveTask', $task);
+        return $this->postRequest('SaveTask', $task, $includeRelations);
+    }
+
+    /**
+     * Gets all users
+     *
+     * @return Json format with all users
+     */
+    public function getUsers()
+    {
+        return $this->postRequest('GetUsers');
+    }
+    
+    /**
+     * Gets users by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getUsersByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetUsersByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets users identifiers
+     *
+     * @return Json format with all users identifiers
+     */
+    public function getUsersIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetUsersIdentifiers');
+    }
+
+    /**
+     * Searches users
+     *
+     * @param $user Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If user is empty
+     * @return Json format with found users
+     */
+    public function searchUsers($user, $includeRelations = false)
+    {
+        if (empty($user))
+            throw new Exception('Empty user');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchUsers', $user, $includeRelations);
+    }
+
+
+    /**
+     * Gets all work flow models
+     *
+     * @return Json format with all work flows
+     */
+    public function getWorkFlowModels()
+    {
+        return $this->postRequest('GetWorkFlowModels');
+    }
+    
+    /**
+     * Gets workflow models by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getWorkflowModelsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetWorkflowModelsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets workflow models identifiers
+     *
+     * @return Json format with all sale workflow models identifiers
+     */
+    public function getWorkflowModelsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetWorkflowModelsIdentifiers');
+    }
+
+    /**
+     * Searches work flow models
+     *
+     * @param $workFlowModel Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If workFlowModel is empty
+     * @return Json format with found work flow models
+     */
+    public function searchWorkFlowModels($workFlowModel, $includeRelations = false)
+    {
+        if (empty($workFlowModel))
+            throw new Exception('Empty workFlowModel');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchWorkFlowModels', $workFlowModel, $includeRelations);
+    }
+
+    /**
+     * Deletes work report
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteWorkReport($guid)
+    {
+        return $this->deleteItem('DeleteWorkReport', $guid);
+    }
+    
+    /**
+     * Gets all work reports
+     *
+     * @return Json format with all work reports
+     */
+    public function getWorkReports()
+    {
+        return $this->postRequest('GetWorkReports');
+    }
+    
+    /**
+     * Gets work reports by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getWorkReportsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetWorkReportsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets work reports identifiers
+     *
+     * @return Json format with all sale work reports identifiers
+     */
+    public function getWorkReportsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetWorkReportsIdentifiers');
+    }
+
+    /**
+     * Searches work reports
+     *
+     * @param $workReport Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If workReport is empty
+     * @return Json format with found work reports
+     */
+    public function searchWorkReports($workReport, $includeRelations = false)
+    {
+        if (empty($workReport))
+            throw new Exception('Empty workReport');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchWorkReports', $workReport, $includeRelations);
+    }
+
+    /**
+     * Saves work report
+     *
+     * @param $workReport work report array data to save
+     * @throws Exception If workReport is empty
+     * @return Json format with successful response
+     */
+    public function saveWorkReport($workReport)
+    {
+        if (empty($workReport))
+            throw new Exception('Empty workReport');
+
+        return $this->postRequest('SaveWorkReport', $workReport);
+    }
+    
+    /**
+     * Deletes user settings
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteUserSettings($guid)
+    {
+        return $this->deleteItem('DeleteUserSetting', $guid, '5.3.1.68');
+    }
+    
+    /**
+     * Gets all user settings
+     *
+     * @return Json format with all work reports
+     */
+    public function getUserSettings()
+    {
+        return $this->postRequest('GetUserSettings', null, '5.3.1.68');
+    }
+    
+    /**
+     * Gets user settings by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getUserSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetUserSettingsByItemGuids', $guids, $includeForeignKeys, $includeRelations, '5.3.1.68');
+    }
+    
+    /**
+     * Gets user settings identifiers
+     *
+     * @return Json format with all sale workflow models identifiers
+     */
+    public function getUserSettingsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetUserSettingsIdentifiers', '5.3.1.68');
+    }
+    
+    /**
+     * Searches user settings
+     *
+     * @param $workReport Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false) 
+     * @throws Exception If workReport is empty
+     * @return Json format with found work reports
+     */
+    public function searchUserSettings($userSettings, $includeRelations = false)
+    {
+        if (empty($userSettings))
+            throw new Exception('Empty userSettings');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchUserSettings', $userSettings, $includeRelations = false, '5.3.1.68');
+    }
+    
+    /**
+     * Saves work report
+     *
+     * @param $workReport work report array data to save
+     * @throws Exception If workReport is empty
+     * @return Json format with successful response
+     */
+    public function saveUserSettings($userSettings)
+    {
+        if (empty($userSettings))
+            throw new Exception('Empty userSettings');
+
+        return $this->postRequest('SaveUserSetting', $userSettings, '5.3.1.68');
     }
 
     /**
@@ -557,9 +1760,13 @@ class eWayConnector
 
         $jsonObject = json_encode($login, true);
         $ch = $this->createPostRequest($this->createWebServiceUrl('Login'), $jsonObject);
-        $jsonResult = json_decode(curl_exec($ch));
-        $returnCode = $jsonResult->ReturnCode;
 
+        $result = $this->executeCurl($ch);
+        $jsonResult = json_decode($result);
+        $returnCode = $jsonResult->ReturnCode;
+        $this->wcfVersion = $jsonResult->WcfVersion;
+        
+        // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
             throw new Exception('Login failed: '.$jsonResult->Description);
         }
@@ -587,44 +1794,107 @@ class eWayConnector
         return join('/', $paths);
     }
 
-    private function postRequest($action, $transmitObject = null)
+    private function postRequest($action, $transmitObject = null, $includeRelations = false, $version = '')
     {
-        if (empty($this->sessionId)) {
-            $this->reLogin();
-        }
-  
         if ($transmitObject == null) {
             $completeTransmitObject = array(
-                'sessionId' => $this->sessionId
+                'sessionId' => $this->sessionId,
+                'includeRelations' => $includeRelations
             );
         } else {
             $completeTransmitObject = array(
                 'sessionId' => $this->sessionId,
                 'transmitObject' => $transmitObject,
+                'includeRelations' => $includeRelations,
                 'dieOnItemConflict' => $this->dieOnItemConflict
             );
         }
 
-        return $this->doRequest($completeTransmitObject, $action);
+        return $this->doRequest($completeTransmitObject, $action, $version);
     }
-    private function doRequest($completeTransmitObject, $action)
+    
+    private function getItemIdentifiers($action, $version = '' ) {
+        $completeTransmitObject = array(
+            'sessionId' => $this->sessionId
+        );
+            
+        return $this->doRequest($completeTransmitObject, $action, $version);
+    }
+    
+    private function getItemsByItemGuids($action, $guids, $includeForeignKeys = true, $includeRelations = false, $additionalParameters = null, $version = '' ) {
+        if ($guids == null) {
+            throw new Exception('Action '.$action.' requires item to be executed on.');
+        } else {
+            $completeTransmitObject = array(
+                'sessionId' => $this->sessionId,
+                'itemGuids' => $guids,
+                'includeForeignKeys' => $includeForeignKeys,
+                'includeRelations' => $includeRelations
+            );
+            
+            if($additionalParameters != null){
+                foreach($additionalParameters as $key => $parameter)
+                    $completeTransmitObject[$key] = $parameter;
+            }
+        }
+        
+        return $this->doRequest($completeTransmitObject, $action, $version);
+    }
+    
+    private function deleteItem($action, $guid, $version = '' ) {
+        if ($guid == null) {
+            throw new Exception('Action '.$action.' requires item to be executed on.');
+        } else {
+            $completeTransmitObject = array(
+                'sessionId' => $this->sessionId,
+                'itemGuid' => $guid
+            );
+        }
+        
+        return $this->doRequest($completeTransmitObject, $action, $version);
+    }
+
+    private function executeCurl($ch)
     {
+        $result = curl_exec($ch);
+        // Check if request has been executed successfully.
+        if ($result === false) {
+            throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
+        }
+
+        // Also Check if return code is OK.
+        $curlReturnInfo = curl_getinfo($ch);
+        if ($curlReturnInfo['http_code'] != 200) {
+            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
+        }
+
+        return $result;
+    }
+
+    private function doRequest($completeTransmitObject, $action, $version ='', $repeatSession = true)
+    {   
         // This is first request, login before
         if (empty($this->sessionId)) {
             $this->reLogin();
             
             $completeTransmitObject['sessionId'] = $this->sessionId;
-            return $this->doRequest($completeTransmitObject, $action);
+            return $this->doRequest($completeTransmitObject, $action, $version);
+        }
+        
+        if ( $version != '' ){
+            if ( version_compare( $this->wcfVersion, $version ) == -1){
+                throw new Exception('This function is available from version '.$version.' ! Your version is '.$this->wcfVersion.' .');
+            }
         }
         
         $url = $this->createWebServiceUrl($action);
         $jsonObject = json_encode($completeTransmitObject, true);
         $ch = $this->createPostRequest($url, $jsonObject);
         
-        $result = curl_exec($ch);
+        $result = $this->executeCurl($ch);
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
-        
+
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
             $this->reLogin();
@@ -633,7 +1903,9 @@ class eWayConnector
         
         if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
             // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
-            return $this->doRequest($completeTransmitObject, $action);
+            if($repeatSession == true) {
+                return $this->doRequest($completeTransmitObject, $action, $version, false);
+            }
         }
         
         if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
@@ -653,6 +1925,7 @@ class eWayConnector
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
+        
         return $ch;
     }
 }
