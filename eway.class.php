@@ -1673,7 +1673,7 @@ class eWayConnector
     /**
      * Gets all user settings
      *
-     * @return Json format with all work reports
+     * @return Json format with all user settings
      */
     public function getUserSettings()
     {
@@ -1696,7 +1696,7 @@ class eWayConnector
     /**
      * Gets user settings identifiers
      *
-     * @return Json format with all sale workflow models identifiers
+     * @return Json format with all sale user settings identifiers
      */
     public function getUserSettingsIdentifiers()
     {
@@ -1708,8 +1708,8 @@ class eWayConnector
      *
      * @param $workReport Array with specified properties for search
      * @param $includeRelations indicator wether you want to include relations (default: false) 
-     * @throws Exception If workReport is empty
-     * @return Json format with found work reports
+     * @throws Exception If userSettings is empty
+     * @return Json format with found user settings
      */
     public function searchUserSettings($userSettings, $includeRelations = false)
     {
@@ -1721,10 +1721,10 @@ class eWayConnector
     }
     
     /**
-     * Saves work report
+     * Saves user settings
      *
      * @param $workReport work report array data to save
-     * @throws Exception If workReport is empty
+     * @throws Exception If userSettings is empty
      * @return Json format with successful response
      */
     public function saveUserSettings($userSettings)
@@ -1794,7 +1794,7 @@ class eWayConnector
         return join('/', $paths);
     }
 
-    private function postRequest($action, $transmitObject = null, $includeRelations = false, $version = '')
+    private function postRequest($action, $transmitObject = null, $includeRelations = false, $version = null)
     {
         if ($transmitObject == null) {
             $completeTransmitObject = array(
@@ -1813,7 +1813,7 @@ class eWayConnector
         return $this->doRequest($completeTransmitObject, $action, $version);
     }
     
-    private function getItemIdentifiers($action, $version = '' ) {
+    private function getItemIdentifiers($action, $version = null ) {
         $completeTransmitObject = array(
             'sessionId' => $this->sessionId
         );
@@ -1821,7 +1821,7 @@ class eWayConnector
         return $this->doRequest($completeTransmitObject, $action, $version);
     }
     
-    private function getItemsByItemGuids($action, $guids, $includeForeignKeys = true, $includeRelations = false, $additionalParameters = null, $version = '' ) {
+    private function getItemsByItemGuids($action, $guids, $includeForeignKeys = true, $includeRelations = false, $additionalParameters = null, $version = null ) {
         if ($guids == null) {
             throw new Exception('Action '.$action.' requires item to be executed on.');
         } else {
@@ -1841,7 +1841,7 @@ class eWayConnector
         return $this->doRequest($completeTransmitObject, $action, $version);
     }
     
-    private function deleteItem($action, $guid, $version = '' ) {
+    private function deleteItem($action, $guid, $version = null ) {
         if ($guid == null) {
             throw new Exception('Action '.$action.' requires item to be executed on.');
         } else {
@@ -1871,7 +1871,7 @@ class eWayConnector
         return $result;
     }
 
-    private function doRequest($completeTransmitObject, $action, $version ='', $repeatSession = true)
+    private function doRequest($completeTransmitObject, $action, $version = null, $repeatSession = true)
     {   
         // This is first request, login before
         if (empty($this->sessionId)) {
@@ -1881,7 +1881,7 @@ class eWayConnector
             return $this->doRequest($completeTransmitObject, $action, $version);
         }
         
-        if ( $version != '' ){
+        if ( $version != null ){
             if ( version_compare( $this->wcfVersion, $version ) == -1){
                 throw new Exception('This function is available from version '.$version.' ! Your version is '.$this->wcfVersion.' .');
             }
