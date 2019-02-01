@@ -48,7 +48,7 @@ $contacts = $connector->getContactsByItemGuids( $contacts, true );
 
 ### Simple HTML table
 To ease orientation in output of our search we can create simple HTML table. The output should look something like this.
-![example output](Images/AcquireContactsByCompany.png)
+![example output](Images/sample_output.png)
 
 ### Raw output
 Alternatively, you can add ```var_dump($object)``` at the end of the example code to see raw output of company. If you wanted to see detail of company relations, you can add ```var_dump($object->Data[0]->Relations)``` . For raw output of contacts we searched, we would add  ```var_dump($contacts)```  .
