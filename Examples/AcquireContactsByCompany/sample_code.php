@@ -23,7 +23,7 @@
     $company_name = 'Chemel & Peterson LLC';
     
     //Connect to API
-    $connector = new eWayConnector( 'https://trial.eway-crm.com/31994/WcfService/Service.svc', 'user1', 'FgYYBY27' );
+    $connector = new eWayConnector( 'ServiceAddress/Service.svc/', 'username', 'password' );
     
     //Container for search parameters (FileAs in our case)
     $object = array( 'FileAs' => $company_name );

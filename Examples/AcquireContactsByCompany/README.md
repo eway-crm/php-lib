@@ -1,18 +1,18 @@
 # Find contacts bound to company with COMPANY or GENERAL type relation
-We would like to find contacts based on their relation with certain company and show them even with foreign keys. Although there is a slight obstacle in our way. We can't use function ```$eway.class->searchContacts()``` because it can't take foreign keys into notice. 
+We would like to find contacts based on their relation with certain company and show them even with foreign keys. Although there is a slight obstacle in our way. We can't use function ```$connector->searchContacts()``` because it can't take foreign keys into notice. 
 
 ## Correct approach
 
 ### Search company and it's relations
-In order to find out which contacts are bound to our chosen company, we need to use function ```$eway.class->searchCompanies()```, use name of our chosen company as first parameter and 'true' as second parameter. The second parameter is indicating, that you want to include relations of searched item. We will find GUIDS of contacts we are looking for there.
+In order to find out which contacts are bound to our chosen company, we need to use function ```$connector->searchCompanies()```, use name of our chosen company as first parameter and 'true' as second parameter. The second parameter is indicating, that you want to include relations of searched item. We will find GUIDS of contacts we are looking for there.
 
 ```php
 
 //Container for search parameters (FileAs in our case)
-$object = array( 'FileAs' => $company_name );
+$object = array('FileAs' => $company_name);
     
-//Get data of the company ("true" parameter determines wether we get relation data of searched company)
-$object = $connector->searchCompanies( array( 'FileAs' => $company_name ), true );
+//Get data of the company("true" parameter determines wether we get relation data of searched company)
+$object = $connector->searchCompanies(array('FileAs' => $company_name ), true);
 
 ```
 
@@ -22,13 +22,13 @@ Now we have ```$object``` containing data of  found company. By calling ```$obje
 ```php
 
 //List through company relations (relations are actualy on 3rd depth of $object)
-foreach( $object->Data[0]->Relations as $key => $relation ){
-
+foreach($object->Data[0]->Relations as $key => $relation)
+{
     //We are looking for relation which is labeled GENERAL or COMPANY and is leding to Contact
-    if( ($relation->RelationType === 'GENERAL' || $relation->RelationType === 'COMPANY') && $relation->ForeignFolderName === 'Contacts' ){
-        
+    if(($relation->RelationType === 'GENERAL' || $relation->RelationType === 'COMPANY') && $relation->ForeignFolderName === 'Contacts')
+	{
         //Store the GUID of the contact
-        array_push( $contacts, $relation->ForeignItemGUID );
+        array_push($contacts, $relation->ForeignItemGUID);
     }
     
 }
@@ -40,7 +40,7 @@ Now we have array of GUIDS of contacts. We will use it as first parameter and 't
 ```php
 
 //Get data of contacts
-$contacts = $connector->getContactsByItemGuids( $contacts, true );
+$contacts = $connector->getContactsByItemGuids($contacts, true);
 
 ```
 
