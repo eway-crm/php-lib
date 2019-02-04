@@ -48,3 +48,5 @@ object(stdClass)[2]
 
 ```
 
+### Sample code
+To see the whole sample code click [here](sample_code.php)
