@@ -12,7 +12,7 @@ In order to find out which contacts are bound to our chosen company, we need to 
 $object = array('FileAs' => $company_name);
     
 //Get data of the company("true" parameter determines wether we get relation data of searched company)
-$object = $connector->searchCompanies(array('FileAs' => $company_name ), true);
+$object = $connector->searchCompanies(array('FileAs' => $company_name), true);
 
 ```
 
