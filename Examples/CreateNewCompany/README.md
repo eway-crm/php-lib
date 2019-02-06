@@ -1,3 +1,4 @@
+
 # Saving new Company
 Here you can see the process of saving new company by function `$connector->saveCompany($newCompany)` .
 
@@ -45,6 +46,8 @@ object(stdClass)[2]
   public 'UserMessage' => null
 
 ```
+
+As you can see, the service returns among other things a GUID of created item. You can use it for [editing](https://github.com/rstefko/eway-crm-php-lib/tree/master/Examples/EditExistingCompany) or creating relations to this item.
 
 ### Sample code
 To see the whole sample code click [here](sample_code.php)
