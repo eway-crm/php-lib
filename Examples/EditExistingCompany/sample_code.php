@@ -4,7 +4,7 @@
     require_once "eway.class.php";
     
     // Create connector
-    $connector = new eWayConnector('ServiceAddress/Service.svc/', 'username', 'password');
+    $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc', 'api', 'ApiTrial@eWay-CRM');
     
     // Edit the company
     $company = array(
