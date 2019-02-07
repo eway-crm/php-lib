@@ -21,19 +21,12 @@ $output = $connector->SearchCompanies($company);
 
 ## Output
 
-Result of your search is now in ```$output```. To get to it, we use ```print_r($output->Data);``` . Based on how many companies were matching search parameters, ```$output->Data``` will contain from 0 to X companies.
+### Simple HTML table
+To ease orientation in output of our search we can create simple HTML table. The output should look something like this.
+![example output](Images/sample_output.PNG)
 
-```php
-
-print("<pre>");
-print_r($output->Data);
-print("</pre>");
-
-```
-
-Output on screen should look something like this:
-
-![sample_output](Images/sample_output.PNG)
+### Raw output
+Alternatively, you can add ```var_dump($output)``` at the end of the example code to see raw output.
 
 ## Sample code
 To see the whole sample code click [here](sample_code.php)

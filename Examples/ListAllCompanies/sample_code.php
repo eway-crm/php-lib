@@ -19,16 +19,11 @@
                     
                 </style>';
     
-    //Search criteria
-    $company = array(
-                    'FileAs' => 'Dorl & Son Inc'    
-                    );
-    
     // Create connector
     $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc', 'api', 'ApiTrial@eWay-CRM');
-    
-    //Search for the company
-    $output = $connector->SearchCompanies($company);
+
+    //Get companies
+    $output = $connector->GetCompanies();
     
     //Open <table> tag for our output
     $table .= '<table align="center">';
@@ -59,5 +54,5 @@
     
     //Show the table with output
     echo $table;
-    
+
 ?>
