@@ -4,7 +4,7 @@ We would like to find contacts based on their relation with certain company and 
 ## Correct approach
 
 ### Search company and it's relations
-In order to find out which contacts are bound to our chosen company, we need to use function ```$connector->searchCompanies()```, use name of our chosen company as first parameter and ```true``` as second parameter. The second parameter is indicating, that you want to include relations of searched item. We will find GUIDS of contacts we are looking for there.
+In order to find out which contacts are bound to our chosen company, we need to use function ```$connector->searchCompanies()```, use name of our chosen company as first parameter and ```true``` as second parameter. The second parameter is indicating, that you want to include relations of searched item. We will find GUIDs of contacts we are looking for there.
 
 ```php
    
@@ -13,16 +13,16 @@ $object = $connector->searchCompanies(array('FileAs' => $company_name), true);
 
 ```
 
-### Get contact GUIDS
+### Get contact GUIDs
 Now we have ```$object``` containing array ```Data[]``` where data of company, or companies if multiple have been found by given parameters, are located (also it can be empty, if no companies were found). In array ```$object->Data[0]->Relations``` we get into relational data of company. All we have to do now is cycle through and pick GUID of related object which in our case must have GENERAL or COMPANY type relation and the lead to contact. 
 
 ```php
 
 //List through company relations (relations are actualy on 3rd depth of $object)
-foreach($object->Data[0]->Relations as $key => $relation)
+foreach ($object->Data[0]->Relations as $key => $relation)
 {
     //We are looking for relation which is labeled GENERAL or COMPANY and is leding to Contact
-    if(($relation->RelationType === 'GENERAL' || $relation->RelationType === 'COMPANY') && $relation->ForeignFolderName === 'Contacts')
+    if (($relation->RelationType === 'GENERAL' || $relation->RelationType === 'COMPANY') && $relation->ForeignFolderName === 'Contacts')
 	{
         //Store the GUID of the contact
         array_push($contacts, $relation->ForeignItemGUID);
@@ -33,7 +33,7 @@ foreach($object->Data[0]->Relations as $key => $relation)
 ```
 
 ### Get contacts
-Now we have array of GUIDS of contacts. We will use it as first parameter and 'true' as second for function ```$connector->getContactsByItemGuids()```. The second parameter indicates that we want to see foreign keys of item we are looking for, if we so desire.
+Now we have array of GUIDs of contacts. We will use it as first parameter and 'true' as second for function ```$connector->getContactsByItemGuids()```. The second parameter indicates that we want to see foreign keys of item we are looking for, if we so desire.
 ```php
 
 //Get data of contacts
