@@ -34,7 +34,7 @@
     //Head of our output table
     $table .=  '<tr>
                     <td style="border: 1px solid black;"><b>Name</b></td>
-                    <td style="border: 1px solid black;"><b>Adress</b></td>
+                    <td style="border: 1px solid black;"><b>Address</b></td>
                     <td style="border: 1px solid black;"><b>Telephone</b></td>
                     <td style="border: 1px solid black;"><b>Email</b></td>
                 </tr>';

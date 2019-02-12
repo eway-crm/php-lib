@@ -8,7 +8,7 @@ All you need to is to make yourself an array with parameters by which you want t
 
 //Search criteria
 $company = array(
-                'FileAs' => 'CompanyK'    
+                'FileAs' => 'Dorl & Son Inc'    
                 );
 
 // Create connector
