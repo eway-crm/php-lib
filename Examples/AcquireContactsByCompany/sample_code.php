@@ -1,7 +1,7 @@
 <?php
     
     //Load API
-    require_once ('eway-crm-php-lib/eway.class.php');
+    require_once ('eway.class.php');
     
     //Variable for our output
     $table =   '<style type="text/css">
