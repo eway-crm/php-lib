@@ -18,3 +18,6 @@ Deletion is done by using function ```$connector->DeleteCompany()``` with GUID o
 We can now check that if we look for the company now, eWay-CRM will not find any results. The company was successfully deleted.
 
 ![example output](Images/sample_output_after.PNG)
+
+## Sample code
+To see the whole sample code click [here](sample_code.php)
