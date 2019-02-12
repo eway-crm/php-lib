@@ -19,15 +19,14 @@ Now we have ```$object``` containing array ```Data[]``` where data of company, o
 ```php
 
 //List through company relations (relations are actualy on 3rd depth of $object)
-foreach($object->Data[0]->Relations as $key => $relation)
+foreach ($object->Data[0]->Relations as $key => $relation)
 {
     //We are looking for relation which is labeled GENERAL or COMPANY and is leding to Contact
-    if(($relation->RelationType === 'GENERAL' || $relation->RelationType === 'COMPANY') && $relation->ForeignFolderName === 'Contacts')
+    if (($relation->RelationType === 'GENERAL' || $relation->RelationType === 'COMPANY') && $relation->ForeignFolderName === 'Contacts')
 	{
         //Store the GUID of the contact
         array_push($contacts, $relation->ForeignItemGUID);
     }
-    
 }
 
 ```
