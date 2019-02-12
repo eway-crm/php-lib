@@ -18,10 +18,10 @@ $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Serv
 ## Actions at the service
 You can check actions available on your service on ```[service adress]/WcfService/Service.svc/help``` .  We have put together a list of examples for some basic actions you can use the service for, so don't be shy an try it out.
 
-[Create new company](Examples/CreateNewCompany/REDME.md)
-[Edit existing company](Examples/EditExistingCompany/REDME.md)
-[List all companies](Examples/ListAllCompanies/REDME.md)
-[Search for company](Examples/SearchForCompany/REDME.md)
-[Link existing item](Examples/LinkExistingItem/REDME.md)
-[Aquire contacts by company](Examples/AquireContactsByCompany/REDME.md)
+[Create new company](Examples/CreateNewCompany/REDME.md)<br />
+[Edit existing company](Examples/EditExistingCompany/REDME.md)<br />
+[List all companies](Examples/ListAllCompanies/REDME.md)<br />
+[Search for company](Examples/SearchForCompany/REDME.md)<br />
+[Link existing item](Examples/LinkExistingItem/REDME.md)<br />
+[Aquire contacts by company](Examples/AquireContactsByCompany/REDME.md)<br />
 
