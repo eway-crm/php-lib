@@ -1,7 +1,7 @@
 # Link to existing Item
 This example shows how to create link from one existing item to another. In other words, basic relation.
 
-First we create array of relation criteria. We need to know GUIDS of two items we want to link an their respective foldernames. The word GENERAL in relation type means, that this will be basic relation, simple link between two items. Saving itself is realized through function ```$connector->SaveRelation()``` .
+First we create array of relation criteria. We need to know GUIDs of two items we want to link an their respective foldernames. The word GENERAL in relation type means, that this will be basic relation, simple link between two items. Saving itself is realized through function ```$connector->SaveRelation()``` .
 
 ```php
 
