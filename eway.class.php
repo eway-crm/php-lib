@@ -1734,6 +1734,58 @@ class eWayConnector
 
         return $this->postRequest('SaveUserSetting', $userSettings, '5.3.1.68');
     }
+    
+    /**
+     * Gets the last item change id (the latest, the highest)
+     *
+     * @return The last item change id
+     */
+    public function getLastItemChangeId()
+    {
+        return $this->doRequest(array('sessionId' => $this->sessionId), 'GetLastItemChangeId');
+    }
+    
+    /**
+     * Gets the item change identifiers for the given module and changes interval
+     *
+     * @param $folderName The module name - object type identifier
+     * @param $baseChangeId The base change id
+     * @param $targetChangeId The target change id
+     * @return The item change identifiers for the given module and changes interval
+     */
+    public function getItemChnageIdentifiers($folderName, $baseChangeId, $targetChangeId)
+    {
+        $completeTransmitObject = array(
+                'sessionId' => $this->sessionId,
+                'folderName' => $folderName,
+                'baseChangeId' => $baseChangeId,
+                'targetChangeId' => $targetChangeId
+            );
+        
+        return $this->doRequest($completeTransmitObject, 'GetItemChangeIdentifiers');
+    }
+    
+    /**
+     * Gets the changed items form the given folders. This method is a combination of calling GetItemChangeIdentifiers and GetXitemsByItemGuids
+     *
+     * @param $folderNames The folder names
+     * @param $baseChangeId The base change id
+     * @param $targetChangeId The target change id
+     * @param $includeForeignKeys If set to True, the JSON result will contain foreign keys/items fields made from the 1:N relations as well
+     * @return The item changes for the given module and changes interval
+     */
+    public function getChangedItems($folderNames, $baseChangeId, $targetChangeId, $includeForeignKeys = false)
+    {
+        $completeTransmitObject = array(
+                'sessionId' => $this->sessionId,
+                'folderNames' => $folderNames,
+                'baseChangeId' => $baseChangeId,
+                'targetChangeId' => $targetChangeId,
+                'includeForeignKeys' => $includeForeignKeys
+            );
+
+        return $this->doRequest($completeTransmitObject, 'GetChangedItems', '5.3.0.1');
+    }
 
     /**
      * Formats date and time for the API calls
