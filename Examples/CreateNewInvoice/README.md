@@ -1,7 +1,7 @@
 # Create new Invoice with relations
-This example will show you how to create new cart with relation to customer, company and project. It will also have goods, one already existing and one freshly created.
+This example will show you how to create new bookkeeping record (cart) with relation to Customer, Company and Project. It will also have Goods, one already existing and one freshly created.
 
-We need to specify array with parameters of our cart, namely: FileAs and GUIDs of company,contact and project. Then we ad array which will include other arrays of related goods. These should have Goods GUID for link to existing Good, or FileAs, name and Code to create new one.
+We need to specify array with parameters of our cart, namely: FileAs and GUIDs of Company, Contact and Project. Then we add array which will include other arrays of related Goods. These should have Goods GUID for link to existing Good, or FileAs, name and Code to create new item from scratch, but without link to previously existing good.
 
 ```php
 
@@ -17,7 +17,8 @@ $newCart = array(
 							  array(
 									'FileAs' => 'Service',
 									'Name' => 'Service',
-									'Code' => 'WRK-003'
+									'Code' => 'WRK-003',
+									'PriceTotal' => '900'
 									),
 							  ),
 		 'Projects_CartGuid' => '5dac8817-ac48-4469-bae3-41778042a911'
