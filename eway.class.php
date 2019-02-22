@@ -41,7 +41,7 @@ class eWayConnector
         if (empty($password))
             throw new Exception('Empty password');
 
-        $this->webServiceAddress = $webServiceAddress;
+        $this->webServiceAddress = $this->formatUrl( $webServiceAddress );
         $this->username = $username;
         $this->dieOnItemConflict = $dieOnItemConflict;
         $this->throwExceptionOnFail = $throwExceptionOnFail;
@@ -1753,7 +1753,7 @@ class eWayConnector
      * @param $targetChangeId The target change id
      * @return The item change identifiers for the given module and changes interval
      */
-    public function getItemChnageIdentifiers($folderName, $baseChangeId, $targetChangeId)
+    public function getItemChangeIdentifiers($folderName, $baseChangeId, $targetChangeId)
     {
         $completeTransmitObject = array(
                 'sessionId' => $this->sessionId,
@@ -1766,7 +1766,7 @@ class eWayConnector
     }
     
     /**
-     * Gets the changed items form the given folders. This method is a combination of calling GetItemChangeIdentifiers and GetXitemsByItemGuids
+     * Gets the changed items form the given folders. This method is a combination of calling GetItemChangeIdentifiers and Get[FolderName]ByItemGuids
      *
      * @param $folderNames The folder names
      * @param $baseChangeId The base change id
@@ -1825,6 +1825,22 @@ class eWayConnector
 
         // Save this sessionId for next time
         $this->sessionId = $jsonResult->SessionId;
+    }
+    
+    private function formatUrl($url)
+    {
+        if( substr_compare( $url, '.svc', -4 ) === 0 || substr_compare( $url, '.svc/', -5 ) === 0 )
+        {
+            return $url;
+        }
+        elseif( substr_compare( $url, '/', -1 ) === 0 )
+        {
+            return $url.'WcfService/Service.svc';
+        }
+        else
+        {
+            return $url.'/WcfService/Service.svc';
+        }
     }
 
     private function createWebServiceUrl($action)
