@@ -8,10 +8,10 @@ Deletion is done by using function ```$connector->DeleteCompany()``` with GUID o
 ```php
 
 //GUID of company
-    $company = '7dfde804-2ed4-11e9-be3d-bc5ff40119b6';
-    
-    //Delete the company
-    $output = $connector->DeleteCompany($company);
+$company = '7dfde804-2ed4-11e9-be3d-bc5ff40119b6';
+
+//Delete the company
+$output = $connector->DeleteCompany($company);
 
 ```
 
