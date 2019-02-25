@@ -1,8 +1,24 @@
 # Find Contacts changed since last time
-This example will show you how to find contacts which were changed or deleted since last time.The example shows two ways of doing this:
+This example will show you how to find contacts which were changed or deleted since last time. It is expected that you have a persistent storage to store CurrentId (revision number) at your disposal. This number is symbolising a poin in time (a timestamp of the current revision).
 
-## Done in two steps
-One of our options is to do the process in two steps. First step is to acquire GUIDS of contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision GUID, which is supplied by function ```$connector->GetLastItemChangeId()``` and the third is current revision.
+```php
+
+//Method for loading current revision number
+function loadCurrentRevision()
+{
+	//TODO: Here should be code for loading the current revision number from persistent storage.
+	$current_revision = 3000;
+	
+	return current_revision;
+}
+
+```
+The API is registering changes on foreign keys on the item as item change as well, even though they are emulated. 
+
+The example shows two ways of doing this:
+
+## Done by using changed identfiers
+This is in case you want to see just identifiers of cganged items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->GetLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
 
 
 ```php
@@ -23,7 +39,7 @@ foreach ($item_data as $data)
 
 ```
 
-In the second step we can use our extracted GUIDS to find according contacts.
+After that we can use our extracted GUIDS to find according contacts.
 
 ```php
 
@@ -38,8 +54,8 @@ $contacts_from_guids = $connector->getContactsByItemGuids($contact_guids)->Data;
 To ease orientation in output of our search we can create simple HTML table. The output should look something like this.
 ![example output](Images/sample_output_one.PNG)
 
-## Done in one step
-This option will focus on getting the contacts in only one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChnageIdentifiers()``` but can be supplied with multiple folder names in array and will return you even the changed items themselves (Item GUIDS in case of deletion).
+## Done by loading details right away
+This option will get the item details one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChnageIdentifiers()``` but can be supplied with folder names and will return you detail of changed items (Item GUIDS in case of deletion).
 
 ```php
 

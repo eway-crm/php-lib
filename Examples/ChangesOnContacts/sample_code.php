@@ -1,5 +1,14 @@
 <?php
 
+	//Method for loading current revision number
+	function loadCurrentRevision()
+	{
+		//TODO: Here should be code for loading the current revision number from persistent storage.
+		$current_revision = 3000;
+		
+		return current_revision;
+	}
+
     //Load API
     require_once "eway.class.php";
     
@@ -27,7 +36,7 @@
     
     //Revisions interval
     $latest_revision = $connector->GetLastItemChangeId()->Datum;
-    $current_revision = 3000;
+    $current_revision = loadCurrentRevision();
     
     //Get contact GUIDS
     $item_data = $connector->getItemChnageIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
