@@ -20,38 +20,38 @@ You can check actions available on your service on ```[service adress]/WcfServic
 
 ### [Create new company](Examples/CreateNewCompany/README.md)<br />
 Example showcasing creation of new Company.<br />
-Sample code [here].(Examples/CreateNewCompany/sample_code.md)
+Sample code [here](Examples/CreateNewCompany/sample_code.md).
 
 ### [Edit existing company](Examples/EditExistingCompany/README.md)<br />
 Example showcasing editing existing Company.<br />
-Sample code [here].(Examples/EditExistingCompany/sample_code.md)
+Sample code [here](Examples/EditExistingCompany/sample_code.md).
 
 ### [List all companies](Examples/ListAllCompanies/README.md)<br />
 Example showcasing listing of all existing Companies.<br />
-Sample code [here].(Examples/ListAllCompanies/sample_code.md)
+Sample code [here](Examples/ListAllCompanies/sample_code.md).
 
 ### [Search for company](Examples/SearchForCompany/README.md)<br />
 Example showcasing serching for Company by parameters.<br />
-Sample code [here].(Examples/SearchForCompany/sample_code.md)
+Sample code [here](Examples/SearchForCompany/sample_code.md).
 
 ### [Search for company](Examples/DeleteCompany/README.md)<br />
 Example showcasing deletion Company.<br />
-Sample code [here].(Examples/DeleteCompany/sample_code.md)
+Sample code [here](Examples/DeleteCompany/sample_code.md).
 
 ### [Link existing item](Examples/LinkExistingItem/README.md)<br />
 Example showcasing creation of simple relation.<br />
-Sample code [here].(Examples/LinkExistingItem/sample_code.md)
+Sample code [here](Examples/LinkExistingItem/sample_code.md).
 
 ### [Aquire contacts by company](Examples/AquireContactsByCompany/README.md)<br />
 Example showcasing listing contacts linked to company.<br />
-Sample code [here].(Examples/AquireContactsByCompany/sample_code.md)
+Sample code [here](Examples/AquireContactsByCompany/sample_code.md).
 
 ### [Create new invoice](Examples/CreateNewInvoice/README.md)<br />
 Example showcasing creation of new Invoice and items on it.<br />
-Sample code [here].(Examples/CreateNewInvoice/sample_code.md)
+Sample code [here](Examples/CreateNewInvoice/sample_code.md).
 
 ### [Changes on contacts](Examples/ChangesOnContacts/README.md)<br />
 Example showcasing listing all changes on contacts from last check.<br />
-Sample code [here].(Examples/ChangesOnContacts/sample_code.md)
+Sample code [here](Examples/ChangesOnContacts/sample_code.md).
 
 
