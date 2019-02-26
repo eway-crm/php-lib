@@ -54,7 +54,7 @@ Sample code [here](Examples/CreateNewInvoice/sample_code.php).
 Example showcasing listing all changes on contacts from last check.<br />
 Sample code [here](Examples/ChangesOnContacts/sample_code.php).
 
-### [Changes on contacts](Examples/CreateTaskWithDocument/README.md)<br />
+### [Create Task with Document](Examples/CreateTaskWithDocument/README.md)<br />
 Example showcasing reation of task with basic link to a document.<br />
 Sample code [here](Examples/CreateTaskWithDocument/sample_code.php).
 
