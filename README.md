@@ -55,7 +55,9 @@ Example showcasing listing all changes on contacts from last check.<br />
 Sample code [here](Examples/ChangesOnContacts/sample_code.php).
 
 ### [Create Task with Document](Examples/CreateTaskWithDocument/README.md)<br />
-Example showcasing reation of task with basic link to a document.<br />
+Example showcasing creation of task with basic link to a document.<br />
 Sample code [here](Examples/CreateTaskWithDocument/sample_code.php).
 
-
+### [Change Project state](Examples/ChangeProjectStatus/README.md)<br />
+Example showcasing changing project state.<br />
+Sample code [here](Examples/ChangeProjectStatus/sample_code.php).
