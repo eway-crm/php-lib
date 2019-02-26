@@ -44,7 +44,7 @@ $documentResult = $connector->SaveDocument($document);
  ```
 ### Output
 As an output, you should see the Document appear in outlook application.
-![example output](Images/sample_output_task_document.PNG)
+![example output](Images/sample_output_document.PNG)
 
 ## Link items together
 All there is left now, is to link both items together. Again we prepare our array with parameters with GUIDS of both items, their folder names (Tasks and Documents) and type of the relation (GENERAL in our case). Than we supply the array as a parameter of function  ```$connector->Saverelation()``` and we are ready to go.
@@ -65,7 +65,7 @@ All there is left now, is to link both items together. Again we prepare our arra
  ```
  ### Output
 As an output, you should see the Document appear in the Task form as a linked item.
-![example output](Images/sample_output_task_relation.PNG)
+![example output](Images/sample_output_relation.PNG)
 
 ## Sample code
 To see the whole sample code click [here](sample_code.php)
