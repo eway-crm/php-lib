@@ -61,3 +61,6 @@ Sample code [here](Examples/CreateTaskWithDocument/sample_code.php).
 ### [Change Project state](Examples/ChangeProjectStatus/README.md)<br />
 Example showcasing changing project state.<br />
 Sample code [here](Examples/ChangeProjectStatus/sample_code.php).
+
+## Folder name
+To ease understanding folder names, look [here](FolderNames.md).
