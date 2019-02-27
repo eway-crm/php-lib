@@ -1,14 +1,31 @@
 <?php
 
-	//Method for loading current revision number
-	function loadCurrentRevision()
-	{
-		//TODO: Here should be code for loading the current revision number from persistent storage.
-		$current_revision = 3000;
-		
-		return current_revision;
-	}
+    class storage
+    {
+        //Container for the revision number
+        public $current_revision;
+    
+        //Method for loading current revision number
+        function storeCurrentRevision($revision_number)
+        {
+            //TODO: Here should be code for storing the current revision number from persistent storage.
+            $this->current_revision = $revision_number;
+        }
+        
+        //Method for loading current revision number
+        function loadCurrentRevision()
+        {
+            //TODO: Here should be code for loading the current revision number from persistent storage.
+            return $this->current_revision;
+        }
+    }
 
+    //Initialize storage
+    $storage = new storage();
+    
+    //Store revision number
+    $storage->storeCurrentRevision(3000);
+    
     //Load API
     require_once "eway.class.php";
     
@@ -35,11 +52,11 @@
     $contact_guids = array();
     
     //Revisions interval
-    $latest_revision = $connector->GetLastItemChangeId()->Datum;
-    $current_revision = loadCurrentRevision();
+    $latest_revision = $connector->getLastItemChangeId()->Datum;
+    $current_revision = $storage->loadCurrentRevision();
     
     //Get contact GUIDS
-    $item_data = $connector->getItemChnageIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
+    $item_data = $connector->getItemChangeIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
     
     //Go through the contact GUIDS
     foreach ($item_data as $data)

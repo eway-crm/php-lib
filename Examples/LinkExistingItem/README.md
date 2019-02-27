@@ -32,3 +32,6 @@ Alternatively, you can add ```var_dump($output)``` at the end of the example cod
 
 ## Sample code
 To see the whole sample code click [here](sample_code.php)
+
+## Folder name
+To ease understanding folder names, look [here](FolderNames.md).

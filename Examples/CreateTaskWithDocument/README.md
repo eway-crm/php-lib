@@ -69,3 +69,6 @@ As an output, you should see the Document appear in the Task form as a linked it
 
 ## Sample code
 To see the whole sample code click [here](sample_code.php)
+
+## Folder name
+To ease understanding folder names, look [here](FolderNames.md).

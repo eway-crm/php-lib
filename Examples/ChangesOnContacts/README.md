@@ -1,16 +1,34 @@
+
 # Find Contacts changed since last time
 This example will show you how to find contacts which were changed or deleted since last time. It is expected that you have a persistent storage to store CurrentId (revision number) at your disposal. This number is symbolising a point in time (a timestamp of the current revision).
 
 ```php
 
-//Method for loading current revision number
-function loadCurrentRevision()
+class storage
 {
-	//TODO: Here should be code for loading the current revision number from persistent storage.
-	$current_revision = 3000;
-	
-	return current_revision;
+    //Container for the revision number
+    public $current_revision;
+
+    //Method for loading current revision number
+    function storeCurrentRevision($revision_number)
+    {
+        //TODO: Here should be code for storing the current revision number from persistent storage.
+        $this->current_revision = $revision_number;
+    }
+    
+    //Method for loading current revision number
+    function loadCurrentRevision()
+    {
+        //TODO: Here should be code for loading the current revision number from persistent storage.
+        return $this->current_revision;
+    }
 }
+
+//Initialize storage
+$storage = new storage();
+
+//Store revision number
+$storage->storeCurrentRevision(3000);
 
 ```
 *Note for experts: The API register changes on foreign keys on the item as item change as well, even though they are emulated.* 
@@ -18,7 +36,7 @@ function loadCurrentRevision()
 The example shows two ways of doing this. One is realised in two steps, first get GUIDS of changed items, then find the item changes. The other is done in just one function. 
 
 ## Done by using changed identfiers
-This is in case you want to see just identifiers of cganged items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->GetLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
+This is in case you want to see just identifiers of changed items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->GetLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
 
 
 ```php
