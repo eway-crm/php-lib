@@ -4,7 +4,7 @@
     require_once "eway.class.php";
     
     //This willl be our Project
-    $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM');
+    $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
     //This is new project, that we want to create
     $project = array(

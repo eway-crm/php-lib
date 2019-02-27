@@ -29,7 +29,7 @@
                 </style>';
     
     // Create connector
-    $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM');
+    $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
     //GUIDS container
     $contact_guids = array();
