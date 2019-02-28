@@ -18,6 +18,7 @@ $projectGuid = $connector->saveProject($project)->Guid;
 ```
 ### Output
 As an output we should see our new Project with state "new" in outlook.
+
 ![example output](Images/sample_output_company.PNG)
 
 ## Changing the status
