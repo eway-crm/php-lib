@@ -7,7 +7,7 @@ To communicate eWay-CRM web service, we first have to establish connection. This
 
 ```php
 
-//Load API
+// Load API
 require_once "eway.class.php";
 
 // Create connector
