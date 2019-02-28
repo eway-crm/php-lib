@@ -17,7 +17,7 @@
     $projectGuid = $connector->saveProject($project)->Guid;
     
     //Load version of project for state changing
-    $projectVersion = $connector->SearchProjects(array('ItemGUID' => $projectGuid))->Data[0]->ItemVersion;
+    $projectVersion = $connector->SearchProjects(array('ItemGUID' => $projectGuid))->Data[0]->ItemVersion + 1;
     
     //Changed fields of the projects
     $project_edit = array(
