@@ -34,7 +34,7 @@ Sample code [here](Examples/ListAllCompanies/sample_code.php).
 Example showcasing serching for Company by parameters.<br />
 Sample code [here](Examples/SearchForCompany/sample_code.php).
 
-### [Search for company](Examples/DeleteCompany/README.md)<br />
+### [Delete company](Examples/DeleteCompany/README.md)<br />
 Example showcasing deletion Company.<br />
 Sample code [here](Examples/DeleteCompany/sample_code.php).
 
@@ -42,9 +42,9 @@ Sample code [here](Examples/DeleteCompany/sample_code.php).
 Example showcasing creation of simple relation.<br />
 Sample code [here](Examples/LinkExistingItem/sample_code.php).
 
-### [Aquire contacts by company](Examples/AquireContactsByCompany/README.md)<br />
+### [Acquire contacts by company](Examples/AcquireContactsByCompany/README.md)<br />
 Example showcasing listing contacts linked to company.<br />
-Sample code [here](Examples/AquireContactsByCompany/sample_code.php).
+Sample code [here](Examples/AcquireContactsByCompany/sample_code.php).
 
 ### [Create new invoice](Examples/CreateNewInvoice/README.md)<br />
 Example showcasing creation of new Invoice and items on it.<br />
@@ -58,8 +58,8 @@ Sample code [here](Examples/ChangesOnContacts/sample_code.php).
 Example showcasing creation of task with basic link to a document.<br />
 Sample code [here](Examples/CreateTaskWithDocument/sample_code.php).
 
-### [Change Project state](Examples/ChangeProjectStatus/README.md)<br />
-Example showcasing changing project state.<br />
+### [Change Project status](Examples/ChangeProjectStatus/README.md)<br />
+Example showcasing changing project status.<br />
 Sample code [here](Examples/ChangeProjectStatus/sample_code.php).
 
 ## Folder name
