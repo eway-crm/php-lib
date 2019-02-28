@@ -2,11 +2,11 @@
 This example will show you how to create new Document, new Task and link them with basic relation.
 
 ## Create Task 
-We will create a Task by using function ```$connector->SaveTask()``` supplied with array of parameters. In the parameters we have ```$userGuid``` which we got from function ```$connector->SearchUsers()``` with FileAs of the user as parameter. 
+We will create a Task by using function ```$connector->saveTask()``` supplied with array of parameters. In the parameters we have ```$userGuid``` which we got from function ```$connector->searchUsers()``` with FileAs of the user as parameter. 
  ```php
 
 //Get user GUID
-$userGuid = $connector->SearchUsers(array('FileAs' => 'Api-Tester, Robot'))->Data[0]->ItemGUID;
+$userGuid = $connector->searchUsers(array('FileAs' => 'Api-Tester, Robot'))->Data[0]->ItemGUID;
 
 //This will be our Task
 $task = array(
@@ -19,7 +19,7 @@ $task = array(
             );
 
 //Save the task
-$taskResult = $connector->SaveTask($task);
+$taskResult = $connector->saveTask($task);
 
  ```
 ### Output
@@ -27,7 +27,7 @@ As an output, you should see the Task appear in outlook application.
 ![example output](Images/sample_output_task.PNG)
 
 ## Create Document
-Now we create our Document. Similarly to the previous step, we have an array of parameters and supply it to the ```$connector->SaveDocument()``` function.
+Now we create our Document. Similarly to the previous step, we have an array of parameters and supply it to the ```$connector->saveDocument()``` function.
  ```php
 
 //This willl be our Document
@@ -39,7 +39,7 @@ $document = array(
                   );
 
 //Save the Document
-$documentResult = $connector->SaveDocument($document);
+$documentResult = $connector->saveDocument($document);
 
  ```
 ### Output
@@ -47,7 +47,7 @@ As an output, you should see the Document appear in outlook application.
 ![example output](Images/sample_output_document.PNG)
 
 ## Link items together
-All there is left now, is to link both items together. Again we prepare our array with parameters with GUIDS of both items, their folder names (Tasks and Documents) and type of the relation (GENERAL in our case). Than we supply the array as a parameter of function  ```$connector->Saverelation()``` and we are ready to go.
+All there is left now, is to link both items together. Again we prepare our array with parameters with GUIDS of both items, their folder names (Tasks and Documents) and type of the relation (GENERAL in our case). Than we supply the array as a parameter of function  ```$connector->saveRelation()``` and we are ready to go.
  ```php
 
 //Specifications of our relation
@@ -60,7 +60,7 @@ All there is left now, is to link both items together. Again we prepare our arra
                     );
 
     //Save the relation
-    $output = $connector->SaveRelation($relation);
+    $output = $connector->saveRelation($relation);
 
  ```
  ### Output

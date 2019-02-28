@@ -16,6 +16,6 @@
                     );
     
     //Save the relation
-    $output = $connector->SaveRelation($relation);
+    $output = $connector->saveRelation($relation);
 
 ?>

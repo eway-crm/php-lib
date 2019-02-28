@@ -1,6 +1,6 @@
 <?php
 
-    class storage
+    class Storage
     {
         //Container for the revision number
         public $current_revision = 3000;
@@ -21,7 +21,7 @@
     }
 
     //Initialize storage
-    $storage = new storage();
+    $storage = new Storage();
     
     //Load API
     require_once "eway.class.php";

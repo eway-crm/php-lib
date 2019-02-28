@@ -2,7 +2,7 @@
 
 This example should show you how to search for company based on one or more parameters.
 
-All you need to is to make yourself an array with parameters by which you want to search company and use it as an argument of function ```$connector->SearchCompanies()``` .
+All you need to is to make yourself an array with parameters by which you want to search company and use it as an argument of function ```$connector->searchCompanies()``` .
 
 ```php
 
@@ -15,7 +15,7 @@ $company = array(
 $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc', 'api', 'ApiTrial@eWay-CRM');
 
 //Search for the company
-$output = $connector->SearchCompanies($company);
+$output = $connector->searchCompanies($company);
 
 ```
 

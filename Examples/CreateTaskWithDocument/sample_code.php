@@ -7,7 +7,7 @@
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
     //Get user GUID
-    $userGuid = $connector->SearchUsers(array('FileAs' => 'Api-Tester, Robot'))->Data[0]->ItemGUID;
+    $userGuid = $connector->searchUsers(array('FileAs' => 'Api-Tester, Robot'))->Data[0]->ItemGUID;
     
     //This will be our Task
     $task = array(
@@ -20,7 +20,7 @@
                 );
     
     //Save the task
-    $taskResult = $connector->SaveTask($task);
+    $taskResult = $connector->saveTask($task);
     //This willl be our Document
     $document = array(
                         'FileAs' => 'Document',
@@ -30,7 +30,7 @@
                       );
     
     //Save the Document
-    $documentResult = $connector->SaveDocument($document);
+    $documentResult = $connector->saveDocument($document);
     
     //Specifications of our relation
     $relation = array(
@@ -42,6 +42,6 @@
                     );
 
     //Save the relation
-    $output = $connector->SaveRelation($relation);
+    $output = $connector->saveRelation($relation);
 
 ?>

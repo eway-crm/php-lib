@@ -1,10 +1,10 @@
 # List all Companies
-This example displays how to list all companies. All there is to it is using function ```$connector->GetCompanies()``` .
+This example displays how to list all companies. All there is to it is using function ```$connector->getCompanies()``` .
 
 ```php
 
 //Get companies
-$result = $connector->GetCompanies();
+$result = $connector->getCompanies();
 
 ```
 

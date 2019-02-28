@@ -3,7 +3,7 @@ This example will show you how to delete company. Below you can see that we have
 
 ![example output](Images/sample_output_before.PNG)
 
-Deletion is done by using function ```$connector->DeleteCompany()``` with GUID of company we want to delete.
+Deletion is done by using function ```$connector->deleteCompany()``` with GUID of company we want to delete.
 
 ```php
 
@@ -11,7 +11,7 @@ Deletion is done by using function ```$connector->DeleteCompany()``` with GUID o
 $company = '7dfde804-2ed4-11e9-be3d-bc5ff40119b6';
 
 //Delete the company
-$output = $connector->DeleteCompany($company);
+$output = $connector->deleteCompany($company);
 
 ```
 

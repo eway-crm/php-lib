@@ -5,7 +5,7 @@ This example will show you how to find contacts which were changed or deleted si
 
 ```php
 
-class storage
+class Storage
 {
     //Container for the revision number
     public $current_revision;
@@ -26,7 +26,7 @@ class storage
 }
 
 //Initialize storage
-$storage = new storage();
+$storage = new Storage();
 
 ```
 *Note for experts: The API register change on foreign keys on the item as item change as well, even though they are emulated.* 
@@ -34,13 +34,13 @@ $storage = new storage();
 The example shows two ways of listing the changes. One is realised in two steps, first get GUIDS of changed items, then find the item changes. The other is done in just one function. 
 
 ## Done by using changed identfiers
-This is in case you want to see just identifiers of changed items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->GetLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
+This is in case you want to see just identifiers of changed items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->getLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
 
 
 ```php
 
 //Revisions interval
-$latest_revision = $connector->GetLastItemChangeId()->Datum;
+$latest_revision = $connector->getLastItemChangeId()->Datum;
 $current_revision = $storage->loadCurrentRevision();;
 
 //Get contact GUIDS

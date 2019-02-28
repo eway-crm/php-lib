@@ -23,7 +23,7 @@
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
 
     //Get companies
-    $output = $connector->GetCompanies();
+    $output = $connector->getCompanies();
     
     //Open <table> tag for our output
     $table .= '<table align="center">';
