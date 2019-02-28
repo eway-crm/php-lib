@@ -3,7 +3,7 @@
     class storage
     {
         //Container for the revision number
-        public $current_revision;
+        public $current_revision = 3000;
     
         //Method for loading current revision number
         function storeCurrentRevision($revision_number)
@@ -22,9 +22,6 @@
 
     //Initialize storage
     $storage = new storage();
-    
-    //Store revision number
-    $storage->storeCurrentRevision(3000);
     
     //Load API
     require_once "eway.class.php";
@@ -140,5 +137,8 @@
     
     //Show the table with output
     echo $table;
+    
+    //Store revision number
+    $storage->storeCurrentRevision($latest_revision);
 
 ?>

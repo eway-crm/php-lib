@@ -1,4 +1,5 @@
 
+
 # Find Contacts changed since last time
 This example will show you how to find contacts which were changed or deleted since last time. It is expected that you have a persistent storage to store CurrentId (revision number) at your disposal. This number is symbolising a point in time (a timestamp of the current revision).
 
@@ -27,13 +28,10 @@ class storage
 //Initialize storage
 $storage = new storage();
 
-//Store revision number
-$storage->storeCurrentRevision(3000);
-
 ```
-*Note for experts: The API register changes on foreign keys on the item as item change as well, even though they are emulated.* 
+*Note for experts: The API register change on foreign keys on the item as item change as well, even though they are emulated.* 
 
-The example shows two ways of doing this. One is realised in two steps, first get GUIDS of changed items, then find the item changes. The other is done in just one function. 
+The example shows two ways of listing the changes. One is realised in two steps, first get GUIDS of changed items, then find the item changes. The other is done in just one function. 
 
 ## Done by using changed identfiers
 This is in case you want to see just identifiers of changed items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->GetLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
@@ -43,7 +41,7 @@ This is in case you want to see just identifiers of changed items. First we acqu
 
 //Revisions interval
 $latest_revision = $connector->GetLastItemChangeId()->Datum;
-$current_revision = loadCurrentRevision();
+$current_revision = $storage->loadCurrentRevision();;
 
 //Get contact GUIDS
 $item_data = $connector->getItemChnageIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
@@ -87,6 +85,16 @@ $contacts = $connector->getChangedItems(array('Contacts'), $current_revision, $l
 To ease orientation in output of our search we can create simple HTML table. We are doing both options in this one example code, so there should be two tables now. The output should look something like this.
 ![example output](Images/sample_output_two.PNG)
 
+## Store current revision
+Now that we are up to date, we should update revision number in our storage.
+```php
+
+//Store revision number
+$storage->storeCurrentRevision($latest_revision);
+```
 
 ## Sample code
 To see the whole sample code click [here](sample_code.php)
+
+## Folder name
+To ease understanding folder names, look [here](FolderNames.md).
