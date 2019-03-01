@@ -15,20 +15,18 @@ In some situations when using our API you will bump into "FolderName". The name 
 | Journal | Journals | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/journal) |
 | Email | Emails | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/e-mails) |
 | Calendar | Calendars | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/calendar) |
-| Invoice | Carts | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/carts) |
 | Product in Bookkeeping record | GoodsInCart | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/goods) |
 | Product | Goods | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/goods) |
 | Sale | SalePrices | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/sale-prices) |
-| Bookkeeping record | Carts | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/goods) |
+| Bookkeeping record/Invoice | Carts | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/carts) |
 | Time sheet | WorkReports | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/work-reports) |
 | Settings | UserSettings |  |
-| Global settings | GlobalSettings | [Page in knowledge base](https://kb.eway-crm.com/documentation/5-administration-application) |
+| Global settings | GlobalSettings | [Page in knowledge base](https://kb.eway-crm.com/documentation/5-administration-application/5-7-global-settings) |
 | Drop-down menu | EnumTypes |  |
 | option/item in drop-down menu | EnumValues |  |
 | Change of state | Flows | [Page in knowledge base](https://kb.eway-crm.com/documentation/5-administration-application/5-11-workflow-diagrams) |
 | Changes of state assigned to particular type | Models | [Page in knowledge base](https://kb.eway-crm.com/documentation/5-administration-application/5-11-workflow-diagrams) |
 | Group/Category | Groups | [Page in knowledge base](https://kb.eway-crm.com/documentation/5-administration-application/5-2-groups) |
-| Change on item | ItemChange |  |
 | Relation | Relations |  |
 | User | Users | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/users) |
 | Enabled features | Features | [Page in knowledge base](https://kb.eway-crm.com/documentation/5-administration-application/5-6-features) |
