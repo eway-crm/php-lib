@@ -2,7 +2,7 @@
 This example will show you how to change status on Project
 
 ## Create Project and store GUID
-We will create "testing" Project as subject of this example by  ```$connector->saveProject()``` with array of specifications as parameter. In a real life scenario, the Company would probably already exist and we would search for it with ```$connector->SearchProjects()```. Function that is saving the company will also return us an object with GUID of the Company.
+We will create "testing" Project as subject of this example by  ```$connector->saveProject()``` with array of specifications as parameter. In a real life scenario, the Company would probably already exist and we would search for it with ```$connector->SearchProjects()```. Function that is saving the Project will also return us an object with GUID of the Project.
 ```php
 
 //This is new project, that we want to create
