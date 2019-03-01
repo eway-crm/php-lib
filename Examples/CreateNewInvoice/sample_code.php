@@ -19,7 +19,8 @@
 				  'FileAs' => 'Service',
 				  'Name' => 'Service',
 				  'Code' => 'WRK-003',
-				  'PriceTotal' => '900'
+				  'ListPrice' => '900',
+				  'SalePrice' => '900'
 				  ),
 			),
 		'Projects_CartGuid' => '5dac8817-ac48-4469-bae3-41778042a911'
