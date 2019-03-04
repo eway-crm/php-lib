@@ -7,31 +7,31 @@ This example will show you how to find contacts which were changed or deleted si
 
 class Storage
 {
-    //Container for the revision number
-    public $current_revision;
+	//Container for the revision number
+	public $current_revision = 3000;
 
-    //Method for loading current revision number
-    function storeCurrentRevision($revision_number)
-    {
-        //TODO: Here should be code for storing the current revision number from persistent storage.
-        $this->current_revision = $revision_number;
-    }
-    
-    //Method for loading current revision number
-    function loadCurrentRevision()
-    {
-        //TODO: Here should be code for loading the current revision number from persistent storage.
-        return $this->current_revision;
-    }
+	//Method for loading current revision number
+	function storeCurrentRevision($revision_number)
+	{
+		//TODO: Here should be code for storing the current revision number from persistent storage.
+		$this->current_revision = $revision_number;
+	}
+	
+	//Method for loading current revision number
+	function loadCurrentRevision()
+	{
+		//TODO: Here should be code for loading the current revision number from persistent storage.
+		return $this->current_revision;
+	}
 }
 
 //Initialize storage
 $storage = new Storage();
 
 ```
-*Note for experts: The API register change on foreign keys on the item as item change as well, even though they are emulated.* 
+*Note for experts: The API registers changes on foreign keys on the item as item change as well, even though they are emulated.* 
 
-The example shows two ways of listing the changes. One is realised in two steps, first get GUIDS of changed items, then find the item changes. The other is done in just one function. 
+The example shows two ways of listing changed contacts. One is realised in two steps, first get GUIDS of changed items, then find the item changes. The other is done in just one function. 
 
 ## Done by using changed identfiers
 This is in case you want to see just identifiers of changed items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->getLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
@@ -71,7 +71,7 @@ To ease orientation in output of our search we can create simple HTML table. The
 ![example output](Images/sample_output_one.PNG)
 
 ## Done by loading details right away
-This option will get the item details one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChnageIdentifiers()``` but can be supplied with folder names and will return you detail of changed items (Item GUIDS in case of deletion).
+This option will get the item details one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChnageIdentifiers()``` but can be supplied with [folder names](FolderNames.md) and will return you detail of changed items (Item GUIDS in case of deletion).
 
 ```php
 
@@ -95,6 +95,3 @@ $storage->storeCurrentRevision($latest_revision);
 
 ## Sample code
 To see the whole sample code click [here](sample_code.php)
-
-## Folder name
-To ease understanding folder names, look [here](FolderNames.md).
