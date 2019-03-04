@@ -34,7 +34,7 @@ $storage = new Storage();
 The example shows two ways of listing changed contacts. One is realised in two steps, first get GUIDS of changed items, then find the item changes. The other is done in just one function. 
 
 ## Done by using changed identfiers
-This is in case you want to see just identifiers of changed items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChnageIdentifiers()``` . First parameter is name of the item folder, second is current revision number and the third is target revision which is supplied by function ```$connector->getLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
+This is in case you want to see just identifiers of changed items. First we acquire GUIDS of changed contacts with use of function ```$connector->getItemChangeIdentifiers()``` . First parameter is name of the item [folder](/../../FolderNames.md), second is current revision number and the third is target revision which is supplied by function ```$connector->getLastItemChangeId()``` . Current revision number is essentially time of your last check of item changes and target revision number is time to which you want your item changes update to.
 
 
 ```php
@@ -71,7 +71,7 @@ To ease orientation in output of our search we can create simple HTML table. The
 ![example output](Images/sample_output_one.PNG)
 
 ## Done by loading details right away
-This option will get the item details one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChnageIdentifiers()``` but can be supplied with [folder names](FolderNames.md) and will return you detail of changed items (Item GUIDS in case of deletion).
+This option will get the item details one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChnageIdentifiers()``` but can be supplied with [folder names](/../../FolderNames.md) and will return you detail of changed items (Item GUIDS in case of deletion).
 
 ```php
 
