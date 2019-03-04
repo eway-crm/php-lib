@@ -2,31 +2,31 @@
 
     class Storage
     {
-        //Container for the revision number
+        // Container for the revision number
         public $current_revision = 3000;
     
-        //Method for loading current revision number
+        // Method for loading current revision number
         function storeCurrentRevision($revision_number)
         {
-            //TODO: Here should be code for storing the current revision number from persistent storage.
+            // TODO: Here should be code for storing the current revision number from persistent storage.
             $this->current_revision = $revision_number;
         }
         
-        //Method for loading current revision number
+        // Method for loading current revision number
         function loadCurrentRevision()
         {
-            //TODO: Here should be code for loading the current revision number from persistent storage.
+            // TODO: Here should be code for loading the current revision number from persistent storage.
             return $this->current_revision;
         }
     }
 
-    //Initialize storage
+    // Initialize storage
     $storage = new Storage();
     
-    //Load API
+    // Load API
     require_once "eway.class.php";
     
-    //Variable for our output
+    // Variable for our output
     $table =   '<style type="text/css">
     
                     table {
@@ -45,30 +45,30 @@
     // Create connector
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
-    //GUIDS container
+    // GUIDS container
     $contact_guids = array();
     
-    //Revisions interval
+    // Revisions interval
     $latest_revision = $connector->getLastItemChangeId()->Datum;
     $current_revision = $storage->loadCurrentRevision();
     
-    //Get contact GUIDS
+    // Get contact GUIDS
     $item_data = $connector->getItemChangeIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
     
-    //Go through the contact GUIDS
+    // Go through the contact GUIDS
     foreach ($item_data as $data)
     {
-        //Extract the GUIDS
+        // Extract the GUIDS
         array_push($contact_guids, $data->ItemGUID);
     }
     
-    //Get contacts based on guids
+    // Get contacts based on guids
     $contacts_from_guids = $connector->getContactsByItemGuids($contact_guids)->Data;
     
-    //Open <table> tag for our output
+    // Open <table> tag for our output
     $table .= '<table align="center">';
     
-    //Head of our output table
+    // Head of our output table
     $table .=  '<tr>
                     <td style="border: 1px solid black;"><b>Selected in two steps:</b></td>
                 </tr>
@@ -79,35 +79,35 @@
                     <td style="border: 1px solid black;"><b>Email</b></td>
                 </tr>';
     
-    //Go through conacts
+    // Go through conacts
     foreach ($contacts_from_guids as $contact_from_item_guid)
     {
-        $table .= '<tr>'; //Open new table row
+        $table .= '<tr>'; // Open new table row
         
-        //Put the contact information we want into table cells 
+        // Put the contact information we want into table cells 
         $table .=  '<td style="border: 1px solid black;">'.$contact_from_item_guid->FirstName.' '.$contact_from_item_guid->LastName.'</td>
                     <td style="border: 1px solid black;">'.$contact_from_item_guid->BusinessAddressCity.'<br>'.$contact_from_item_guid->BusinessAddressStreet.' '.$contact_from_item_guid->BusinessAddressPostalCode.'</td>
                     <td style="border: 1px solid black;">'.$contact_from_item_guid->TelephoneNumber1.'</td>
                     <td style="border: 1px solid black;">'.$contact_from_item_guid->Email1Address.'</td>';
         
-        $table .= '</tr>'; //Close the table row
+        $table .= '</tr>'; // Close the table row
     }
     
-    //Close the <table> tags
+    // Close the <table> tags
     $table .= '</table>';
     
-    //Add space between two tables
+    // Add space between two tables
     $table .= ' <table>
                     <tr></br></tr>
                 </table>';
     
-    //Get contacts
+    // Get contacts
     $contacts = $connector->getChangedItems(array('Contacts'), $current_revision, $latest_revision)->Data[0]->ChangedItems;
     
-     //Open <table> tag for our output
+    // Open <table> tag for our output
     $table .= '<table align="center">';
     
-    //Head of our output table
+    // Head of our output table
     $table .=  '<tr>
                     <td style="border: 1px solid black;"><b>Selected in one step:</b></td>
                 </tr>
@@ -118,27 +118,27 @@
                     <td style="border: 1px solid black;"><b>Email</b></td>
                 </tr>';
     
-    //Go thorough contacts
+    // Go thorough contacts
     foreach ($contacts as $item)
     {
-        $table .= '<tr>'; //Open new table row
+        $table .= '<tr>'; // Open new table row
         
-        //Put the contact information we want into table cells 
+        // Put the contact information we want into table cells 
         $table .=  '<td style="border: 1px solid black;">'.$item->FirstName.' '.$item->LastName.'</td>
                     <td style="border: 1px solid black;">'.$item->BusinessAddressCity.'<br>'.$item->BusinessAddressStreet.' '.$item->BusinessAddressPostalCode.'</td>
                     <td style="border: 1px solid black;">'.$item->TelephoneNumber1.'</td>
                     <td style="border: 1px solid black;">'.$item->Email1Address.'</td>';
         
-        $table .= '</tr>'; //Close the table row
+        $table .= '</tr>'; // Close the table row
     }
     
-    //Close the <table> tags
+    // Close the <table> tags
     $table .= '</table>';
     
-    //Show the table with output
+    // Show the table with output
     echo $table;
     
-    //Store revision number
+    // Store revision number
     $storage->storeCurrentRevision($latest_revision);
 
 ?>

@@ -3,7 +3,7 @@ This example displays how to list all companies. All there is to it is using fun
 
 ```php
 
-//Get companies
+// Get companies
 $result = $connector->getCompanies();
 
 ```

@@ -7,25 +7,25 @@ This example will show you how to find contacts which were changed or deleted si
 
 class Storage
 {
-	//Container for the revision number
+	// Container for the revision number
 	public $current_revision = 3000;
 
-	//Method for loading current revision number
+	// Method for loading current revision number
 	function storeCurrentRevision($revision_number)
 	{
-		//TODO: Here should be code for storing the current revision number from persistent storage.
+		// TODO: Here should be code for storing the current revision number from persistent storage.
 		$this->current_revision = $revision_number;
 	}
 	
-	//Method for loading current revision number
+	// Method for loading current revision number
 	function loadCurrentRevision()
 	{
-		//TODO: Here should be code for loading the current revision number from persistent storage.
+		// TODO: Here should be code for loading the current revision number from persistent storage.
 		return $this->current_revision;
 	}
 }
 
-//Initialize storage
+// Initialize storage
 $storage = new Storage();
 
 ```
@@ -39,17 +39,17 @@ This is in case you want to see just identifiers of changed items. First we acqu
 
 ```php
 
-//Revisions interval
+// Revisions interval
 $latest_revision = $connector->getLastItemChangeId()->Datum;
 $current_revision = $storage->loadCurrentRevision();;
 
-//Get contact GUIDS
+// Get contact GUIDS
 $item_data = $connector->getItemChnageIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
 
-//Go through the contact GUIDS
+// Go through the contact GUIDS
 foreach ($item_data as $data)
 {
-    //Extract the GUIDS
+    // Extract the GUIDS
     array_push($contact_guids, $data->ItemGUID);
 }
 
@@ -59,7 +59,7 @@ After that we can use our extracted GUIDS to find according contacts.
 
 ```php
 
-//Get contacts based on guids
+// Get contacts based on guids
 $contacts_from_guids = $connector->getContactsByItemGuids($contact_guids)->Data;
 
 ```

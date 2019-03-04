@@ -5,7 +5,7 @@ We need to specify array with parameters of our cart, namely: FileAs and GUIDs o
 
 ```php
 
-//This is new cart, that we want to create
+// This is new cart, that we want to create
 $newCart = array(
 	'FileAs' => 'Desired Invoice',
 	'Companies_CustomerGuid' => 'bc0c3aef-64c9-4db5-a739-370937268203',
@@ -32,7 +32,7 @@ Now we use function ```$connector->saveCart()``` with our array as parameter to 
 
 ```php
 
-//Save the Cart
+// Save the Cart
 $connector->saveCart($newCart);
 ```
 

@@ -1,12 +1,12 @@
 <?php
 
-    //Load API
+    // Load API
     require_once "eway.class.php";
     
     // Create connector
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
-    //Specifications of our relation
+    // Specifications of our relation
     $relation = array(
                     'ItemGUID1'     => '129641b8-3677-11e7-9e49-080027cbca76',
                     'ItemGUID2'     => 'd9705ddc-9161-44e3-82cd-0bd0063b66f5',
@@ -15,7 +15,7 @@
                     'RelationType'  => 'GENERAL'
                     );
     
-    //Save the relation
+    // Save the relation
     $output = $connector->saveRelation($relation);
 
 ?>

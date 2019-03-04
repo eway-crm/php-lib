@@ -1,9 +1,9 @@
 <?php
 
-    //Load API
+    // Load API
     require_once "eway.class.php";
     
-    //Variable for our output
+    // Variable for our output
     $table =   '<style type="text/css">
     
                     table {
@@ -19,7 +19,7 @@
                     
                 </style>';
     
-    //Search criteria
+    // Search criteria
     $company = array(
                     'FileAs' => 'Dorl & Son Inc'    
                     );
@@ -27,13 +27,13 @@
     // Create connector
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
-    //Search for the company
+    // Search for the company
     $output = $connector->searchCompanies($company);
     
-    //Open <table> tag for our output
+    // Open <table> tag for our output
     $table .= '<table align="center">';
     
-    //Head of our output table
+    // Head of our output table
     $table .=  '<tr>
                     <td style="border: 1px solid black;"><b>Name</b></td>
                     <td style="border: 1px solid black;"><b>Address</b></td>
@@ -41,23 +41,23 @@
                 </tr>';
                 
                 
-    //List through results
+    // List through results
     foreach ($output->Data as $item)
     {
-        $table .= '<tr>'; //Open new table row
+        $table .= '<tr>'; // Open new table row
         
-        //Put the contact information we want into table cells 
+        // Put the contact information we want into table cells 
         $table .=  '<td style="border: 1px solid black;">'.$item->FileAs.'</td>
                     <td style="border: 1px solid black;">'.$item->Address1City.'<br>'.$item->Address1Street.' '.$item->Address1PostalCode.'</td>
                     <td style="border: 1px solid black;">'.$item->Phone.'</td>';
         
-        $table .= '</tr>'; //Close the table row
+        $table .= '</tr>'; // Close the table row
     }
     
-    //Close the <table> tags
+    // Close the <table> tags
     $table .= '</table>';
     
-    //Show the table with output
+    // Show the table with output
     echo $table;
     
 ?>

@@ -8,7 +8,7 @@ In order to find out which contacts are bound to our chosen company, we need to 
 
 ```php
    
-//Get data of the company("true" parameter determines wether we get relation data of searched company)
+// Get data of the company("true" parameter determines wether we get relation data of searched company)
 $object = $connector->searchCompanies(array('FileAs' => $company_name), true);
 
 ```
@@ -18,13 +18,13 @@ Now we have ```$object``` containing array ```Data[]``` where data of company, o
 
 ```php
 
-//List through company relations (relations are actualy on 3rd depth of $object)
+// List through company relations (relations are actualy on 3rd depth of $object)
 foreach ($object->Data[0]->Relations as $key => $relation)
 {
-    //We are looking for relation which is labeled GENERAL or COMPANY and is leding to Contact
+    // We are looking for relation which is labeled GENERAL or COMPANY and is leding to Contact
     if (($relation->RelationType === 'GENERAL' || $relation->RelationType === 'COMPANY') && $relation->ForeignFolderName === 'Contacts')
 	{
-        //Store the GUID of the contact
+        // Store the GUID of the contact
         array_push($contacts, $relation->ForeignItemGUID);
     }
 }
@@ -35,7 +35,7 @@ foreach ($object->Data[0]->Relations as $key => $relation)
 Now we have array of GUIDs of contacts. We will use it as first parameter and 'true' as second for function ```$connector->getContactsByItemGuids()```. The second parameter indicates that we want to see foreign keys of item we are looking for, if we so desire.
 ```php
 
-//Get data of contacts
+// Get data of contacts
 $contacts = $connector->getContactsByItemGuids($contacts, true);
 
 ```

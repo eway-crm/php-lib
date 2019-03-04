@@ -6,7 +6,7 @@ All you need to is to make yourself an array with parameters by which you want t
 
 ```php
 
-//Search criteria
+// Search criteria
 $company = array(
                 'FileAs' => 'Dorl & Son Inc'    
                 );
@@ -14,7 +14,7 @@ $company = array(
 // Create connector
 $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc', 'api', 'ApiTrial@eWay-CRM');
 
-//Search for the company
+// Search for the company
 $output = $connector->searchCompanies($company);
 
 ```

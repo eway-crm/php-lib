@@ -1,12 +1,12 @@
 <?php
 
-    //Load API
+    // Load API
     require_once "eway.class.php";
     
     // Create connector
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
-    //This is new cart, that we want to create
+    // This is new cart, that we want to create
     $newCart = array(
 		'FileAs' => 'Desired Invoice',
 		'Companies_CustomerGuid' => 'bc0c3aef-64c9-4db5-a739-370937268203',
@@ -26,7 +26,7 @@
 		'Projects_CartGuid' => '5dac8817-ac48-4469-bae3-41778042a911'
 		);
     
-    //Save the Cart
+    // Save the Cart
     $connector->saveCart($newCart);
     
 ?>

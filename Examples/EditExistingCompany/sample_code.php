@@ -1,6 +1,6 @@
 <?php
     
-    //Load API
+    // Load API
     require_once "eway.class.php";
     
     // Create connector

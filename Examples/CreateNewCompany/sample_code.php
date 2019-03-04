@@ -1,6 +1,6 @@
 <?php
          
-    //Load API
+    // Load API
     require_once ('eway-crm-php-lib/eway.class.php');
     
     // This is new company, that we want to create
@@ -12,7 +12,7 @@
                         'Email' => 'Email@company.com'
                         );
     
-    //Connect to API
+    // Connect to API
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
     // Try to save new company

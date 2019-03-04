@@ -5,10 +5,10 @@ This example will show you how to create new Document, new Task and link them wi
 We will create a Task by using function ```$connector->saveTask()``` supplied with array of parameters. In the parameters we have ```$userGuid``` which we got from function ```$connector->searchUsers()``` with FileAs of the user as parameter. 
  ```php
 
-//Get user GUID
+// Get user GUID
 $userGuid = $connector->searchUsers(array('FileAs' => 'Api-Tester, Robot'))->Data[0]->ItemGUID;
 
-//This will be our Task
+// This will be our Task
 $task = array(
             'StartDate' => '2019-02-01 20:00:00Z',
             'DueDate' => '2019-02-02 04:00:00Z',
@@ -18,7 +18,7 @@ $task = array(
             'Users_TaskSolverGuid' => $userGuid
             );
 
-//Save the task
+// Save the task
 $taskResult = $connector->saveTask($task);
 
  ```
@@ -30,7 +30,7 @@ As an output, you should see the Task appear in outlook application.
 Now we create our Document. Similarly to the previous step, we have an array of parameters and supply it to the ```$connector->saveDocument()``` function.
  ```php
 
-//This willl be our Document
+// This willl be our Document
 $document = array(
                     'FileAs' => 'Document',
                     'DocName' => 'Document',
@@ -38,7 +38,7 @@ $document = array(
                     'Extension' => 'txt'
                   );
 
-//Save the Document
+// Save the Document
 $documentResult = $connector->saveDocument($document);
 
  ```
@@ -50,7 +50,7 @@ As an output, you should see the Document appear in outlook application.
 All there is left now, is to link both items together. Again we prepare our array with parameters with GUIDS of both items, their folder names (Tasks and Documents) and type of the relation (GENERAL in our case). Than we supply the array as a parameter of function  ```$connector->saveRelation()``` and we are ready to go.
  ```php
 
-//Specifications of our relation
+// Specifications of our relation
     $relation = array(
                     'ItemGUID1'     => $taskResult->Guid,
                     'ItemGUID2'     => $documentResult->Guid,
@@ -59,7 +59,7 @@ All there is left now, is to link both items together. Again we prepare our arra
                     'RelationType'  => 'GENERAL'
                     );
 
-    //Save the relation
+    // Save the relation
     $output = $connector->saveRelation($relation);
 
  ```
