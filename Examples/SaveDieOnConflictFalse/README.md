@@ -4,6 +4,9 @@ First we prepare company attributes that we want to save and set ItemVersion to 
 
 ```php
 
+// This willl be our Project
+    $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM');
+    
 // This is new company, that we want to create
     $newCompany = array(
                         'ItemGUID' => 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e',
@@ -16,7 +19,7 @@ First we prepare company attributes that we want to save and set ItemVersion to 
                         );
 
     // Try to save new company
-    var_dump($connector->saveCompany($newCompany));
+    $connector->saveCompany($newCompany);
 
 ```
 
