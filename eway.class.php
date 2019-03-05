@@ -1786,6 +1786,21 @@ class eWayConnector
 
         return $this->doRequest($completeTransmitObject, 'GetChangedItems', '5.3.0.1');
     }
+    
+    /**
+     * Uploads binary attachement against eWay-CRM API
+     *
+     * @param $filePath Path to file to be attached
+     * @param $itemGuid Guid of the attached item (will generate new if empty)
+     * @return Json format with successful response
+     */
+    public function saveBinaryAttachment($filePath, &$itemGuid = null)
+    {
+        if (empty($itemGuid))
+            $itemGuid = trim(com_create_guid(), '{}');
+        
+        return $this->upload($itemGuid, $filePath);
+    }
 
     /**
      * Formats date and time for the API calls
@@ -1846,6 +1861,11 @@ class eWayConnector
     private function createWebServiceUrl($action)
     {
         return $this->joinPaths($this->webServiceAddress, $action);
+    }
+    
+    private function createFileUploadUrl($itemGuid, $fileName)
+    {
+        return $this->createWebServiceUrl('SaveBinaryAttachment?sessionId='.$this->sessionId.'&itemGuid='.$itemGuid.'&fileName='.$fileName);
     }
 
     private function joinPaths()
@@ -1982,7 +2002,43 @@ class eWayConnector
         
         return $jsonResult;
     }
-
+    
+    private function upload($itemGuid, $filePath)
+    {
+        // This is first request, login before
+        if (empty($this->sessionId)) {
+            $this->reLogin();
+            
+            return $this->upload($itemGuid, $filePath);
+        }
+        
+        $url = $this->createFileUploadUrl($itemGuid, basename($filePath));
+        $ch = $this->createUploadRequest($url, $filePath);
+        
+        $result = $this->executeCurl($ch);
+        $jsonResult = json_decode($result);
+        $returnCode = $jsonResult->ReturnCode;
+        
+        // Session timed out, re-log again
+        if ($returnCode == 'rcBadSession') {
+            $this->reLogin();
+            $completeTransmitObject['sessionId'] = $this->sessionId;
+        }
+        
+        if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
+            // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
+            if($repeatSession == true) {
+                return $this->doRequest($completeTransmitObject, $action, $version, false);
+            }
+        }
+        
+        if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
+            throw new Exception($returnCode.': '.$jsonResult->Description);
+        }
+        
+        return $jsonResult;
+    }
+    
     private function createPostRequest($url, $jsonObject)
     {
         $ch = curl_init();
@@ -1993,6 +2049,20 @@ class eWayConnector
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
+        
+        return $ch;
+    }
+
+    private function createUploadRequest($url, $filePath)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/octet-stream', 'Accept: application/json', 'Content-Length: '.filesize($filePath)));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_INFILE, fopen($filePath, 'r'));
         
         return $ch;
     }
