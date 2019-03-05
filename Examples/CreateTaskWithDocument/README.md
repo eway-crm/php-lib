@@ -27,15 +27,19 @@ As an output, you should see the Task appear in outlook application.
 ![example output](Images/sample_output_task.PNG)
 
 ## Create Document
-Now we create our Document. Similarly to the previous step, we have an array of parameters and supply it to the ```$connector->saveDocument()``` function.
+Now we create our Document. First we upload binary of the file by ```$connector->saveBinaryAttachment()``` with path to the file as first parameter and empty variable for GUID of our document (we can supply it with our own GUID of choice, but remember to put it in parameters of the document too) and then, similarly to saving task, we have an array of parameters and supply it to the ```$connector->saveDocument()``` function.
  ```php
 
+//Save the Document
+$documentResult = $connector->SaveDocument($document);
+ 
 // This willl be our Document
 $document = array(
-                    'FileAs' => 'Document',
-                    'DocName' => 'Document',
-                    'DocSize' => 10,
-                    'Extension' => 'txt'
+                    'ItemGUID' => $GUID,
+					'FileAs' => 'Picture',
+					'DocName' => 'Picture',
+					'DocSize' => 10884,
+					'Extension' => 'PNG'
                   );
 
 // Save the Document

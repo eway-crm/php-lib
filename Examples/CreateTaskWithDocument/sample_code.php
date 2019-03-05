@@ -21,12 +21,17 @@
     
     // Save the task
     $taskResult = $connector->saveTask($task);
+    
+    // Save binary of the Document
+    $connector->saveBinaryAttachment('Picture.PNG', $GUID);
+    
     // This willl be our Document
     $document = array(
-                        'FileAs' => 'Document',
-                        'DocName' => 'Document',
-                        'DocSize' => 10,
-                        'Extension' => 'txt'
+                        'ItemGUID' => $GUID,
+                        'FileAs' => 'Picture',
+                        'DocName' => 'Picture',
+                        'DocSize' => 10884,
+                        'Extension' => 'PNG'
                       );
     
     // Save the Document
