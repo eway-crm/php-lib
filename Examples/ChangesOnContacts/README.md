@@ -44,7 +44,7 @@ $latest_revision = $connector->getLastItemChangeId()->Datum;
 $current_revision = $storage->loadCurrentRevision();;
 
 // Get contact GUIDS
-$item_data = $connector->getItemChnageIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
+$item_data = $connector->getItemChangeIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
 
 // Go through the contact GUIDS
 foreach ($item_data as $data)
@@ -71,7 +71,7 @@ To ease orientation in output of our search we can create simple HTML table. The
 ![example output](Images/sample_output_one.PNG)
 
 ## Done by loading details right away
-This option will get the item details one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChnageIdentifiers()``` but can be supplied with [folder names](/../../blob/master/FolderNames.md) and will return you detail of changed items (Item GUIDS in case of deletion).
+This option will get the item details one step. That can be done by function ```$connector->getChangedItems()``` which is very similar to function  ```$connector->getItemChangeIdentifiers()``` but can be supplied with [folder names](/../../blob/master/FolderNames.md) and will return you detail of changed items (Item GUIDS in case of deletion).
 
 ```php
 
