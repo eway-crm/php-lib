@@ -25,12 +25,12 @@
     // Save binary of the Document
     $connector->saveBinaryAttachment('Picture.PNG', $GUID);
     
-    // This willl be our Document
+    // This will be our Document
     $document = array(
                         'ItemGUID' => $GUID,
                         'FileAs' => 'Picture',
                         'DocName' => 'Picture',
-                        'DocSize' => 10884,
+                        'DocSize' => filesize('Picture.PNG'),
                         'Extension' => 'PNG'
                       );
     
