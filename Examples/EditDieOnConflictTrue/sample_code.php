@@ -3,8 +3,8 @@
     // Load API
     require_once "eway.class.php";
     
-    // Connect to API and set dieOnItemConflict to false
-    $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM');
+    // Connect to API and set dieOnItemConflict to true
+    $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM', false, true);
     
     // Lets create new company to have something to edit
     $company = array(
