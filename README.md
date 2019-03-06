@@ -62,5 +62,26 @@ Sample code [here](Examples/CreateTaskWithDocument/sample_code.php).
 Example showcasing changing project status.<br />
 Sample code [here](Examples/ChangeProjectStatus/sample_code.php).
 
+### Item conflicts
+How does it work exactly? Every item in eWay-CRM database has it's own revision number (like in SVN/Git) called ItemVersion. This number is increased by one everytime the item is updated. Using this number, eWay-CRM in Outlook is able to determine a conflict and show you the conflict resolving dialog (Use mine or theirs). When working with API, we don't force you to work with ItemVersion when you don't need it. When you save a record, you should send ItemVersion higher that the currently stored one (higher by one). By this you say that you have seen the revision N and the data you are sending is the revision N+1. Everything you send is saved. If you send ItemVersion lower or equal to the current or you don't send the ItemVersion at all, the system thinks that you have not seen the latest revision N. In Outlook, you would get conflict dialog. In API, to make thinkgs simplier, an automatic merge is done. The merge is simple. Every field value you are sending is saved except nulls. So your data are preserved but non of your deletings is done.
+
+Every Save method has also a boolean flag, which turns the auto-merge off and you get a conflict error code instead.
+
+### [Create with Item conflict off](Examples/SaveDieOnConflictTrue/README.md)<br />
+Example showcasing creation with Item conflict off.<br />
+Sample code [here](Examples/SaveDieOnConflictTrue/sample_code.php).
+
+### [Create with Item conflict on](Examples/SaveDieOnConflictFalse/README.md)<br />
+Example showcasing creation with Item conflict on.<br />
+Sample code [here](Examples/SaveDieOnConflictFalse/sample_code.php).
+
+### [Edit with Item conflict off](Examples/EditDieOnConflictTrue/README.md)<br />
+Example showcasing editing with Item conflict off.<br />
+Sample code [here](Examples/EditDieOnConflictTrue/sample_code.php).
+
+### [Edit with Item conflict on](Examples/EditDieOnConflictFalse/README.md)<br />
+Example showcasing editing with Item conflict on.<br />
+Sample code [here](Examples/EditDieOnConflictFalse/sample_code.php).
+
 ## Folder name
 To ease understanding folder names, look [here](FolderNames.md).
