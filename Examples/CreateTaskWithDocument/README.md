@@ -33,12 +33,12 @@ Now we create our Document. First we upload binary of the file by ```$connector-
 //Save the Document
 $documentResult = $connector->SaveDocument($document);
  
-// This willl be our Document
+// This will be our Document
 $document = array(
                     'ItemGUID' => $GUID,
 					'FileAs' => 'Picture',
 					'DocName' => 'Picture',
-					'DocSize' => 10884,
+					'DocSize' => filesize('Picture.PNG'),
 					'Extension' => 'PNG'
                   );
 
