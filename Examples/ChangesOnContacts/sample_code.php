@@ -45,20 +45,20 @@
     // Create connector
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
-    // GUIDS container
+    // GUIDs container
     $contact_guids = array();
     
     // Revisions interval
     $latest_revision = $connector->getLastItemChangeId()->Datum;
     $current_revision = $storage->loadCurrentRevision();
     
-    // Get contact GUIDS
+    // Get contact GUIDs
     $item_data = $connector->getItemChangeIdentifiers('Contacts', $current_revision, $latest_revision)->Data;
     
-    // Go through the contact GUIDS
+    // Go through the contact GUIDs
     foreach ($item_data as $data)
     {
-        // Extract the GUIDS
+        // Extract the GUIDs
         array_push($contact_guids, $data->ItemGUID);
     }
     
@@ -79,7 +79,7 @@
                     <td style="border: 1px solid black;"><b>Email</b></td>
                 </tr>';
     
-    // Go through conacts
+    // Go through contacts
     foreach ($contacts_from_guids as $contact_from_item_guid)
     {
         $table .= '<tr>'; // Open new table row
