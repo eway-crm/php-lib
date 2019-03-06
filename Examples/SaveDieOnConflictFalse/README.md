@@ -8,18 +8,18 @@ First we prepare company attributes that we want to save and set ItemVersion to 
     $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM');
     
 // This is new company, that we want to create
-    $newCompany = array(
-                        'ItemGUID' => 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e',
-                        'FileAs' => 'Company', 
-                        'CompanyName' => 'Company',
-                        'Purchaser' => '1',
-                        'Phone' => '111 222 333',
-                        'Email' => 'Emailusil@company.com',
-                        'ItemVersion' => '1'
-                        );
+$newCompany = array(
+					'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
+					'FileAs' => 'Monsters Inc.', 
+					'CompanyName' => 'Monsters Inc.',
+					'Purchaser' => '1',
+					'Phone' => '131 522 348',
+					'Email' => 'info@monsters.com',
+					'ItemVersion' => '1'
+					);
 
-    // Try to save new company
-    $connector->saveCompany($newCompany);
+// Try to save new company
+$connector->saveCompany($newCompany);
 
 ```
 
