@@ -75,7 +75,7 @@ This option will get the item details one step. That can be done by function ```
 
 ```php
 
-//Get contacts
+// Get contacts
 $contacts = $connector->getChangedItems(array('Contacts'), $current_revision, $latest_revision)->Data[0]->ChangedItems;
 ```
 
