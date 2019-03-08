@@ -1,5 +1,5 @@
 # Folder names
-In some situations when using our API you will bump into "FolderName". The name refers to names of objects you work with in our eWayCRM system. Here is a short list of item names ad their respective folder names you might use:
+In some situations when using our API you will bump into "FolderName". The name refers to names of objects you work with in our eWayCRM system. Here is a short list of item names and their respective folder names you might use:
 
 | Item | Folder name | Documentation |
 |--|--|--|
