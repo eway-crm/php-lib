@@ -2,7 +2,7 @@
 This example will show you how to create new Document, new Task and link them with basic relation.
 
 ## Create Task 
-We will create a Task by using function ```$connector->saveTask()``` supplied with array of parameters. In the parameters we have ```$userGuid``` which we got from function ```$connector->searchUsers()``` with FileAs of the user as parameter. 
+We will create a Task by using method ```$connector->saveTask()``` supplied with array of parameters. In the parameters we have ```$userGuid``` which we got from method ```$connector->searchUsers()``` with FileAs of the user as parameter. 
  ```php
 
 // Get user GUID
@@ -23,11 +23,11 @@ $taskResult = $connector->saveTask($task);
 
  ```
 ### Output
-As an output, you should see the Task appear in outlook application.
+As an output, you should see the Task appear in Outlook application.
 ![example output](Images/sample_output_task.PNG)
 
 ## Create Document
-Now we create our Document. First we upload binary of the file by ```$connector->saveBinaryAttachment()``` with path to the file as first parameter and empty variable for GUID of our document (we can supply it with our own GUID of choice, but remember to put it in parameters of the document too) and then, similarly to saving task, we have an array of parameters and supply it to the ```$connector->saveDocument()``` function.
+Now we create our Document. First we upload binary of the file by ```$connector->saveBinaryAttachment()``` with path to the file as first parameter and empty variable for GUID of our document (we can supply it with our own GUID of choice, but remember to put it in parameters of the document too) and then, similarly to saving task, we have an array of parameters and supply it to the ```$connector->saveDocument()``` method.
  ```php
 
 // Save binary of the Document
@@ -47,11 +47,11 @@ $documentResult = $connector->saveDocument($document);
 
  ```
 ### Output
-As an output, you should see the Document appear in outlook application.
+As an output, you should see the Document appear in Outlook application.
 ![example output](Images/sample_output_document.PNG)
 
 ## Link items together
-All there is left now, is to link both items together. Again we prepare our array with parameters with GUIDS of both items, their folder names (Tasks and Documents) and type of the relation (GENERAL in our case). Than we supply the array as a parameter of function  ```$connector->saveRelation()``` and we are ready to go.
+All there is left now, is to link both items together. Again we prepare our array with parameters with GUIDS of both items, their folder names (Tasks and Documents) and type of the relation (GENERAL in our case). Than we supply the array as a parameter of method  ```$connector->saveRelation()``` and we are ready to go.
  ```php
 
 // Specifications of our relation
