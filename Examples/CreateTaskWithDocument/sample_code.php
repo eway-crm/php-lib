@@ -7,7 +7,7 @@
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
     // Get user GUID
-    $userGuid = $connector->searchUsers(array('FileAs' => 'Api-Tester, Robot'))->Data[0]->ItemGUID;
+    $user_guid = $connector->searchUsers(array('FileAs' => 'Api-Tester, Robot'))->Data[0]->ItemGUID;
     
     // This will be our Task
     $task = array(
@@ -15,8 +15,8 @@
                 'DueDate' => '2019-02-02 04:00:00Z',
                 'Subject' => 'TASK: Do the task',
                 'FileAs' => 'TASK: Do the task',
-                'Users_TaskDelegatorGuid' => $userGuid,
-                'Users_TaskSolverGuid' => $userGuid
+                'Users_TaskDelegatorGuid' => $user_guid,
+                'Users_TaskSolverGuid' => $user_guid
                 );
     
     // Save the task
