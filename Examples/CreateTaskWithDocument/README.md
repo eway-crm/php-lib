@@ -10,12 +10,12 @@ $user_guid = $connector->searchUsers(array('FileAs' => 'Api-Tester, Robot'))->Da
 
 // This will be our Task
 $task = array(
-	'StartDate' => '2019-02-01 20:00:00Z',
-	'DueDate' => '2019-02-02 04:00:00Z',
-	'Subject' => 'TASK: Do the task',
-	'FileAs' => 'TASK: Do the task',
-	'Users_TaskDelegatorGuid' => $user_guid,
-	'Users_TaskSolverGuid' => $user_guid
+				'StartDate' => '2019-02-01 20:00:00Z',
+				'DueDate' => '2019-02-02 04:00:00Z',
+				'Subject' => 'TASK: Do the task',
+				'FileAs' => 'TASK: Do the task',
+				'Users_TaskDelegatorGuid' => $user_guid,
+				'Users_TaskSolverGuid' => $user_guid
 	);
 
 // Save the task
@@ -34,7 +34,7 @@ $connector->saveBinaryAttachment('Picture.PNG', $GUID);
  
 // This will be our Document
 $document = array(
-                    'ItemGUID' => $GUID,
+					'ItemGUID' => $GUID,
 					'FileAs' => 'Picture',
 					'DocName' => 'Picture',
 					'DocSize' => filesize('Picture.PNG'),
