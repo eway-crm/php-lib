@@ -6,7 +6,7 @@ First we prepare company attributes that we want to save and set ItemVersion to 
 ```php
 
 // Connect to API
-$connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM');
+$connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
 // This is new company, that we want to create
 $newCompany = array(
