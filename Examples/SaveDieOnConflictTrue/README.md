@@ -1,6 +1,7 @@
+
 # Creating items with dieOnItemConflict set to true
 
-Now we have the same situation as  in previous example, the only difference is in dieOnItemConflict, that is set to true this time. As before we prepare company, set all atributes that we need, create connector, call method. Api takes request and searches if guid has not been used yet. In case that guid have not been used yet, item is created, otherwise, service returns rcItemAlreadyUploaded.
+Now we have the same situation as  in [previous example](../SaveDieOnConflictFalse), the only difference is in dieOnItemConflict, that is set to true this time. As before we prepare company, set all atributes that we need, create connector, call method. In case of item with same GUID not yet existing, item is created, otherwise, service returns rcItemAlreadyUploaded.
 
 ```php
 
@@ -10,12 +11,12 @@ $connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Serv
 // This is new company, that we want to create.
 $newCompany = array(
                     'ItemGUID' => 'ebdd18f3-92e9-412d-afec-e1aaf6139b09',
-                        'FileAs' => 'Monsters Inc.', 
-                        'CompanyName' => 'Monsters Inc.',
-                        'Purchaser' => '1',
-                        'Phone' => '131 522 348',
-                        'Email' => 'info@monsters.com',
-                        'ItemVersion' => '1'
+                    'FileAs' => 'Monsters Inc.', 
+                    'CompanyName' => 'Monsters Inc.',
+                    'Purchaser' => '1',
+                    'Phone' => '131 522 348',
+                    'Email' => 'info@monsters.com',
+                    'ItemVersion' => '1'
                     );
 
 // Try to save new company
@@ -23,19 +24,8 @@ $connector->saveCompany($newCompany);
 
 ```
 
-This is example of given result:
-```console
 
-object(stdClass)[2]
-  public 'Description' => null
-  public 'ReturnCode' => string 'rcSuccess' (length=9)
-  public 'Guid' => string 'b8f6b5e2-8fdb-41f9-9aa5-51142a92d35e' (length=36)
-  public 'IsUserMessageOptionalError' => null
-  public 'UserMessage' => null
-
-```
-
-If you try to create the same company again, rcItemAlreadyUploaded error will be returned.
+If the company already exists, rcItemAlreadyUploaded error will be returned.
 ```console
 
 object(stdClass)[2]
