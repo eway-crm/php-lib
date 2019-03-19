@@ -1,7 +1,7 @@
 
-# Editing items with dieOnItemConflict set to false
+# Editing items with dieOnItemConflict detection disabled
 
-We want to edit company, that already exists and dieOnItemConflict is turned off. First of all we create new company and then we will edit it. As you can see, ItemVersion is missing. 
+We want to edit company, that already exists and dieOnItemConflict detection id disabled. First of all we create new company and then we will edit it. As you can see, ItemVersion is missing. 
 
 ```php
 

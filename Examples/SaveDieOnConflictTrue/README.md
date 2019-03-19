@@ -1,7 +1,7 @@
 
-# Creating items with dieOnItemConflict set to true
+# Creating items with dieOnItemConflict detection enabled
 
-Now we have the same situation as  in [previous example](../SaveDieOnConflictFalse), the only difference is in dieOnItemConflict, that is set to true this time. As before we prepare company, set all atributes that we need, create connector, call method. In case of item with same GUID not yet existing, item is created, otherwise, service returns rcItemAlreadyUploaded.
+Now we have the same situation as  in [previous example](../SaveDieOnConflictFalse), the only difference is in dieOnItemConflict detection, that is enabled this time. As before we prepare company, set all atributes that we need, create connector, call method. In case of item with same GUID not yet existing, item is created, otherwise, service returns rcItemAlreadyUploaded.
 
 ```php
 

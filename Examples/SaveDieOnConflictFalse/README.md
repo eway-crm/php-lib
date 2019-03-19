@@ -1,5 +1,5 @@
 
-# Creating items with dieOnItemConflict set to false
+# Creating items with dieOnItemConflict detection disable
 
 First we prepare company attributes that we want to save and set ItemVersion to 1. This signalize that company is new and should be created. Api checks for existence of item with acoarding  GUID does exist. If yes, items are merged, if not, item is created. Because ItemVersion does not change before second saving, merge will occur, due to item has already been created. If you increase item version before saving, item will be overwritten by new attributes and merge will not occur.
 

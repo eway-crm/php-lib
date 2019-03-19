@@ -1,7 +1,7 @@
 
-# Editing items with dieOnItemConflict set to false
+# Editing items with dieOnItemConflict detection enabled
 
-We want to edit company, that already exists and dieOnItemConflict is turned on. First of all we create new company and edit the company later. As you can see, ItemVersion is not missing this time, because api would not let you create or edit item without specifying ItemVersion, when dieOnItemConflict is true. If Item is not found, item will be created, and if item is found, ItemVersions are compared. In case that your new ItemVersion is not higher, rcItemConflict is returned, and in case it is higher, item is overwritten.
+We want to edit company, that already exists and dieOnItemConflict detection is turned on. First of all we create new company and edit the company later. As you can see, ItemVersion is not missing this time, because api would not let you create or edit item without specifying ItemVersion, when dieOnItemConflict detection is enabled. If Item is not found, item will be created, and if item is found, ItemVersions are compared. In case that your new ItemVersion is not higher, rcItemConflict is returned, and in case it is higher, item is overwritten.
 ```php
 
 // Connect to API and set dieOnItemConflict to true
