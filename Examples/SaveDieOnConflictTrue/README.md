@@ -1,12 +1,12 @@
 
 # Creating items with dieOnItemConflict detection enabled
 
-Now we have the same situation as  in [previous example](../SaveDieOnConflictFalse), the only difference is in dieOnItemConflict detection, that is enabled this time. As before we prepare company, set all atributes that we need, create connector, call method. In case of item with same GUID not yet existing, item is created, otherwise, service returns rcItemAlreadyUploaded.
+Now we have the same situation as  in [previous example](../SaveDieOnConflictFalse), the only difference is in dieOnItemConflict detection, that is enabled this time. As before we prepare company, set all atributes that we need, create connector, call method. In case of item with same GUID not yet existing, item is created, otherwise, service returns rcItemAlreadyUploaded (this error message is not stored anywhere, unless you deliberately store the output of function returning it).
 
 ```php
 
 //Connect to API and set dieOnItemConflict to true
-$connector = new eWayConnector('https://trial.eway-crm.com/31994/WcfService/Service.svc/', 'api', 'ApiTrial@eWay-CRM', false, true);
+$connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM', false, true);
 
 // This is new company, that we want to create.
 $newCompany = array(
