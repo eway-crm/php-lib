@@ -19,7 +19,7 @@ $task = array(
 	);
 
 // Save the task
-$taskResult = $connector->saveTask($task);
+$task_result = $connector->saveTask($task);
 
  ```
 ### Output
@@ -42,7 +42,7 @@ $document = array(
                   );
 
 // Save the Document
-$documentResult = $connector->saveDocument($document);
+$document_result = $connector->saveDocument($document);
 
  ```
 ### Output
@@ -55,8 +55,8 @@ All there is left now, is to link both items together. Again we prepare our arra
 
 // Specifications of our relation
 $relation = array(
-	'ItemGUID1'     => $taskResult->Guid,
-	'ItemGUID2'     => $documentResult->Guid,
+	'ItemGUID1'     => $task_result->Guid,
+	'ItemGUID2'     => $document_result->Guid,
 	'FolderName1'   => 'Tasks',
 	'FolderName2'   => 'Documents',
 	'RelationType'  => 'GENERAL'
