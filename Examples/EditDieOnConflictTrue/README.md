@@ -18,7 +18,7 @@ $company = array(
                     );
 
 // Try to save new company
-$companyGuid = $connector->saveCompany($newCompany);
+$companyGuid = $connector->saveCompany($company);
 
 ```
 
