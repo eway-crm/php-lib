@@ -18,7 +18,7 @@ $company = array(
                     );
 
 // Try to save new company
-$companyGuid = $connector->saveCompany($newCompany)->Guid;
+$companyGuid = $connector->saveCompany($company)->Guid;
 
 ```
 
@@ -41,7 +41,7 @@ Now we prepare new data and try editing the company. Item will be found this tim
 // Edited company fields
 $companyEdit = array(
                     'ItemGUID' => $companyGuid,
-                    'Phone' => 'null',
+                    'Phone' => '',
                     'Email' => 'support@monsters.com',
                     );
 

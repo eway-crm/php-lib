@@ -10,18 +10,18 @@
     $company = array(
                         'FileAs' => 'Monsters Inc.', 
                         'CompanyName' => 'Monsters Inc.',
-                        'Purchaser' => boolean true,
+                        'Purchaser' => "1",
                         'Phone' => '544 727 379',
                         'Email' => 'info@monsters.com',
                         );
 
     // Try to save new company
-    $companyGuid = $connector->saveCompany($newCompany)->Guid;
+    $companyGuid = $connector->saveCompany($company)->Guid;
     
     // Edited company fields
     $companyEdit = array(
                         'ItemGUID' => $companyGuid,
-                        'Phone' => 'null',
+                        'Phone' => '',
                         'Email' => 'support@monsters.com',
                         );
     
