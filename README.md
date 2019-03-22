@@ -67,7 +67,7 @@ How does it work exactly? Every item in eWay-CRM database has it's own revision 
 
 Every Save method has also a boolean flag, which turns the auto-merge off and you get a conflict error code instead.
 
-### [Create with Item conflict detection disabled](default)(Examples/SaveDieOnConflictFalse/README.md)<br />
+### [Create with Item conflict detection disabled](Examples/SaveDieOnConflictFalse/README.md)(default)<br />
 Example showcasing creation with Item conflict detection disabled.<br />
 Sample code [here](Examples/SaveDieOnConflictFalse/sample_code.php).
 
@@ -75,7 +75,7 @@ Sample code [here](Examples/SaveDieOnConflictFalse/sample_code.php).
 Example showcasing creation with Item conflict detection enabled.<br />
 Sample code [here](Examples/SaveDieOnConflictTrue/sample_code.php).
 
-### [Edit with Item conflict detection disabled](default)(Examples/EditDieOnConflictFalse/README.md)<br />
+### [Edit with Item conflict detection disabled](Examples/EditDieOnConflictFalse/README.md)(default)<br />
 Example showcasing editing with Item conflict detection disabled.<br />
 Sample code [here](Examples/EditDieOnConflictFalse/sample_code.php).
 
