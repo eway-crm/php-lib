@@ -22,7 +22,7 @@
     // Edited company fields
     $companyEdit = array(
                         'ItemGUID' => $companyGuid,
-                        'Phone' => 'null',
+                        'Phone' => '',
                         'Email' => 'support@monsters.com',
                         'ItemVersion' => '1'
                         );

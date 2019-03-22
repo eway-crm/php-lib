@@ -28,7 +28,7 @@ Now we prepare new data and try editing the company.
 // Edited company fields
 $companyEdit = array(
                     'ItemGUID' => $companyGuid,
-                    'Phone' => 'null',
+                    'Phone' => '',
                     'Email' => 'support@monsters.com',
                     'ItemVersion' => '1'
                     );
