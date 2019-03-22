@@ -67,20 +67,20 @@ How does it work exactly? Every item in eWay-CRM database has it's own revision 
 
 Every Save method has also a boolean flag, which turns the auto-merge off and you get a conflict error code instead.
 
-### [Create with Item conflict off](Examples/SaveDieOnConflictFalse/README.md)<br />
-Example showcasing creation with Item conflict off.<br />
+### [Create with Item conflict detection disabled](default)(Examples/SaveDieOnConflictFalse/README.md)<br />
+Example showcasing creation with Item conflict detection disabled.<br />
 Sample code [here](Examples/SaveDieOnConflictFalse/sample_code.php).
 
-### [Create with Item conflict on](Examples/SaveDieOnConflictTrue/README.md)<br />
-Example showcasing creation with Item conflict on.<br />
+### [Create with Item conflict detection enabled](Examples/SaveDieOnConflictTrue/README.md)<br />
+Example showcasing creation with Item conflict detection enabled.<br />
 Sample code [here](Examples/SaveDieOnConflictTrue/sample_code.php).
 
-### [Edit with Item conflict off](Examples/EditDieOnConflictFalse/README.md)<br />
-Example showcasing editing with Item conflict off.<br />
+### [Edit with Item conflict detection disabled](default)(Examples/EditDieOnConflictFalse/README.md)<br />
+Example showcasing editing with Item conflict detection disabled.<br />
 Sample code [here](Examples/EditDieOnConflictFalse/sample_code.php).
 
-### [Edit with Item conflict on](Examples/EditDieOnConflictTrue/README.md)<br />
-Example showcasing editing with Item conflict on.<br />
+### [Edit with Item conflict detection enabled](Examples/EditDieOnConflictTrue/README.md)<br />
+Example showcasing editing with Item conflict detection enabled.<br />
 Sample code [here](Examples/EditDieOnConflictTrue/sample_code.php).
 
 ## Folder name
