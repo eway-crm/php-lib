@@ -1,7 +1,8 @@
 
+
 # Creating items with dieOnItemConflict detection enabled
 
-Now we have the same situation as  in [previous example](../SaveDieOnConflictFalse), the only difference is in dieOnItemConflict detection, that is enabled this time. As before we prepare company, set all atributes that we need, create connector, call method. In case of item with same GUID not yet existing, item is created, otherwise, service returns rcItemAlreadyUploaded (this error message is not stored anywhere, unless you deliberately store the output of function returning it).
+Now we have the same situation as  in [previous example](../SaveDieOnConflictFalse), the only difference is in dieOnItemConflict detection, that is enabled this time. As before we prepare company, set all atributes that we need, create connector, call method. The API checks, whether an item with this ItemGuid already exists. If the item does not exist, it is created. If the item already exists, the API returns rcItemAlreadyUploaded return code and nothing is saved/changed in the database (this error message is not stored anywhere, unless you deliberately store the output of function returning it).
 
 ```php
 
