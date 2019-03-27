@@ -26,7 +26,7 @@ Now we prepare new data and try editing the company.
 ```php
 
 // Edited company fields
-$companyEdit = array(
+$company = array(
                     'ItemGUID' => $companyGuid,
                     'Phone' => '',
                     'Email' => 'support@monsters.com',
@@ -34,12 +34,12 @@ $companyEdit = array(
                     );
 
 // Try to edit new company
-$connector->saveCompany($companyEdit);
+$connector->saveCompany($company);
 
 ```
 
 
- Our item version is still 1 - not increased.With dieItemOnConflict true, API returns ReturnCode = rcItemConflict, no changes are made.
+ Our item version is still 1 - not increased. With dieItemOnConflict true, API returns ReturnCode = rcItemConflict, no changes are made.
 ```console
 
 object(stdClass)[2]

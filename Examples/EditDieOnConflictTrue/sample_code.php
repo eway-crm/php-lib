@@ -20,7 +20,7 @@
     $companyGuid = $connector->saveCompany($company);
     
     // Edited company fields
-    $companyEdit = array(
+    $company = array(
                         'ItemGUID' => $companyGuid,
                         'Phone' => '',
                         'Email' => 'support@monsters.com',
@@ -28,6 +28,6 @@
                         );
     
     // Try to edit new company
-    $connector->saveCompany($companyEdit);
+    $connector->saveCompany($company);
     
 ?>
