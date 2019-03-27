@@ -1,7 +1,7 @@
 <?php
 
     // Load API
-    require_once "eway.class.php";
+    require_once "../../eway.class.php";
     
     // This willl be our Project
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');

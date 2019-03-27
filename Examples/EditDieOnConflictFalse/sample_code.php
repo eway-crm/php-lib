@@ -1,7 +1,7 @@
 <?php
 
     // Load API
-    require_once "eway.class.php";
+    require_once "../../eway.class.php";
     
     // Connect to API and set dieOnItemConflict to false
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
@@ -21,11 +21,15 @@
     // Edited company fields
     $company = array(
                         'ItemGUID' => $companyGuid,
-                        'Phone' => '',
+                        'Phone' => null,
                         'Email' => 'support@monsters.com',
                         );
     
     // Try to edit new company
     $connector->saveCompany($company);
+	
+	// Load and print data
+	$company = array('ItemGUID' => $companyGuid);
+	print_r($connector->searchCompanies($company));
     
 ?>

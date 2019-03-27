@@ -24,7 +24,7 @@
     $storage = new Storage();
     
     // Load API
-    require_once "eway.class.php";
+    require_once "../../eway.class.php";
     
     // Variable for our output
     $table =   '<style type="text/css">
