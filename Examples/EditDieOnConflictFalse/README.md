@@ -39,14 +39,14 @@ Now we prepare new data and try editing the company. Item will be found this tim
 ```php
 
 // Edited company fields
-$companyEdit = array(
+$company = array(
                     'ItemGUID' => $companyGuid,
-                    'Phone' => '',
+                    'Phone' => null,
                     'Email' => 'support@monsters.com',
                     );
 
 // Try to edit new company
-$connector->saveCompany($companyEdit);
+$connector->saveCompany($company);
 
 ```
 
