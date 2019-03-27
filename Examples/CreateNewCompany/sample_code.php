@@ -1,7 +1,7 @@
 <?php
          
     // Load API
-    require_once ('eway-crm-php-lib/eway.class.php');
+    require_once ('../../eway.class.php');
     
     // This is new company, that we want to create
     $newCompany = array(
