@@ -17,11 +17,12 @@
 
     // Try to save new company
     $companyGuid = $connector->saveCompany($company)->Guid;
+	var_dump($connector->searchCompanies($company));
     
     // Edited company fields
     $company = array(
                         'ItemGUID' => $companyGuid,
-                        'Phone' => null,
+                        'Phone' => '',
                         'Email' => 'support@monsters.com',
                         );
     
@@ -30,6 +31,6 @@
 	
 	// Load and print data
 	$company = array('ItemGUID' => $companyGuid);
-	print_r($connector->searchCompanies($company));
+	var_dump($connector->searchCompanies($company));
     
 ?>
