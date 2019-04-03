@@ -16,7 +16,7 @@ $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTr
 ```
 
 ## Actions at the service
-You can check actions available on your service on ```[service adress]/WcfService/Service.svc/help``` .  We have put together a list of examples for some basic actions you can use the service for, so don't be shy an try it out.
+You can check actions available on your service on ```[service adress]/WcfService/Service.svc/help```. If the help is not enabled on your API have a look at [instructions](https://kb.eway-crm.com/faq-1/tips/how-to-activate-eway-crm-api-help) to activate it. We have put together a list of examples for some basic actions you can use the service for, so don't be shy an try it out.
 
 ### [Create new company](Examples/CreateNewCompany/README.md)<br />
 Example showcasing creation of new Company.<br />
