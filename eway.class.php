@@ -1877,7 +1877,7 @@ class eWayConnector
             $paths = array_merge($paths, (array)$arg);
         }
 
-        $paths = array_map(create_function('$p', 'return trim($p, "/");'), $paths);
+        $paths = array_map(function($p) {return trim($p, "/"); }, $paths);
         $paths = array_filter($paths);
         return join('/', $paths);
     }
@@ -1911,20 +1911,20 @@ class eWayConnector
     
     private function getItemsByItemGuids($action, $guids, $includeForeignKeys = true, $includeRelations = false, $additionalParameters = null, $version = null ) {
         if ($guids == null) {
-            throw new Exception('Action '.$action.' requires item to be executed on.');
-        } else {
-            $completeTransmitObject = array(
-                'sessionId' => $this->sessionId,
-                'itemGuids' => $guids,
-                'includeForeignKeys' => $includeForeignKeys,
-                'includeRelations' => $includeRelations
-            );
-            
-            if($additionalParameters != null){
-                foreach($additionalParameters as $key => $parameter)
-                    $completeTransmitObject[$key] = $parameter;
-            }
+            throw new Exception('Action '.$action.' requires an array of searched item guids to be executed on.');
         }
+		
+		$completeTransmitObject = array(
+			'sessionId' => $this->sessionId,
+			'itemGuids' => $guids,
+			'includeForeignKeys' => $includeForeignKeys,
+			'includeRelations' => $includeRelations
+		);
+		
+		if($additionalParameters != null){
+			foreach($additionalParameters as $key => $parameter)
+				$completeTransmitObject[$key] = $parameter;
+		}
         
         return $this->doRequest($completeTransmitObject, $action, $version);
     }
