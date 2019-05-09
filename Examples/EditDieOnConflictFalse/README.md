@@ -1,7 +1,7 @@
 
-# Editing items with dieOnItemConflict detection disabled
+# Editing items - Default behaviour (dieOnItemConflict flag of)
 
-We want to edit company, that already exists and dieOnItemConflict detection id disabled. First of all we create new company and then we will edit it. As you can see, ItemVersion is missing. 
+We want to edit company that already exists and we don't care abou the dieOnItemConflict flag (keep it on its default value - `false`). First of all we create new company and then we will edit it. As you can see, we don't care about the `ItemVersion` field as well. 
 
 ```php
 
@@ -14,7 +14,7 @@ $company = array(
                     'CompanyName' => 'Monsters Inc.',
                     'Purchaser' => '1',
                     'Phone' => '544 727 379',
-                    'Email' => 'info@monsters.com',
+                    'Email' => 'info@monsters.com'
                     );
 
 // Try to save new company
@@ -22,7 +22,7 @@ $companyGuid = $connector->saveCompany($company)->Guid;
 
 ```
 
-If we were to search this newly created Company, we would get this:
+If we want to search this newly created Company, we would get this:
 ```console
 
 object(stdClass)[2]
@@ -35,14 +35,14 @@ object(stdClass)[2]
   public 'Purchaser' => boolean true
 
 ```
-Now we prepare new data and try editing the company. Item will be found this time and because ItemVersion is not specified, merge will occur.
+Now we prepare new object and try to edit the company. The existing item will be found this time and because the `ItemVersion` field is not specified, merge will happen.
 ```php
 
 // Edited company fields
 $company = array(
                     'ItemGUID' => $companyGuid,
                     'Phone' => null,
-                    'Email' => 'support@monsters.com',
+                    'Email' => 'support@monsters.com'
                     );
 
 // Try to edit new company
@@ -51,7 +51,7 @@ $connector->saveCompany($company);
 ```
 
 
-Our item version is still 1 - not increased. Api will process little merge between versions and old data will be replaced by new. If you send null value (as we did with Phone), merge does not change value inserted before, everything else is changed.
+As you can se bellow, the new data we sent are stored however the `Phone` field was not erased. This is the result of the automatic merging which was initiated by the `rcItemConflict` return code which the API took care about.
 ```console
 
 object(stdClass)[2]
@@ -61,6 +61,37 @@ object(stdClass)[2]
   public 'CompanyName' => string 'Monsters Inc.' (length=13)
   public 'Email' => string 'support@monsters.com' (length=17)
   public 'Phone' => string '544 727 379' (length=11)
+  public 'Purchaser' => boolean true
+
+```
+
+If we really want to erase the `Phone` field, we must tell the system we saw the very latest version of this data recrod. We do that by sending the `ItemVersion` field increased by one.
+```php
+
+// Edited company fields
+$company = array(
+                    'ItemGUID' => $companyGuid,
+					'ItemVersion' => 3,
+                    'Phone' => null,
+                    'Email' => 'support@monsters.com'
+                    );
+
+// Try to edit new company
+$connector->saveCompany($company);
+
+```
+
+Voilà, the phone is not there.
+
+```console
+
+object(stdClass)[2]
+  public 'ItemGUID' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
+  public 'ItemVersion' => int 3
+  public 'FileAs' => string 'Monsters Inc.' (length=14)
+  public 'CompanyName' => string 'Monsters Inc.' (length=13)
+  public 'Email' => string 'support@monsters.com' (length=17)
+  public 'Phone' => null
   public 'Purchaser' => boolean true
 
 ```
