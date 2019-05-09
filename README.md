@@ -15,7 +15,7 @@ $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTr
 
 ```
 
-## Actions at the service
+## Simple actions with the eWay-CRM API
 You can check actions available on your service on ```[service adress]/WcfService/Service.svc/help```. If the help is not enabled on your API have a look at [instructions](https://kb.eway-crm.com/faq-1/tips/how-to-activate-eway-crm-api-help) to activate it. We have put together a list of examples for some basic actions you can use the service for, so don't be shy an try it out.
 
 ### [Create new company](Examples/CreateNewCompany/README.md)<br />
@@ -62,26 +62,20 @@ Sample code [here](Examples/CreateTaskWithDocument/sample_code.php).
 Example showcasing changing project status.<br />
 Sample code [here](Examples/ChangeProjectStatus/sample_code.php).
 
-### Item conflicts
-How does it work exactly? Every item in eWay-CRM database has it's own revision number (like in SVN/Git) called ItemVersion. This number is increased by one everytime the item is updated. Using this number, eWay-CRM in Outlook is able to determine a conflict and show you the conflict resolving dialog (Use mine or theirs). When working with API, we don't force you to work with ItemVersion when you don't need it. When you save a record, you should send ItemVersion higher than the currently stored one (higher by one). By this you say that you have seen the revision N and the data you are sending is the revision N+1. Everything you send is saved. If you send ItemVersion lower or equal to the current or you don't send the ItemVersion at all, the system thinks that you have not seen the latest revision N. In Outlook, you would get conflict dialog. In API, to make things simplier, an automatic merge is done. The merge is simple. Every field value you are sending is saved except nulls. So your data are preserved but none of your deletings is performed.
+## Data changes over time and conflicts
+eWay-CRM server component (web service) stores data uploaded from various clients (Outlook Addin, Mobile App, API...). One of the main features of eWay-CRM is sharing data among users (among clients). When permissions configuration allows, multiple users have the possibility to modify the same data records at the same time. Making a change at the same time means to load the record, change it and save it while another client is doing the same steps and loads the data before the first client saves it. Because of the client software’s ability to work offline, this situation comes up more often than one would expect.
 
-Every Save method has also a boolean flag, which turns the auto-merge off and you get a conflict error code instead.
+eWay-CRM deals with this subject in a similar way to Subversion (SVN) or Git. Every data record has its own revision number called `ItemVersion`. This field contains integer, which is increased on every change made to the item. Every client software should consider the very latest revision of the data record before any change is uploaded to the server. Then by uploading the data record with the field `ItemVersion` increased by one, the client tells the server that it has taken the latest revision into account. The server processes the uploads sequentially. Hence, when two clients change the same item at the same time, there is always one client who loses – does not actually take the change made by the faster client into account. This slower client uploads the `ItemVersion` lower or equal to the current state. The server component does not allow such uploads and returns error code `rcItemConflict` (or `rcItemAlreadyUploaded`).
 
-### [Create with Item conflict detection disabled](Examples/SaveDieOnConflictFalse/README.md) (default)<br />
-Example showcasing creation with Item conflict detection disabled.<br />
-Sample code [here](Examples/SaveDieOnConflictFalse/sample_code.php).
+The logic described above implies that these conflicts must be solved on the client side. eWay-CRM for MS Outlook does it in cooperation with the user (see more in [eWay-CRM Documentation](https://kb.eway-crm.com/documentation/3-description/3-3-item-working-window/item-conflict?set_language=en) ). Nevertheless, eWay-CRM API is a middle-layer software between eWay-CRM server component and 3rd party clients. By default, the API solves these conflicts for you.
 
-### [Create with Item conflict detection enabled](Examples/SaveDieOnConflictTrue/README.md)<br />
-Example showcasing creation with Item conflict detection enabled.<br />
-Sample code [here](Examples/SaveDieOnConflictTrue/sample_code.php).
+Of course, you always have the option to not specify `ItemVersion` field at all. In that case the API determines the right `ItemVersion` for you and works with the incremented value. No conflict appears on the background then. When you set the version integer high enough, no conflict solving is needed as well. When you upload an item with `ItemVersion` lower or equal to the current server state, the API solves the conflict by merging the uploaded data with the data stored on the server. For example, if you download the item, change something and send it back without creating a new object, you probably send back the same `ItemVersion` as you downloaded. API will do the merging in this saving without you even notice.
 
-### [Edit with Item conflict detection disabled](Examples/EditDieOnConflictFalse/README.md) (default)<br />
-Example showcasing editing with Item conflict detection disabled.<br />
-Sample code [here](Examples/EditDieOnConflictFalse/sample_code.php).
+How does this automatic merging work? Very simply. The data sent into the API always win, except of nulls. In other words, the API writes all the changes into database except the fields where an existing value would be erased. 
 
-### [Edit with Item conflict detection enabled](Examples/EditDieOnConflictTrue/README.md)<br />
-Example showcasing editing with Item conflict detection enabled.<br />
-Sample code [here](Examples/EditDieOnConflictTrue/sample_code.php).
+Wanna see it for real? Check this [example](Examples/EditDieOnConflictFalse) out.
 
-## Folder name
+If you want to make sure no merge is done or you just want to really take the very latest version into account, you can always switch the conflicts on by specifying the `dieOnItemConflict` flag. Then you will get the return codes `rcItemConflict` and `rcItemAlreadyUploaded` and you will have to deal with them yourself. Using this flag is shown in this [example](Examples/EditDieOnConflictTrue).
+
+## Folder names
 To ease understanding folder names, look [here](FolderNames.md).
