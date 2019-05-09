@@ -1,5 +1,5 @@
 
-# Editing items - Default behaviour (dieOnItemConflict flag of)
+# Editing items - Default behaviour (dieOnItemConflict flag off)
 
 We want to edit company that already exists and we don't care abou the dieOnItemConflict flag (keep it on its default value - `false`). First of all we create new company and then we will edit it. As you can see, we don't care about the `ItemVersion` field as well. 
 
@@ -22,7 +22,7 @@ $companyGuid = $connector->saveCompany($company)->Guid;
 
 ```
 
-If we want to search this newly created Company, we would get this:
+If load this newly created Company, we would get this:
 ```console
 
 object(stdClass)[2]
@@ -35,12 +35,13 @@ object(stdClass)[2]
   public 'Purchaser' => boolean true
 
 ```
-Now we prepare new object and try to edit the company. The existing item will be found this time and because the `ItemVersion` field is not specified, merge will happen.
+Now we prepare new object and try to edit the company. Because the `ItemVersion` field is obiviously too low, merge will happen.
 ```php
 
 // Edited company fields
 $company = array(
                     'ItemGUID' => $companyGuid,
+					'ItemVersion' => 1,
                     'Phone' => null,
                     'Email' => 'support@monsters.com'
                     );
@@ -51,7 +52,7 @@ $connector->saveCompany($company);
 ```
 
 
-As you can se bellow, the new data we sent are stored however the `Phone` field was not erased. This is the result of the automatic merging which was initiated by the `rcItemConflict` return code which the API took care about.
+As you can se bellow, the e-mail address was modified; however, the `Phone` field was not erased. This is the result of the automatic merging which was initiated by the `rcItemConflict` return code which the API took care about.
 ```console
 
 object(stdClass)[2]
@@ -72,8 +73,7 @@ If we really want to erase the `Phone` field, we must tell the system we saw the
 $company = array(
                     'ItemGUID' => $companyGuid,
 					'ItemVersion' => 3,
-                    'Phone' => null,
-                    'Email' => 'support@monsters.com'
+                    'Phone' => null
                     );
 
 // Try to edit new company
@@ -82,7 +82,6 @@ $connector->saveCompany($company);
 ```
 
 Voilà, the phone is not there.
-
 ```console
 
 object(stdClass)[2]
@@ -91,6 +90,34 @@ object(stdClass)[2]
   public 'FileAs' => string 'Monsters Inc.' (length=14)
   public 'CompanyName' => string 'Monsters Inc.' (length=13)
   public 'Email' => string 'support@monsters.com' (length=17)
+  public 'Phone' => null
+  public 'Purchaser' => boolean true
+
+```
+
+If you don't want to care about the conflict logic at all, just send no `ItemVersion` field at all.
+```php
+
+// Edited company fields
+$company = array(
+                    'ItemGUID' => $companyGuid,
+                    'Email' => null
+                    );
+
+// Try to edit new company
+$connector->saveCompany($company);
+
+```
+
+And the e-mail address is erased as well.
+```console
+
+object(stdClass)[2]
+  public 'ItemGUID' => string 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' (length=36)
+  public 'ItemVersion' => int 4
+  public 'FileAs' => string 'Monsters Inc.' (length=14)
+  public 'CompanyName' => string 'Monsters Inc.' (length=13)
+  public 'Email' => null
   public 'Phone' => null
   public 'Purchaser' => boolean true
 
