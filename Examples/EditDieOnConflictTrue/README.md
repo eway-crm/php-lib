@@ -21,7 +21,7 @@ $companyGuid = $connector->saveCompany($company);
 
 ```
 
-Lets try modify the item with obiviously too small item version. This will be a conflict with the item on the server.
+Lets try to modify the item with obiviously too small item version. This will be a conflict with the item on the server.
 ```php
 
 $company = array(
@@ -37,7 +37,7 @@ As we expected, we got the conflict error. If both (the stored and the uploaded)
 
 > rcItemConflict: Web service returned an error (rcItemConflict): ItemVersion of item 'a5b6f76a-1b40-44c4-ae2c-7ab963ad313e' from folder 'Companies' is set to '2' while current item modified by 'ba3ff5df-2920-11e9-910f-00224d483d5b' has version '2', you have to increase the version by one during update
 
-If we laod the item, we can see that no field was changed.
+If we load the item, we can see that no field was changed.
 ```console
 
 object(stdClass)[6]
@@ -51,7 +51,7 @@ object(stdClass)[6]
 
 ```
 
-If we want to really save the data, we have to tell the API, we know the latest version number.
+If we want to really save the data, we have to tell the API we know the latest version number.
 ```php
 
 $company = array(
@@ -78,7 +78,7 @@ object(stdClass)[6]
 
 ```
 
-Anyway, successful saving can be always achieved by not specifying `ItemVersion` at all. However, having the conflict detecion turned on and not sending `ItemVersion` does not make any sense. The conflict errors raise only when you specify `ItemVersion`. Otherwise, the API assumes that you have no clue about items versioning.
+Anyway, successful saving can be always achieved by not specifying `ItemVersion` at all. However, having the conflict detection turned on and not sending `ItemVersion` does not make any sense. The conflict errors raise only when you specify `ItemVersion`. Otherwise, the API assumes that you have no clue about items versioning.
 ```php
 
 $company = array(
