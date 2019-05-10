@@ -15,36 +15,36 @@
                         'Email' => 'info@monsters.com',
                         );
     $companyGuid = $connector->saveCompany($company)->Guid;
-	$loadedCompany = $connector->getCompaniesByItemGuids(array($companyGuid))->Data[0];
+    $loadedCompany = $connector->getCompaniesByItemGuids(array($companyGuid))->Data[0];
     $companyItemVersion = $loadedCompany->ItemVersion;
-	var_dump($loadedCompany);
-	
-	echo('<h2>---</h2>');
+    var_dump($loadedCompany);
+    
+    echo('<h2>---</h2>');
     
     // Edit company fields - with automerge.
     $company = array(
                         'ItemGUID' => $companyGuid,
-						'ItemVersion' => $companyItemVersion,
+                        'ItemVersion' => $companyItemVersion,
                         'Phone' => null,
                         'Email' => 'support@monsters.com',
                         );
     $connector->saveCompany($company);	
-	$loadedCompany = $connector->getCompaniesByItemGuids(array($companyGuid))->Data[0];
+    $loadedCompany = $connector->getCompaniesByItemGuids(array($companyGuid))->Data[0];
     $companyItemVersion = $loadedCompany->ItemVersion;
-	var_dump($loadedCompany);
-	
-	echo('<h2>---</h2>');
+    var_dump($loadedCompany);
+    
+    echo('<h2>---</h2>');
     
     // Edit company fields - with ItemVersion high enough.
     $company = array(
                         'ItemGUID' => $companyGuid,
-						'ItemVersion' => $companyItemVersion + 1,
+                        'ItemVersion' => $companyItemVersion + 1,
                         'Phone' => null
                         );
     $connector->saveCompany($company);
-	var_dump($connector->getCompaniesByItemGuids(array($companyGuid))->Data[0]);
-	
-	echo('<h2>---</h2>');
+    var_dump($connector->getCompaniesByItemGuids(array($companyGuid))->Data[0]);
+    
+    echo('<h2>---</h2>');
     
     // Edit company fields - with no conflicts.
     $company = array(
@@ -52,9 +52,9 @@
                         'Email' => null,
                         );
     $connector->saveCompany($company);
-	var_dump($connector->getCompaniesByItemGuids(array($companyGuid))->Data[0]);
-	
-	// Clean the mess.
+    var_dump($connector->getCompaniesByItemGuids(array($companyGuid))->Data[0]);
+    
+    // Clean the mess.
     $connector->deleteCompany($companyGuid);
     
 ?>
