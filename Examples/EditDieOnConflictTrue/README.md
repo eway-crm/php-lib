@@ -1,7 +1,9 @@
 
-# Editing items with dieOnItemConflict detection enabled
+# Editing items with conflict detection enabled
 
-We want to edit company, that already exists and dieOnItemConflict detection is turned on. First of all we create new company and edit the company later. As you can see, ItemVersion is not missing this time, because api would not let you create or edit item without specifying ItemVersion, when dieOnItemConflict detection is enabled. If Item is not found, item will be created, and if item is found, ItemVersions are compared. In case that your new ItemVersion is not higher, rcItemConflict is returned, and in case it is higher, item is overwritten.
+We want to edit company that already exists and the conflict detection is turned on.
+
+First of all we create new company to have something to edit. When creating new items witihout specifying `ItemGUID`, there is no need to specify `ItemVersion` as well. If we wanted the item to be created with a given item guid, `ItemVersion` should be `1`.
 ```php
 
 // Connect to API and set dieOnItemConflict to true
@@ -13,39 +15,93 @@ $company = array(
                     'CompanyName' => 'Monsters Inc.',
                     'Purchaser' => '1',
                     'Phone' => '544 727 379',
-                    'Email' => 'info@monsters.com',
-                    'ItemVersion' => '1'
+                    'Email' => 'info@monsters.com'
                     );
-
-// Try to save new company
 $companyGuid = $connector->saveCompany($company);
 
 ```
 
-Now we prepare new data and try editing the company.
+Lets try modify the item with obiviously too small item version. This will be a conflict with the item on the server.
 ```php
 
-// Edited company fields
 $company = array(
                     'ItemGUID' => $companyGuid,
-                    'Phone' => '',
-                    'Email' => 'support@monsters.com',
-                    'ItemVersion' => '1'
+                    'ItemVersion' => $companyItemVersion,
+                    'Phone' => null,
+                    'Email' => 'support@monsters.com'
                     );
+$connector->saveCompany($company);
 
-// Try to edit new company
+```
+As we expected, we got the conflict error. If both (the stored and the uploaded) item versions were `1`, the error code would be `rcItemAlreadyUploaded` instead of `rcItemConflict`. But the meaning is the same.
+
+> rcItemConflict: Web service returned an error (rcItemConflict): ItemVersion of item 'a5b6f76a-1b40-44c4-ae2c-7ab963ad313e' from folder 'Companies' is set to '2' while current item modified by 'ba3ff5df-2920-11e9-910f-00224d483d5b' has version '2', you have to increase the version by one during update
+
+If we laod the item, we can see that no field was changed.
+```console
+
+object(stdClass)[6]
+  public 'ItemGUID' => string 'a5b6f76a-1b40-44c4-ae2c-7ab963ad313e' (length=36)
+  public 'ItemVersion' => int 2
+  public 'FileAs' => string 'Monsters Inc.' (length=13)
+  public 'Email' => string 'info@monsters.com' (length=17)
+  public 'Phone' => string '544 727 379' (length=11)
+  public 'PhoneNormalized' => string '544727379' (length=9)
+  public 'Purchaser' => boolean true
+
+```
+
+If we want to really save the data, we have to tell the API, we know the latest version number.
+```php
+
+$company = array(
+                    'ItemGUID' => $companyGuid,
+                    'ItemVersion' => $companyItemVersion + 1,
+                    'Phone' => null,
+                    'Email' => 'support@monsters.com'
+                    );
 $connector->saveCompany($company);
 
 ```
 
-
- Our item version is still 1 - not increased. With dieItemOnConflict true, API returns ReturnCode = rcItemConflict, no changes are made.
+This time, the saving was successful.
 ```console
 
-object(stdClass)[2]
-  public 'Description' => string 'Web service returned an error (rcItemConflict): ItemVersion of item 'ebdd18f3-92e9-412d-afec-e1aaf6139b09' is set to '1' while current item modified by 'a71c4a87-f360-4f67-8fce-e99f48c6e4fb' has version '2', you have to increase the version by one during edit
-  public 'Guid' => string '00000000-0000-0000-0000-000000000000' (length=36)
-  public 'ReturnCode' => string 'rcItemConflict' (length=14)
+object(stdClass)[6]
+  public 'ItemGUID' => string 'a5b6f76a-1b40-44c4-ae2c-7ab963ad313e' (length=36)
+  public 'ItemVersion' => int 4
+  public 'FileAs' => string 'Monsters Inc.' (length=13)
+  public 'Email' => string 'support@monsters.com' (length=20)
+  public 'Phone' => null
+  public 'PhoneNormalized' => null
+  public 'Purchaser' => boolean true
+
+```
+
+Anyway, successful saving can be always achieved by not specifying `ItemVersion` at all. However, having the conflict detecion turned on and not sending `ItemVersion` does not make any sense. The conflict errors raise only when you specify `ItemVersion`. Otherwise, the API assumes that you have no clue about items versioning.
+```php
+
+$company = array(
+                    'ItemGUID' => $companyGuid,
+                    'ItemVersion' => $companyItemVersion + 1,
+                    'Phone' => '+1 (123) 654-789',
+                    'Email' => null
+                    );
+$connector->saveCompany($company);
+
+```
+
+Again, the item was modified.
+```console
+
+object(stdClass)[6]
+  public 'ItemGUID' => string 'a5b6f76a-1b40-44c4-ae2c-7ab963ad313e' (length=36)
+  public 'ItemVersion' => int 6
+  public 'FileAs' => string 'Monsters Inc.' (length=13)
+  public 'Email' => null
+  public 'Phone' => string '+1 (123) 654-789' (length=16)
+  public 'PhoneNormalized' => string '001123654789' (length=12)
+  public 'Purchaser' => boolean true
 
 ```
 
