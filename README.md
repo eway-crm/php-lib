@@ -75,7 +75,7 @@ How does this automatic merging work? Very simply. The data sent into the API al
 
 Wanna see it for real? Check this [example](Examples/EditDieOnConflictFalse) out.
 
-If you want to make sure no merge is done or you just want to really take the very latest version into account, you can always switch the conflicts on by specifying the `dieOnItemConflict` flag. Then you will get the return codes `rcItemConflict` and `rcItemAlreadyUploaded` and you will have to deal with them yourself. Using this flag is shown in this [example](Examples/EditDieOnConflictTrue).
+If you want to make sure no merge is done or you just want to really take the very latest version into account, you can always switch the conflicts on by specifying the `dieOnItemConflict` flag. Then you will get the return codes `rcItemConflict` and `rcItemAlreadyUploaded` and you will have to deal with them yourself. The usage of this flag is shown in this [example](Examples/EditDieOnConflictTrue).
 
 ## Folder names
 To ease understanding folder names, look [here](FolderNames.md).
