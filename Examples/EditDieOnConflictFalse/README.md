@@ -35,13 +35,14 @@ object(stdClass)[2]
   public 'Purchaser' => boolean true
 
 ```
-Now we prepare new object and try to edit the company. Because the `ItemVersion` field is obiviously too low, merge will happen.
+
+Now we prepare new object and try to edit the company. Because the `ItemVersion` field is obiviously too low (the same number we loaded from the server previously), merge will happen.
 ```php
 
 // Edited company fields
 $company = array(
                     'ItemGUID' => $companyGuid,
-					'ItemVersion' => 1,
+                    'ItemVersion' => $companyItemVersion,
                     'Phone' => null,
                     'Email' => 'support@monsters.com'
                     );
@@ -72,7 +73,7 @@ If we really want to erase the `Phone` field, we must tell the system we saw the
 // Edited company fields
 $company = array(
                     'ItemGUID' => $companyGuid,
-					'ItemVersion' => 3,
+                    'ItemVersion' => $companyItemVersion + 1,
                     'Phone' => null
                     );
 
