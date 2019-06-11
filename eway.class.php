@@ -555,6 +555,56 @@ class eWayConnector
     }
 
     /**
+     * Gets all Enum Types
+     *
+     * @return Json format with all enum types
+     */
+    public function getEnumTypes()
+    {
+        return $this->postRequest('GetEnumTypes');
+    }
+    
+    /**
+     * Gets enum types by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getEnumTypesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        return $this->getItemsByItemGuids('GetEnumTypesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets enum types identifiers
+     *
+     * @return Json format with all enum types identifiers
+     */
+    public function getEnumTypesIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetEnumTypesIdentifiers');
+    }
+    
+    /**
+     * Searches Enum Types
+     *
+     * @param $enumType Array with specified properties for search
+     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @throws Exception If enumType is empty
+     * @return Json format with found enum values
+     */
+    public function searchEnumTypes($enumType, $includeRelations = false)
+    {
+        if (empty($enumType))
+            throw new Exception('Empty enumType');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchEnumTypes', $enumType, $includeRelations);
+    }
+    
+    /**
      * Gets all Enum Values
      *
      * @return Json format with all enum values
