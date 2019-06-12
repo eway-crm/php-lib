@@ -62,6 +62,10 @@ Sample code [here](Examples/CreateTaskWithDocument/sample_code.php).
 Example showcasing changing project status.<br />
 Sample code [here](Examples/ChangeProjectStatus/sample_code.php).
 
+### [Manipulation with additional fields](Examples/AdditionalFields/README.md)<br />
+Example showcasing manipulation with additional fields.<br />
+Sample code [here](Examples/AdditionalFields/sample_code.php).
+
 ## Data changes over time and conflicts
 eWay-CRM server component (web service) stores data uploaded from various clients (Outlook Addin, Mobile App, API...). One of the main features of eWay-CRM is sharing data among users (among clients). When permissions configuration allows, multiple users have the possibility to modify the same data records at the same time. Making a change at the same time means to load the record, change it and save it while another client is doing the same steps and loads the data before the first client saves it. Because of the client software’s ability to work offline, this situation comes up more often than one would expect.
 
