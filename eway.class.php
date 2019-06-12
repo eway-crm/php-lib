@@ -555,7 +555,7 @@ class eWayConnector
     }
 
     /**
-     * Gets all Enum Types
+     * Gets all enum types
      *
      * @return Json format with all enum types
      */
@@ -588,7 +588,7 @@ class eWayConnector
     }
     
     /**
-     * Searches Enum Types
+     * Searches enum types
      *
      * @param $enumType Array with specified properties for search
      * @param $includeRelations indicator wether you want to include relations (default: false)
@@ -605,7 +605,7 @@ class eWayConnector
     }
     
     /**
-     * Gets all Enum Values
+     * Gets all enum values
      *
      * @return Json format with all enum values
      */
@@ -638,7 +638,7 @@ class eWayConnector
     }
 
     /**
-     * Searches Enum Values
+     * Searches enum values
      *
      * @param $enumValue Array with specified properties for search
      * @param $includeRelations indicator wether you want to include relations (default: false)
