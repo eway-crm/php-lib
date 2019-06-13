@@ -6,18 +6,17 @@
     // Connect to API
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
-    // Here we prepare criteria of additional field search
-    $criteria = array(
-                       'ObjectTypeId' => '14' // 14 is ObjectTypeID of Company               
-                    );
-    
-    // Search for Additiona Fields available for company
-    $additionalFields = $connector->searchAdditionalFields($criteria);
+    // Search for all additiona fields
+    $additionalFields = $connector->getAdditionalFields();
     
     // Create array of names for easier manipulation
     foreach ($additionalFields->Data as $field)
     {
-        $additionalFieldsNames[$field->FileAs] = 'af_'.$field->FieldId;
+        //Take to acount only fields which belong to company
+        if($field->ObjectTypeFolderName == 'Companies')
+        {
+            $additionalFieldsNames[$field->FileAs] = 'af_'.$field->FieldId;
+        }
     }
     
     // Here we prepare criteria of enum type search
@@ -25,7 +24,7 @@
                        'EnumName' => 'AF'.str_replace('af', '', $additionalFieldsNames['Enum'])
                     );
     
-    // Search Enum type of our Enum additional field
+    // Search enum type of our enum additional field
     $enumType = $connector->searchEnumTypes($criteria);
     
     // Here we prepare criteria of enum values search
@@ -33,7 +32,7 @@
                        'EnumType' => $enumType->Data[0]->ItemGUID
                     );
     
-    // Search Enum type of our Enum additional field
+    // Search Enum type of our enum additional field
     $enumValues = $connector->searchEnumValues($criteria);
     
     // Create array of enum values
@@ -47,7 +46,7 @@
                        'EnumName' => 'AF'.str_replace('af', '', $additionalFieldsNames['MultiDropDown'])
                     );
     
-    // Search Enum type of our MultiDropDown additional field
+    // Search enum type of our MultiDropDown additional field
     $enumType = $connector->searchEnumTypes($criteria);
     
     // Here we prepare criteria of MultiDropDown values search
@@ -68,7 +67,7 @@
         array_push($multiDropDownValues, $value->ItemGUID); 
     }
     
-    // Fill the Additional Fields
+    // Fill the additional fields
     $additionalFieldsValues = array(
                                     $additionalFieldsNames['Number'] => '7',
                                     $additionalFieldsNames['Date'] => '1970-01-01',
