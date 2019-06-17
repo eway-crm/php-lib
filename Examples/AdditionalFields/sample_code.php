@@ -1,7 +1,7 @@
 <?php
          
     // Load API
-    require_once ('eway.class.php');
+    require_once ('../../eway.class.php');
     
     // Connect to API
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
@@ -12,7 +12,7 @@
     // Create array of names for easier manipulation
     foreach ($additionalFields->Data as $field)
     {
-        //Take to acount only fields which belong to company
+        // Take to acount only fields which belong to company
         if($field->ObjectTypeFolderName == 'Companies')
         {
             $additionalFieldsNames[$field->FileAs] = 'af_'.$field->FieldId;
@@ -61,8 +61,8 @@
     // Prepare container for values
     $multiDropDownValues = array();
     
-    //Create value for the MultiDropDown
-    foreach($enumValues->Data as $value)
+    // Create value for the MultiDropDown
+    foreach ($enumValues->Data as $value)
     {
         array_push($multiDropDownValues, $value->ItemGUID); 
     }
