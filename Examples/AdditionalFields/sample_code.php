@@ -9,19 +9,22 @@
     // Search for all additiona fields
     $additionalFields = $connector->getAdditionalFields();
     
+    //Create container for field names
+    $additionalFieldsNames = array();
+    
     // Create array of names for easier manipulation
     foreach ($additionalFields->Data as $field)
     {
         // Take to acount only fields which belong to company
         if($field->ObjectTypeFolderName == 'Companies')
         {
-            $additionalFieldsNames[$field->FileAs] = 'af_'.$field->FieldId;
+            $additionalFieldsNames[$field->FileAs] = 'AF_'.$field->FieldId;
         }
     }
     
     // Here we prepare criteria of enum type search
     $criteria = array(
-                       'EnumName' => 'AF'.str_replace('af', '', $additionalFieldsNames['Enum'])
+                       'EnumName' => $additionalFieldsNames['Enum']
                     );
     
     // Search enum type of our enum additional field
@@ -35,6 +38,9 @@
     // Search Enum type of our enum additional field
     $enumValues = $connector->searchEnumValues($criteria);
     
+    //Prepare container for enum values
+    $enumValuesOptions = array();
+    
     // Create array of enum values
     foreach ($enumValues->Data as $value)
     {
@@ -43,7 +49,7 @@
     
     // Here we prepare criteria of enum type search
     $criteria = array(
-                       'EnumName' => 'AF'.str_replace('af', '', $additionalFieldsNames['MultiDropDown'])
+                       'EnumName' => $additionalFieldsNames['MultiDropDown']
                     );
     
     // Search enum type of our MultiDropDown additional field

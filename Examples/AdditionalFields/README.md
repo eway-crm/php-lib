@@ -79,7 +79,7 @@ foreach($enumValues->Data as $value)
 ```
 
 ## Relation additional field value
-Relation additional field require foreign key as value (GUID) so w create new journal to use its GUID as the value.
+Relation additional field require foreign key as value (GUID) so we create new journal to use its GUID as the value.
 ```php
 // This is new journal we want to create
 $newJournal = array(
