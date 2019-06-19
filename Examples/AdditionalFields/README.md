@@ -11,6 +11,9 @@ $additionalFields = $connector->getAdditionalFields();
 ### Make manipulation easier
 We can make manipulation with these additional fields easier by selecting only information we need. In this case, we want to iterate through the fields that are belonging to company ("ObjectType[FolderName](../../FolderNames.md)" is "Companies") and create array "additionalFieldsNames", where name of the field is key and the fields number is its value (we also add the af_ prefix, which we use in eWay-CRM).
 ```php
+//Create container for field names
+$additionalFieldsNames = array();
+
 // Create array of names for easier manipulation
 foreach ($additionalFields->Data as $field)
 {
@@ -40,6 +43,9 @@ $criteria = array(
 
 // Search enum type of our enum additional field
 $enumValues = $connector->searchEnumValues($criteria);
+
+//Prepare container for enum values
+$enumValuesOptions = array();
 
 // Create array of enum values
 foreach ($enumValues->Data as $value)
