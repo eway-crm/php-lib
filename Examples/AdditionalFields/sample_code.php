@@ -68,17 +68,28 @@
     $multiDropDownValues = array();
     
     // Create value for the MultiDropDown
-    foreach ($enumValues->Data as $value)
+    foreach($enumValues->Data as $value)
     {
         array_push($multiDropDownValues, $value->ItemGUID); 
     }
+    
+        
+    // This is new journal we want to create
+    $newJournal = array(
+                        'FileAs' => 'Journal of Company',
+                        'Note' => 'this is journal of Company.'
+                        );
+    
+    // Try to save new journal
+    $journal = $connector->saveJournal($newJournal);
     
     // Fill the additional fields
     $additionalFieldsValues = array(
                                     $additionalFieldsNames['Number'] => '7',
                                     $additionalFieldsNames['Date'] => '1970-01-01',
                                     $additionalFieldsNames['Enum'] => $enumValuesOptions['Option 2'],
-                                    $additionalFieldsNames['MultiDropDown'] => $multiDropDownValues
+                                    $additionalFieldsNames['MultiDropDown'] => $multiDropDownValues,
+                                    $additionalFieldsNames['Relation'] => $journal->Guid
                                 );
 
     // This is new company, that we want to create
@@ -93,26 +104,5 @@
     
     // Try to save new company
     $company = $connector->saveCompany($newCompany);
-    
-    // This is new journal we want to create
-    $newJournal = array(
-                        'FileAs' => 'Journal of Company',
-                        'Note' => 'this is journal of Company.'
-                        );
-    
-    // Try to save new journal
-    $journal = $connector->saveJournal($newJournal);
-    
-    // Here we specify our relation
-    $relation = array(
-                      'ItemGUID1' => $company->Guid,
-                      'ItemGUID2' => $journal->Guid,
-                      'FolderName1' => 'Companies',
-                      'FolderName2' => 'Journal',
-                      'RelationType' => 'AF'.str_replace('af', '', $additionalFieldsNames['Relation'])
-                      );
-    
-    // Save the relation
-    $connector->saveRelation($relation);
 
 ?>
