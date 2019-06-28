@@ -1,30 +1,14 @@
 <?php
          
     // Load API
-    require_once ('../../eway.class.php');
+    require_once ('eway.class.php');
     
     // Connect to API
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
-    // Search for all additiona fields
-    $additionalFields = $connector->getAdditionalFields();
-    
-    //Create container for field names
-    $additionalFieldsNames = array();
-    
-    // Create array of names for easier manipulation
-    foreach ($additionalFields->Data as $field)
-    {
-        // Take to acount only fields which belong to company
-        if($field->ObjectTypeFolderName == 'Companies')
-        {
-            $additionalFieldsNames[$field->FileAs] = 'AF_'.$field->FieldId;
-        }
-    }
-    
     // Here we prepare criteria of enum type search
     $criteria = array(
-                       'EnumName' => $additionalFieldsNames['Enum']
+                       'EnumName' => 'AF_27'
                     );
     
     // Search enum type of our enum additional field
@@ -38,42 +22,22 @@
     // Search Enum type of our enum additional field
     $enumValues = $connector->searchEnumValues($criteria);
     
-    //Prepare container for enum values
-    $enumValuesOptions = array();
-    
-    // Create array of enum values
-    foreach ($enumValues->Data as $value)
-    {
-        $enumValuesOptions[$value->FileAs] = $value->ItemGUID;
-    }
-    
     // Here we prepare criteria of enum type search
     $criteria = array(
-                       'EnumName' => $additionalFieldsNames['MultiDropDown']
+                       'EnumName' => 'AF_29'
                     );
     
     // Search enum type of our MultiDropDown additional field
-    $enumType = $connector->searchEnumTypes($criteria);
+    $multiDropDownType = $connector->searchEnumTypes($criteria);
     
     // Here we prepare criteria of MultiDropDown values search
     $criteria = array(
-                       'EnumType' => $enumType->Data[0]->ItemGUID
+                       'EnumType' => $multiDropDownType->Data[0]->ItemGUID
                     );
     
     // Search Enum type of our MultiDropDown additional field
-    $enumValues = $connector->searchEnumValues($criteria);
+    $multiDropDownValues = $connector->searchEnumValues($criteria);
     
-    
-    // Prepare container for values
-    $multiDropDownValues = array();
-    
-    // Create value for the MultiDropDown
-    foreach($enumValues->Data as $value)
-    {
-        array_push($multiDropDownValues, $value->ItemGUID); 
-    }
-    
-        
     // This is new journal we want to create
     $newJournal = array(
                         'FileAs' => 'Journal of Company',
@@ -85,11 +49,11 @@
     
     // Fill the additional fields
     $additionalFieldsValues = array(
-                                    $additionalFieldsNames['Number'] => '7',
-                                    $additionalFieldsNames['Date'] => '1970-01-01',
-                                    $additionalFieldsNames['Enum'] => $enumValuesOptions['Option 2'],
-                                    $additionalFieldsNames['MultiDropDown'] => $multiDropDownValues,
-                                    $additionalFieldsNames['Relation'] => $journal->Guid
+                                    'af_25' => '7',
+                                    'af_26' => '1970-01-01',
+                                    'af_27' => pickEnum('Option 1', $enumValues->Data),
+                                    'af_28' => $journal->Guid,
+                                    'af_29' => array(pickEnum('Option 1', $multiDropDownValues->Data), pickEnum('Option 2', $multiDropDownValues->Data), pickEnum('Option 3', $multiDropDownValues->Data))
                                 );
 
     // This is new company, that we want to create
@@ -105,4 +69,14 @@
     // Try to save new company
     $company = $connector->saveCompany($newCompany);
 
+    function pickEnum ($name , $values)
+    {
+        foreach($values as $value)
+        {
+            if($value->FileAs == $name)
+            {
+                return $value->ItemGUID;
+            }
+        }
+    }
 ?>
