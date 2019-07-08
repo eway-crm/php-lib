@@ -5,55 +5,16 @@
     
     // Connect to API
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
-    
-    // Here we prepare criteria of enum type search
-    $criteria = array(
-                       'EnumName' => 'AF_27'
-                    );
-    
-    // Search enum type of our enum additional field
-    $enumType = $connector->searchEnumTypes($criteria);
-    
-    // Here we prepare criteria of enum values search
-    $criteria = array(
-                       'EnumType' => $enumType->Data[0]->ItemGUID
-                    );
-    
-    // Search Enum type of our enum additional field
-    $enumValues = $connector->searchEnumValues($criteria);
-    
-    // Here we prepare criteria of enum type search
-    $criteria = array(
-                       'EnumName' => 'AF_29'
-                    );
-    
-    // Search enum type of our MultiDropDown additional field
-    $multiDropDownType = $connector->searchEnumTypes($criteria);
-    
-    // Here we prepare criteria of MultiDropDown values search
-    $criteria = array(
-                       'EnumType' => $multiDropDownType->Data[0]->ItemGUID
-                    );
-    
-    // Search Enum type of our MultiDropDown additional field
-    $multiDropDownValues = $connector->searchEnumValues($criteria);
-    
-    // This is new journal we want to create
-    $newJournal = array(
-                        'FileAs' => 'Journal of Company',
-                        'Note' => 'this is journal of Company.'
-                        );
-    
-    // Try to save new journal
-    $journal = $connector->saveJournal($newJournal);
-    
+
     // Fill the additional fields
     $additionalFieldsValues = array(
                                     'af_25' => '7',
                                     'af_26' => '1970-01-01',
-                                    'af_27' => pickEnum('Option 1', $enumValues->Data),
-                                    'af_28' => $journal->Guid,
-                                    'af_29' => array(pickEnum('Option 1', $multiDropDownValues->Data), pickEnum('Option 2', $multiDropDownValues->Data), pickEnum('Option 3', $multiDropDownValues->Data))
+                                    'af_27' => pickEnum('Option 1', loadEnumValues('AF_27', $connector)->Data),
+                                    'af_28' => '10992e33-c0d6-4a2e-b565-5babc646fd48',
+                                    'af_29' => array(pickEnum('Option 1', loadEnumValues('AF_29', $connector)->Data),
+                                                     pickEnum('Option 2', loadEnumValues('AF_29', $connector)->Data),
+                                                     pickEnum('Option 3', loadEnumValues('AF_29', $connector)->Data))
                                 );
 
     // This is new company, that we want to create
@@ -68,7 +29,11 @@
     
     // Try to save new company
     $company = $connector->saveCompany($newCompany);
-
+    
+    // Display the raw data of company's additional fields
+    var_dump($connector->searchCompanies(array('ItemGUID' => $company->Guid))->Data[0]->AdditionalFields);
+    
+    // Function for picking Enum option by name
     function pickEnum ($name , $values)
     {
         foreach($values as $value)
@@ -78,5 +43,15 @@
                 return $value->ItemGUID;
             }
         }
+    }
+    
+    // Function for loading Enum options by additional field name
+    function loadEnumValues($fieldNumber, $connector)
+    {
+        $criteria = array(
+                          'EnumTypeName' => $fieldNumber
+                        );
+        
+        return $connector->searchEnumValues($criteria);
     }
 ?>
