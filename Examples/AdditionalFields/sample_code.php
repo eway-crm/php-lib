@@ -6,15 +6,18 @@
     // Connect to API
     $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
 
+    //Prepare values for multiple select
+    $enumValues = loadEnumValues('AF_29', $connector)->Data;
+    
     // Fill the additional fields
     $additionalFieldsValues = array(
                                     'af_25' => '7',
                                     'af_26' => '1970-01-01',
                                     'af_27' => pickEnum('Option 1', loadEnumValues('AF_27', $connector)->Data),
                                     'af_28' => '10992e33-c0d6-4a2e-b565-5babc646fd48',
-                                    'af_29' => array(pickEnum('Option 1', loadEnumValues('AF_29', $connector)->Data),
-                                                     pickEnum('Option 2', loadEnumValues('AF_29', $connector)->Data),
-                                                     pickEnum('Option 3', loadEnumValues('AF_29', $connector)->Data))
+                                    'af_29' => array(pickEnum('Option 1', $enumValues),
+                                                     pickEnum('Option 2', $enumValues),
+                                                     pickEnum('Option 3', $enumValues))
                                 );
 
     // This is new company, that we want to create
