@@ -16,6 +16,7 @@ class eWayConnector
     private $dieOnItemConflict;
     private $throwExceptionOnFail;
     private $wcfVersion = null;
+    private $userGuid;
 
     /**
      * Initialize eWayConnector class
@@ -1867,6 +1868,15 @@ class eWayConnector
         return date('Y-m-d H:i:s', $date);
     }
 
+    public function loadUserGuid()
+    {
+        if($this->userGuid == NULL)
+        {
+            $this->reLogin();
+        }
+        return $this->userGuid;
+    }
+    
     private function reLogin()
     {
         $login = array(
@@ -1882,6 +1892,7 @@ class eWayConnector
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
         $this->wcfVersion = $jsonResult->WcfVersion;
+        $this->userGuid = $jsonResult->UserItemGuid;
         
         // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
