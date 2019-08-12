@@ -1868,9 +1868,9 @@ class eWayConnector
         return date('Y-m-d H:i:s', $date);
     }
 
-    public function loadUserGuid()
+    public function getUserGuid()
     {
-        if($this->userGuid == NULL)
+        if ($this->userGuid == NULL)
         {
             $this->reLogin();
         }
