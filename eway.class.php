@@ -10,7 +10,9 @@ class eWayConnector
 {
     private $appVersion = 'PHP2.0';
     private $sessionId;
+    private $baseWebServiceAddress;
     private $webServiceAddress;
+    private $oldWebServiceAddressUsed;
     private $username;
     private $passwordHash;
     private $dieOnItemConflict;
@@ -42,7 +44,24 @@ class eWayConnector
         if (empty($password))
             throw new Exception('Empty password');
 
-        $this->webServiceAddress = $this->formatUrl( $webServiceAddress );
+        if( !substr_compare( $webServiceAddress, '.svc', -4 ) === 0 || !substr_compare( $webServiceAddress, '.svc/', -5 ) === 0 )
+        {
+            if( substr_compare( $webServiceAddress, '/', -1 ) === 0 )
+            {
+                $this->webServiceAddress = $webServiceAddress.'WcfService/Service.svc';
+            }
+            else
+            {
+                $this->webServiceAddress = $webServiceAddress.'/WcfService/Service.svc';
+            } 
+        }
+        else
+        {
+            $this->baseWebServiceAddress = $webServiceAddress;
+            $this->webServiceAddress = $this->getApiServiceUrl($webServiceAddress);
+        }
+     
+        //$this->webServiceAddress = $this->formatUrl( $webServiceAddress );
         $this->username = $username;
         $this->dieOnItemConflict = $dieOnItemConflict;
         $this->throwExceptionOnFail = $throwExceptionOnFail;
@@ -1839,6 +1858,16 @@ class eWayConnector
     }
     
     /**
+     * Gets module permissions of the current user
+     *
+     * @return Json format with permissions
+     */
+    public function getMyModulePermissions()
+    {
+        return $this->postRequest('GetMyModulePermissions');
+    }
+    
+    /**
      * Uploads binary attachement against eWay-CRM API
      *
      * @param $filePath Path to file to be attached
@@ -1917,6 +1946,19 @@ class eWayConnector
         {
             return $url.'/WcfService/Service.svc';
         }
+    }
+    
+    private function getApiServiceUrl ( $baseUri, $useOldUrl = false )
+    {
+        $path = ($useOldUrl) ? "WcfService/Service.svc" : "API.svc";
+        if( substr_compare( $baseUri, '/', -1 ) === 0 )
+        {
+            return $baseUri.$path;
+        }
+        else
+        {
+            return $baseUri."/".$path;
+        } 
     }
 
     private function createWebServiceUrl($action)
@@ -2006,15 +2048,31 @@ class eWayConnector
     private function executeCurl($ch)
     {
         $result = curl_exec($ch);
-        // Check if request has been executed successfully.
-        if ($result === false) {
-            throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
+        try{
+            // Check if request has been executed successfully.
+            if ($result === false) {            
+                throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
+            }
+    
+            // Also Check if return code is OK.
+            $curlReturnInfo = curl_getinfo($ch);
+            if ($curlReturnInfo['http_code'] != 200) {
+                if (!$this->oldWebServiceAddressUsed && $curlReturnInfo['http_code'] == 404) {
+                    curl_setopt($ch, CURLOPT_URL, str_replace( $this->webServiceAddress, $this->getApiServiceUrl( $this->baseWebServiceAddress, true ), $curlReturnInfo['url'] ));
+                    $this->webServiceAddress = $this->getApiServiceUrl( $this->baseWebServiceAddress, true );
+                    $this->oldWebServiceAddressUsed = true;
+                    
+                    return $this->executeCurl($ch);
+                }
+                throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
+            }
         }
-
-        // Also Check if return code is OK.
-        $curlReturnInfo = curl_getinfo($ch);
-        if ($curlReturnInfo['http_code'] != 200) {
-            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
+        finally
+        {
+            if($ch != null)
+            {
+                unset($ch);
+            }
         }
 
         return $result;
@@ -2052,7 +2110,7 @@ class eWayConnector
         
         if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
             // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
-            if($repeatSession == true) {
+            if ($repeatSession == true) {
                 return $this->doRequest($completeTransmitObject, $action, $version, false);
             }
         }
