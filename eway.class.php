@@ -61,7 +61,6 @@ class eWayConnector
             $this->webServiceAddress = $this->getApiServiceUrl($webServiceAddress);
         }
      
-        //$this->webServiceAddress = $this->formatUrl( $webServiceAddress );
         $this->username = $username;
         $this->dieOnItemConflict = $dieOnItemConflict;
         $this->throwExceptionOnFail = $throwExceptionOnFail;
@@ -92,6 +91,9 @@ class eWayConnector
      */
     public function getAdditionalFieldsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetAdditionalFieldsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -130,6 +132,9 @@ class eWayConnector
      */
     public function deleteCart($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteCart', $guid);
     }
 
@@ -154,7 +159,10 @@ class eWayConnector
      */
     public function getCartsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false, $omitGoodsInCart = false)
     {
-        if($omitGoodsInCart == true) {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
+        if ($omitGoodsInCart == true) {
             $additionalParameters = array('omitGoodsInCart' => true);
         } else {
             $additionalParameters = null;
@@ -225,6 +233,9 @@ class eWayConnector
      */
     public function getCalendarsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetCalendarsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -278,6 +289,9 @@ class eWayConnector
      */
     public function deleteCompany($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteCompany', $guid);
     }
     
@@ -301,6 +315,9 @@ class eWayConnector
      */
     public function getCompaniesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetCompaniesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
 
@@ -354,6 +371,9 @@ class eWayConnector
      */
     public function deleteContact($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteContact', $guid);
     }
     
@@ -377,6 +397,9 @@ class eWayConnector
      */
     public function getContactsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetContactsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -430,6 +453,9 @@ class eWayConnector
      */
     public function deleteDocument($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteDocument', $guid);
     }
     
@@ -453,6 +479,9 @@ class eWayConnector
      */
     public function getDocumentsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetDocumentsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -506,6 +535,9 @@ class eWayConnector
      */
     public function deleteEmail($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteEmail', $guid);
     }
 
@@ -529,6 +561,9 @@ class eWayConnector
      */
     public function getEmailsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetEmailsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -594,6 +629,9 @@ class eWayConnector
      */
     public function getEnumTypesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetEnumTypesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -644,6 +682,9 @@ class eWayConnector
      */
     public function getEnumValuesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetEnumValuesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -694,6 +735,9 @@ class eWayConnector
      */
     public function getFeaturesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetFeaturesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -744,6 +788,9 @@ class eWayConnector
      */
     public function getFlowsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetFlowsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
 
@@ -794,6 +841,9 @@ class eWayConnector
      */
     public function getGlobalSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetGlobalSettingsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -832,6 +882,9 @@ class eWayConnector
      */
     public function deleteGood($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteGood', $guid);
     }
     
@@ -855,6 +908,9 @@ class eWayConnector
      */
     public function getGoodsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetGoodsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -909,6 +965,9 @@ class eWayConnector
      */
     public function deleteGoodInCart($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteGoodInCart', $guid);
     }
     
@@ -932,6 +991,9 @@ class eWayConnector
      */
     public function getGoodsInCartByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetGoodsInCartByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -997,6 +1059,9 @@ class eWayConnector
      */
     public function getGroupsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetGroupsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1050,6 +1115,9 @@ class eWayConnector
      */
     public function deleteJournal($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteJournal', $guid);
     }
     
@@ -1073,6 +1141,9 @@ class eWayConnector
      */
     public function getJournalsItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetJournalsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
 
@@ -1126,6 +1197,9 @@ class eWayConnector
      */
     public function deleteLead($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteLead', $guid);
     }
     
@@ -1149,6 +1223,9 @@ class eWayConnector
      */
     public function getLeadsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetLeadsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1202,6 +1279,9 @@ class eWayConnector
      */
     public function deleteMarketingCampaign($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteMarketingCampaign', $guid);
     }
     
@@ -1225,6 +1305,9 @@ class eWayConnector
      */
     public function getMerketingCampaignsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetMarketingCampaignsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1278,6 +1361,9 @@ class eWayConnector
      */
     public function deleteMarketingListRecord($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteMarketingListRecord', $guid);
     }
     
@@ -1301,6 +1387,9 @@ class eWayConnector
      */
     public function getMarketingListsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetMarketingListsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1354,6 +1443,9 @@ class eWayConnector
      */
     public function deleteProject($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteProject', $guid);
     }
     
@@ -1377,6 +1469,9 @@ class eWayConnector
      */
     public function getProjectsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetProjectsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1442,6 +1537,9 @@ class eWayConnector
      */
     public function getSalePricesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetSalePricesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1507,6 +1605,9 @@ class eWayConnector
      */
     public function getTasksByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetTasksByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1572,6 +1673,9 @@ class eWayConnector
      */
     public function getUsersByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetUsersByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1623,6 +1727,9 @@ class eWayConnector
      */
     public function getWorkflowModelsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetWorkflowModelsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1661,6 +1768,9 @@ class eWayConnector
      */
     public function deleteWorkReport($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteWorkReport', $guid);
     }
     
@@ -1684,6 +1794,9 @@ class eWayConnector
      */
     public function getWorkReportsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetWorkReportsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
     
@@ -1737,6 +1850,9 @@ class eWayConnector
      */
     public function deleteUserSettings($guid)
     {
+        if (empty($guid))
+            throw new Exception('No GUID was given!');
+        
         return $this->deleteItem('DeleteUserSetting', $guid, '5.3.1.68');
     }
     
@@ -1760,6 +1876,9 @@ class eWayConnector
      */
     public function getUserSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
+        if (empty($guids))
+            throw new Exception('No GUIDs were given!');
+        
         return $this->getItemsByItemGuids('GetUserSettingsByItemGuids', $guids, $includeForeignKeys, $includeRelations, '5.3.1.68');
     }
     
@@ -1925,40 +2044,24 @@ class eWayConnector
         
         // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
-            throw new Exception('Login failed: '.$jsonResult->Description);
+            throw new responseException($jsonResult);
         }
 
         // Save this sessionId for next time
         $this->sessionId = $jsonResult->SessionId;
     }
     
-    private function formatUrl($url)
+    private function getApiServiceUrl($baseUri, $useOldUrl = false)
     {
-        if( substr_compare( $url, '.svc', -4 ) === 0 || substr_compare( $url, '.svc/', -5 ) === 0 )
-        {
-            return $url;
-        }
-        elseif( substr_compare( $url, '/', -1 ) === 0 )
-        {
-            return $url.'WcfService/Service.svc';
-        }
-        else
-        {
-            return $url.'/WcfService/Service.svc';
-        }
-    }
-    
-    private function getApiServiceUrl ( $baseUri, $useOldUrl = false )
-    {
-        $path = ($useOldUrl) ? "WcfService/Service.svc" : "API.svc";
-        if( substr_compare( $baseUri, '/', -1 ) === 0 )
+        $path = ($useOldUrl) ? "WcfService/Service.svc" : (substr_compare($baseUri, 'http://', 7) ? "InsecureAPI.svc" : "API.svc");
+        if(substr_compare($baseUri, '/', -1) === 0)
         {
             return $baseUri.$path;
         }
         else
         {
             return $baseUri."/".$path;
-        } 
+        }
     }
 
     private function createWebServiceUrl($action)
@@ -2048,31 +2151,26 @@ class eWayConnector
     private function executeCurl($ch)
     {
         $result = curl_exec($ch);
-        try{
-            // Check if request has been executed successfully.
-            if ($result === false) {            
-                throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
-            }
-    
-            // Also Check if return code is OK.
-            $curlReturnInfo = curl_getinfo($ch);
-            if ($curlReturnInfo['http_code'] != 200) {
-                if (!$this->oldWebServiceAddressUsed && $curlReturnInfo['http_code'] == 404) {
-                    curl_setopt($ch, CURLOPT_URL, str_replace( $this->webServiceAddress, $this->getApiServiceUrl( $this->baseWebServiceAddress, true ), $curlReturnInfo['url'] ));
-                    $this->webServiceAddress = $this->getApiServiceUrl( $this->baseWebServiceAddress, true );
-                    $this->oldWebServiceAddressUsed = true;
-                    
-                    return $this->executeCurl($ch);
-                }
-                throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
-            }
+        
+        // Check if request has been executed successfully.
+        if ($result === false) {            
+            throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
         }
-        finally
+
+        // Also Check if return code is OK.
+        $curlReturnInfo = curl_getinfo($ch);
+        if ($curlReturnInfo['http_code'] != 200)
         {
-            if($ch != null)
+            if (!$this->oldWebServiceAddressUsed && $curlReturnInfo['http_code'] == 404)
             {
-                unset($ch);
+                curl_setopt($ch, CURLOPT_URL, str_replace($this->webServiceAddress, $this->getApiServiceUrl($this->baseWebServiceAddress, true), $curlReturnInfo['url']));
+                $this->webServiceAddress = $this->getApiServiceUrl($this->baseWebServiceAddress, true);
+                $this->oldWebServiceAddressUsed = true;
+                
+                return $this->executeCurl($ch);
             }
+            
+            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
         }
 
         return $result;
@@ -2101,7 +2199,7 @@ class eWayConnector
         $result = $this->executeCurl($ch);
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
-
+        
         // Session timed out, re-log again
         if ($returnCode == 'rcBadSession') {
             $this->reLogin();
@@ -2116,7 +2214,7 @@ class eWayConnector
         }
         
         if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
-            throw new Exception($returnCode.': '.$jsonResult->Description);
+            throw new responseException($jsonResult);
         }
         
         return $jsonResult;
@@ -2152,7 +2250,7 @@ class eWayConnector
         }
         
         if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
-            throw new Exception($returnCode.': '.$jsonResult->Description);
+            throw new responseException($jsonResult);
         }
         
         return $jsonResult;
@@ -2184,6 +2282,27 @@ class eWayConnector
         curl_setopt($ch, CURLOPT_INFILE, fopen($filePath, 'r'));
         
         return $ch;
+    }
+}
+
+class responseException extends Exception
+{
+    public $returnCode;
+    public $description;
+    public $completeResponse;
+    
+    public function __construct($object, $message ='', $code = 0, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+        
+        $this->returnCode = $object->ReturnCode;
+        $this->description = $object->Description;
+        $this->completeResponse = $object;
+    }
+    
+    public function __toString()
+    {
+        return $this->returnCode.": {$this->description}\n";
     }
 }
 ?>
