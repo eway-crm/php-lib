@@ -2054,7 +2054,7 @@ class eWayConnector
     private function getApiServiceUrl($baseUri, $useOldUrl = false)
     {
         $path = ($useOldUrl) ? "WcfService/Service.svc" : (substr_compare($baseUri, 'http://', 7) ? "InsecureAPI.svc" : "API.svc");
-        if(substr_compare($baseUri, '/', -1) === 0)
+        if (substr_compare($baseUri, '/', -1) === 0)
         {
             return $baseUri.$path;
         }
