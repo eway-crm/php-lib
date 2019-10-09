@@ -92,7 +92,7 @@ class eWayConnector
     public function getAdditionalFieldsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetAdditionalFieldsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -133,7 +133,7 @@ class eWayConnector
     public function deleteCart($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteCart', $guid);
     }
@@ -160,7 +160,7 @@ class eWayConnector
     public function getCartsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false, $omitGoodsInCart = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         if ($omitGoodsInCart == true) {
             $additionalParameters = array('omitGoodsInCart' => true);
@@ -234,7 +234,7 @@ class eWayConnector
     public function getCalendarsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetCalendarsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -290,7 +290,7 @@ class eWayConnector
     public function deleteCompany($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteCompany', $guid);
     }
@@ -316,7 +316,7 @@ class eWayConnector
     public function getCompaniesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetCompaniesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -372,7 +372,7 @@ class eWayConnector
     public function deleteContact($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteContact', $guid);
     }
@@ -398,7 +398,7 @@ class eWayConnector
     public function getContactsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetContactsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -454,7 +454,7 @@ class eWayConnector
     public function deleteDocument($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteDocument', $guid);
     }
@@ -480,7 +480,7 @@ class eWayConnector
     public function getDocumentsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetDocumentsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -536,7 +536,7 @@ class eWayConnector
     public function deleteEmail($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteEmail', $guid);
     }
@@ -562,7 +562,7 @@ class eWayConnector
     public function getEmailsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetEmailsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -630,7 +630,7 @@ class eWayConnector
     public function getEnumTypesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetEnumTypesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -683,7 +683,7 @@ class eWayConnector
     public function getEnumValuesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetEnumValuesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -736,7 +736,7 @@ class eWayConnector
     public function getFeaturesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetFeaturesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -789,7 +789,7 @@ class eWayConnector
     public function getFlowsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetFlowsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -842,7 +842,7 @@ class eWayConnector
     public function getGlobalSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetGlobalSettingsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -883,7 +883,7 @@ class eWayConnector
     public function deleteGood($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteGood', $guid);
     }
@@ -909,7 +909,7 @@ class eWayConnector
     public function getGoodsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetGoodsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -966,7 +966,7 @@ class eWayConnector
     public function deleteGoodInCart($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteGoodInCart', $guid);
     }
@@ -992,7 +992,7 @@ class eWayConnector
     public function getGoodsInCartByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetGoodsInCartByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1060,7 +1060,7 @@ class eWayConnector
     public function getGroupsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetGroupsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1116,7 +1116,7 @@ class eWayConnector
     public function deleteJournal($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteJournal', $guid);
     }
@@ -1142,7 +1142,7 @@ class eWayConnector
     public function getJournalsItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetJournalsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1198,7 +1198,7 @@ class eWayConnector
     public function deleteLead($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteLead', $guid);
     }
@@ -1224,7 +1224,7 @@ class eWayConnector
     public function getLeadsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetLeadsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1280,7 +1280,7 @@ class eWayConnector
     public function deleteMarketingCampaign($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteMarketingCampaign', $guid);
     }
@@ -1306,7 +1306,7 @@ class eWayConnector
     public function getMerketingCampaignsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetMarketingCampaignsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1362,7 +1362,7 @@ class eWayConnector
     public function deleteMarketingListRecord($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteMarketingListRecord', $guid);
     }
@@ -1388,7 +1388,7 @@ class eWayConnector
     public function getMarketingListsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetMarketingListsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1444,7 +1444,7 @@ class eWayConnector
     public function deleteProject($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteProject', $guid);
     }
@@ -1470,7 +1470,7 @@ class eWayConnector
     public function getProjectsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetProjectsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1538,7 +1538,7 @@ class eWayConnector
     public function getSalePricesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetSalePricesByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1606,7 +1606,7 @@ class eWayConnector
     public function getTasksByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetTasksByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1674,7 +1674,7 @@ class eWayConnector
     public function getUsersByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetUsersByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1728,7 +1728,7 @@ class eWayConnector
     public function getWorkflowModelsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetWorkflowModelsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1769,7 +1769,7 @@ class eWayConnector
     public function deleteWorkReport($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteWorkReport', $guid);
     }
@@ -1795,7 +1795,7 @@ class eWayConnector
     public function getWorkReportsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetWorkReportsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
     }
@@ -1851,7 +1851,7 @@ class eWayConnector
     public function deleteUserSettings($guid)
     {
         if (empty($guid))
-            throw new Exception('No GUID was given!');
+            throw new Exception('Parameter $guid not specified');
         
         return $this->deleteItem('DeleteUserSetting', $guid, '5.3.1.68');
     }
@@ -1877,7 +1877,7 @@ class eWayConnector
     public function getUserSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
     {
         if (empty($guids))
-            throw new Exception('No GUIDs were given!');
+            throw new Exception('Parameter $guids not specified');
         
         return $this->getItemsByItemGuids('GetUserSettingsByItemGuids', $guids, $includeForeignKeys, $includeRelations, '5.3.1.68');
     }
@@ -2044,7 +2044,7 @@ class eWayConnector
         
         // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
-            throw new responseException($jsonResult);
+            throw new ResponseException($jsonResult);
         }
 
         // Save this sessionId for next time
@@ -2214,7 +2214,7 @@ class eWayConnector
         }
         
         if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
-            throw new responseException($jsonResult);
+            throw new ResponseException($jsonResult);
         }
         
         return $jsonResult;
@@ -2250,7 +2250,7 @@ class eWayConnector
         }
         
         if ($this->throwExceptionOnFail && $returnCode != 'rcSuccess') {
-            throw new responseException($jsonResult);
+            throw new ResponseException($jsonResult);
         }
         
         return $jsonResult;
@@ -2285,7 +2285,7 @@ class eWayConnector
     }
 }
 
-class responseException extends Exception
+class ResponseException extends Exception
 {
     public $returnCode;
     public $description;
