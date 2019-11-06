@@ -2044,7 +2044,7 @@ class eWayConnector
         
         // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
-            throw new ResponseException($jsonResult);
+            throw new LoginException($jsonResult);
         }
 
         // Save this sessionId for next time
@@ -2303,6 +2303,14 @@ class ResponseException extends Exception
     public function __toString()
     {
         return $this->returnCode.": {$this->description}\n";
+    }
+}
+
+class LoginException extends ResponseException
+{
+    public function __construct($object, $message ='', $code = 0, Exception $previous = null)
+    {
+        parent::__construct($object, "LogIn", $code, $previous);
     }
 }
 ?>
