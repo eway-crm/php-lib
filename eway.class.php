@@ -44,21 +44,15 @@ class eWayConnector
         if (empty($password))
             throw new Exception('Empty password');
 
-        if( !substr_compare( $webServiceAddress, '.svc', -4 ) === 0 || !substr_compare( $webServiceAddress, '.svc/', -5 ) === 0 )
+        if( substr( $webServiceAddress, -4, 4 ) == '.svc' || substr( $webServiceAddress, -5, 5 ) == '.svc/' )
         {
-            if( substr_compare( $webServiceAddress, '/', -1 ) === 0 )
-            {
-                $this->webServiceAddress = $webServiceAddress.'WcfService/Service.svc';
-            }
-            else
-            {
-                $this->webServiceAddress = $webServiceAddress.'/WcfService/Service.svc';
-            } 
+            $this->webServiceAddress = $webServiceAddress;
+            $this->oldWebServiceAddressUsed = true;
         }
         else
         {
-            $this->baseWebServiceAddress = $webServiceAddress;
             $this->webServiceAddress = $this->getApiServiceUrl($webServiceAddress);
+            $this->baseWebServiceAddress = $webServiceAddress;
         }
      
         $this->username = $username;
@@ -69,6 +63,19 @@ class eWayConnector
             $this->passwordHash = $password;
         else
             $this->passwordHash = md5($password);
+    }
+    
+        private function getApiServiceUrl($baseUri, $useOldUrl = false)
+    {
+        $path = ($useOldUrl) ? "WcfService/Service.svc" : ( ( substr($baseUri, 0, 7) == 'http://' ) ? "InsecureAPI.svc" : "API.svc");
+        if (substr_compare($baseUri, '/', -1) === 0)
+        {
+            return $baseUri.$path;
+        }
+        else
+        {
+            return $baseUri."/".$path;
+        }
     }
 
     /**
@@ -2049,19 +2056,6 @@ class eWayConnector
 
         // Save this sessionId for next time
         $this->sessionId = $jsonResult->SessionId;
-    }
-    
-    private function getApiServiceUrl($baseUri, $useOldUrl = false)
-    {
-        $path = ($useOldUrl) ? "WcfService/Service.svc" : (substr_compare($baseUri, 'http://', 7) ? "InsecureAPI.svc" : "API.svc");
-        if (substr_compare($baseUri, '/', -1) === 0)
-        {
-            return $baseUri.$path;
-        }
-        else
-        {
-            return $baseUri."/".$path;
-        }
     }
 
     private function createWebServiceUrl($action)
