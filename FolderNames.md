@@ -9,12 +9,12 @@ In some situations when using our API you will bump into "FolderName". The name 
 | Deal | Leads | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/leads) |
 | Project | Projects | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/projects) |
 | Marketing Campaign | Marketing | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/marketing) |
-| Marketing List | MarketingLists | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/marketing) |
+| Marketing List | MarketingList | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/marketing) |
 | Task | Tasks | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/tasks) |
 | Document | Documents | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/documents) |
-| Journal | Journals | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/journal) |
+| Journal | Journal | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/journal) |
 | Email | Emails | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/e-mails) |
-| Calendar | Calendars | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/calendar) |
+| Calendar | Calendar | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/calendar) |
 | Product | Goods | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/goods) |
 | Discount List | SalePrices | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/sale-prices) |
 | Bookkeeping record | Carts | [Page in knowledge base](https://kb.eway-crm.com/documentation/4-modules/carts) |
