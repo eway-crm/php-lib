@@ -2214,7 +2214,7 @@ class eWayConnector
         return $jsonResult;
     }
     
-    private function upload($itemGuid, $filePath)
+    private function upload($itemGuid, $filePath, $repeatSession = true)
     {
         // This is first request, login before
         if (empty($this->sessionId)) {
@@ -2230,16 +2230,13 @@ class eWayConnector
         $jsonResult = json_decode($result);
         $returnCode = $jsonResult->ReturnCode;
         
-        // Session timed out, re-log again
-        if ($returnCode == 'rcBadSession') {
-            $this->reLogin();
-            $completeTransmitObject['sessionId'] = $this->sessionId;
-        }
-        
         if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
             // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
             if($repeatSession == true) {
-                return $this->doRequest($completeTransmitObject, $action, $version, false);
+				if ($returnCode == 'rcBadSession') {
+					$this->reLogin();
+				}
+				return $this->upload($itemGuid, $filePath, false);
             }
         }
         
