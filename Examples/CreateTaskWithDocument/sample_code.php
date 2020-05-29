@@ -48,5 +48,7 @@
 
     // Save the relation
     $output = $connector->saveRelation($relation);
-
+	
+	// Download the picture back
+	$connector->getBinaryAttachment($GUID, 'Picture2.PNG');
 ?>

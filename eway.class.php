@@ -2007,6 +2007,27 @@ class eWayConnector
         
         return $this->upload($itemGuid, $filePath);
     }
+	
+	/**
+	 * Downloads the binary attachment of a document and saves it into a file.
+	 * If no revision number is specified, downloads the latest revision.
+	 * 
+	 * @param $itemGuid ItemGUID of the document.
+	 * @param $targetFilePath Path to the target file into which the binary content is saved. The file should not exist.
+	 * @param $revision (Optional) The revision number. If no supplied or is zero, the latest revision of the document is downloaded.
+	 */
+	public function getBinaryAttachment($itemGuid, $targetFilePath, $revision = 0) {
+		if (empty($revision) || $revision == 0) {
+			$revisionObj = array(
+                'sessionId' => $this->sessionId,
+				'documtentGuid' => $itemGuid
+			);
+			$revisionResponse = $this->doRequest($revisionObj, 'GetLatestRevision');
+			$revision = $revisionResponse->Datum->Revision;
+		}
+		
+		$this->download($itemGuid, $revision, $targetFilePath);
+	}
 
     /**
      * Formats date and time for the API calls
@@ -2166,6 +2187,8 @@ class eWayConnector
             
             throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
         }
+		
+		curl_close($ch); 
 
         return $result;
     }
@@ -2222,7 +2245,7 @@ class eWayConnector
             
             return $this->upload($itemGuid, $filePath);
         }
-        
+		
         $url = $this->createFileUploadUrl($itemGuid, basename($filePath));
         $ch = $this->createUploadRequest($url, $filePath);
         
@@ -2246,6 +2269,42 @@ class eWayConnector
         
         return $jsonResult;
     }
+	
+	private function download($itemGuid, $revision, $targetFilePath) {
+		// We cannot be sure the request will be ok (there is no return code).
+		$this->reLogin();
+		
+		if (empty($this->sessionId)) {
+			throw new Exception('Unable to obtain session for downloading.');
+		}
+		
+		$url = $this->createWebServiceUrl('GetBinaryAttachment');
+		$completeTransmitObject = array(
+			'sessionId' => $this->sessionId,
+			'itemGuid' => $itemGuid, 
+			'revision' => $revision
+		);
+        $jsonObject = json_encode($completeTransmitObject, true);
+		
+		$targetFileHandle = fopen($targetFilePath, 'wb');
+		$ch = $this->createDownloadPostRequest($url, $jsonObject, $targetFileHandle);      
+		$result = curl_exec($ch);
+        
+        // Check if request has been executed successfully.
+        if ($result === false) {            
+            throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
+        }
+
+        // Also Check if return code is OK.
+        $curlReturnInfo = curl_getinfo($ch);
+        if ($curlReturnInfo['http_code'] != 200)
+        {            
+            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
+        }
+		
+		curl_close($ch);
+		fclose($targetFileHandle);
+	}
     
     private function createPostRequest($url, $jsonObject)
     {
@@ -2274,6 +2333,20 @@ class eWayConnector
         
         return $ch;
     }
+	
+	private function createDownloadPostRequest($url, $jsonObject, $targetFilePathHandle) {		
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_FILE, $targetFilePathHandle); 
+		curl_setopt($ch, CURLOPT_HEADER, 0); 
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Accept: application/octet-stream'));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
+		
+		return $ch;
+	}
 }
 
 class ResponseException extends Exception
