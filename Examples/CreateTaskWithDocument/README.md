@@ -70,6 +70,17 @@ $output = $connector->saveRelation($relation);
 As an output, you should see the Document appear in the Task form as a linked item.
 ![example output](Images/sample_output_relation.PNG)
 
+## Download a Document
+
+If you want to download the document's binary data back or just download another file, use the method `getBinaryAttachment`. This function downloads binary content of a document (specified revision or the latest one) and saves it into a file.
+
+```php
+
+// Download the picture back
+$connector->getBinaryAttachment($GUID, 'Picture2.PNG');
+
+``` 
+
 ## Sample code
 To see the whole sample code click [here](sample_code.php)
 
