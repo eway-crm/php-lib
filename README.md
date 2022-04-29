@@ -15,7 +15,7 @@ $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTr
 
 ```
 
-⚠️⊞ This connector does not support Microsoft account authenticaion. If you log into eWay-CRM with your Microsoft account, this connector will not work.
+⚠️ This connector does not support [Microsoft Account Authenticaion](https://kb.eway-crm.com/documentation/2-installation/2-3-installation-the-server-part/adjust-eway-crm-web-service-for-azure-login-office-365?set_language=en). If you log into eWay-CRM with your Microsoft account, this connector will not work.
 
 ## Simple actions with the eWay-CRM API
 You can check actions available on your service on ```[service adress]/API.svc/help```. If the help is not enabled on your API have a look at [instructions](https://kb.eway-crm.com/faq-1/tips/how-to-activate-eway-crm-api-help) to activate it. You can also see [help](https://trial.eway-crm.com/31994/API.svc/help) of the sample web service.
