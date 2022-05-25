@@ -3,12 +3,12 @@
 /**
  * eWayConnector class helps connect and manage operation for web service.
  *
- * @copyright 2014-2015 eWay System s.r.o.
- * @version 2.0
+ * @copyright 2014-2022 eWay System s.r.o.
+ * @version 2.3
  */
 class eWayConnector
 {
-    private $appVersion = 'PHP2.0';
+    private $appVersion;
     private $sessionId;
     private $baseWebServiceAddress;
     private $webServiceAddress;
@@ -33,7 +33,7 @@ class eWayConnector
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true)
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.3')
     {
         if (empty($webServiceAddress))
             throw new Exception('Empty web service address');
@@ -58,6 +58,7 @@ class eWayConnector
         $this->username = $username;
         $this->dieOnItemConflict = $dieOnItemConflict;
         $this->throwExceptionOnFail = $throwExceptionOnFail;
+        $this->appVersion = $appVersion;
 
         if ($passwordAlreadyEncrypted)
             $this->passwordHash = $password;
@@ -65,7 +66,7 @@ class eWayConnector
             $this->passwordHash = md5($password);
     }
     
-        private function getApiServiceUrl($baseUri, $useOldUrl = false)
+    private function getApiServiceUrl($baseUri, $useOldUrl = false)
     {
         $path = ($useOldUrl) ? "WcfService/Service.svc" : ( ( substr($baseUri, 0, 7) == 'http://' ) ? "InsecureAPI.svc" : "API.svc");
         if (substr_compare($baseUri, '/', -1) === 0)
@@ -2052,13 +2053,21 @@ class eWayConnector
         }
         return $this->userGuid;
     }
+
+    private function getClientIp()
+    {
+        return $_SERVER['HTTP_CLIENT_IP'] 
+            ? : ($_SERVER['HTTP_X_FORWARDED_FOR'] 
+            ? : $_SERVER['REMOTE_ADDR']);
+    }
     
     private function reLogin()
     {
         $login = array(
             'userName' => $this->username,
             'passwordHash' => $this->passwordHash,
-            'appVersion' => $this->appVersion
+            'appVersion' => $this->appVersion,
+            'clientMachineIdentifier' => $this->getClientIp()
         );
 
         $jsonObject = json_encode($login, true);
@@ -2374,7 +2383,7 @@ class LoginException extends ResponseException
 {
     public function __construct($object, $message ='', $code = 0, Exception $previous = null)
     {
-        parent::__construct($object, "LogIn", $code, $previous);
+        parent::__construct($object, $object->Description, $code, $previous);
     }
 }
 ?>
