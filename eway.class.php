@@ -4,7 +4,7 @@
  * eWayConnector class helps connect and manage operation for web service.
  *
  * @copyright 2014-2022 eWay System s.r.o.
- * @version 2.3
+ * @version 2.4
  */
 class eWayConnector
 {
@@ -19,6 +19,10 @@ class eWayConnector
     private $throwExceptionOnFail;
     private $wcfVersion = null;
     private $userGuid;
+    private $clientId;
+    private $clientSecret;
+    private $accessToken;
+    private $refreshToken;
 
     /**
      * Initialize eWayConnector class
@@ -29,11 +33,16 @@ class eWayConnector
      * @param $passwordAlreadyEncrypted - if true, user already encrypted password
      * @param $dieOnItemConflict If true, throws rcItemConflict when item has been changed before saving, if false, merges data
      * @param $throwExceptionOnFail If true, throws exception when the web service does not return rcSuccess
+     * @param $appVersion Application identifier (name and version)
+     * @param $clientId Client ID for OAuth
+     * @param $clientSecret Client Secret for OAuth
+     * @param $refreshToken Refresh Token used to get Access Token for OAuth
      * @throws Exception If web service address is empty
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.3')
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.3',
+        $clientId = null, $clientSecret = null, $refreshToken = null)
     {
         if (empty($webServiceAddress))
             throw new Exception('Empty web service address');
@@ -41,10 +50,10 @@ class eWayConnector
         if (empty($username))
             throw new Exception('Empty username');
 
-        if (empty($password))
+        if (empty($password) && empty($clientId) && empty($clientSecret))
             throw new Exception('Empty password');
 
-        if( substr( $webServiceAddress, -4, 4 ) == '.svc' || substr( $webServiceAddress, -5, 5 ) == '.svc/' )
+        if (substr($webServiceAddress, -4, 4) == '.svc' || substr($webServiceAddress, -5, 5) == '.svc/')
         {
             $this->webServiceAddress = $webServiceAddress;
             $this->oldWebServiceAddressUsed = true;
@@ -52,18 +61,24 @@ class eWayConnector
         else
         {
             $this->webServiceAddress = $this->getApiServiceUrl($webServiceAddress);
-            $this->baseWebServiceAddress = $webServiceAddress;
+            $this->baseWebServiceAddress = trim($webServiceAddress, "/");
         }
      
         $this->username = $username;
         $this->dieOnItemConflict = $dieOnItemConflict;
         $this->throwExceptionOnFail = $throwExceptionOnFail;
         $this->appVersion = $appVersion;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
+        $this->accessToken = $refreshToken;
+        $this->refreshToken = $refreshToken;
 
-        if ($passwordAlreadyEncrypted)
-            $this->passwordHash = $password;
-        else
-            $this->passwordHash = md5($password);
+        if (!empty($password)) {
+            if ($passwordAlreadyEncrypted)
+                $this->passwordHash = $password;
+            else
+                $this->passwordHash = md5($password);
+        }
     }
     
     private function getApiServiceUrl($baseUri, $useOldUrl = false)
@@ -77,6 +92,142 @@ class eWayConnector
         {
             return $baseUri."/".$path;
         }
+    }
+
+    /**
+     * Encode data to Base64URL
+     * @param string $data
+     * @return boolean|string
+     */
+    public function base64url_encode($data)
+    {
+        // First of all you should encode $data to Base64 string
+        $b64 = base64_encode($data);
+
+        // Make sure you get a valid result, otherwise, return FALSE, as the base64_encode() function do
+        if ($b64 === false) {
+            return false;
+        }
+
+        // Convert Base64 to Base64URL by replacing + with - and / with _
+        $url = strtr($b64, '+/', '-_');
+
+        // Remove padding character from the end of line and return the Base64URL result
+        return rtrim($url, '=');
+    }
+
+    /**
+     * Generates code verifier for the OAuth flow.
+     */
+    public function generateCodeVerifier() 
+    {
+        return rtrim(base64_encode(md5(microtime())), "=");
+    }
+
+    /**
+     * Gets code challenge from previously generated code verifier.
+     */
+    public function getCodeChallenge($codeVerifier)
+    {
+        if (empty($codeVerifier))
+            throw new Exception('CodeVerifier is not specified!');
+        
+        return $this->base64url_encode(pack('H*', hash('sha256', $codeVerifier)));
+    }
+
+    /**
+     * Gets OAuth authorization URL.
+     */
+    public function getAuthorizationUrl($redirectUrl, $challenge, $userName = null, $userNameForced = false)
+    {
+        if (empty($redirectUrl))
+            throw new Exception('Redirect URL is not specified!');
+        
+        if (empty($this->clientId))
+            throw new Exception('ClientID is not specified!');
+
+        if (empty($this->clientSecret))
+            throw new Exception('ClientSecret is not specified!');
+        
+        $url = $this->baseWebServiceAddress."/auth/connect/authorize?client_id={$this->clientId}&scope=api offline_access&redirect_uri={$redirectUrl}&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&prompt=login";
+
+        if (!empty($userName))
+        {
+            $url .= "&login_hint=".$userName;
+
+            if ($userNameForced)
+            {
+                $url .= "&login_forced=true";
+            }
+            else
+            {
+                $url .= "&login_forced=false";
+            }
+        }
+
+        return $url;
+    }
+
+    /**
+     * Finish OAuth authorization to get refresh token.
+     */
+    public function finishAuthorization($redirectUrl, $codeVerifier, $authorizationCode)
+    {
+        if (empty($this->clientId))
+            throw new Exception('ClientID is not specified!');
+
+        if (empty($this->clientSecret))
+            throw new Exception('ClientSecret is not specified!');
+
+        $params = array(
+            'code_verifier' => $codeVerifier,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'code' => $authorizationCode,
+            'redirect_uri' => $redirectUrl,
+            'grant_type' => 'authorization_code'
+        );
+
+        $response = $this->callTokenEndpoint($params);
+
+        if ($response)
+        {
+            $this->accessToken = $response->access_token;
+            $this->refreshToken = $response->refresh_token;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Get new access token from refresh token.
+     */
+    public function refreshAccessToken()
+    {
+        if (empty($this->refreshToken))
+            throw new Exception('Refresh Token is not specified!');
+        
+        if (empty($this->clientId))
+            throw new Exception('ClientID is not specified!');
+
+        if (empty($this->clientSecret))
+            throw new Exception('ClientSecret is not specified!');
+        
+        $params = array(
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'refresh_token' => $this->refreshToken,
+            'grant_type' => 'refresh_token'
+        );
+
+        return $this->callTokenEndpoint($params);
+    }
+
+    private function callTokenEndpoint($params)
+    {
+        $ch = $this->createPostRequest($this->baseWebServiceAddress.'/auth/connect/token', http_build_query($params), 'application/x-www-form-urlencoded');
+
+        return json_decode($this->executeCurl($ch));
     }
 
     /**
@@ -2061,7 +2212,7 @@ class eWayConnector
             ? : $_SERVER['REMOTE_ADDR']);
     }
     
-    private function reLogin()
+    private function reLogin($repeatOnBadAccessToken = true)
     {
         $login = array(
             'userName' => $this->username,
@@ -2079,6 +2230,11 @@ class eWayConnector
         $this->wcfVersion = $jsonResult->WcfVersion;
         $this->userGuid = $jsonResult->UserItemGuid;
         
+        if ($returnCode == 'rcBadAccessToken' && $repeatOnBadAccessToken == true && $this->doRefreshAccessToken()) {
+            $this->reLogin(false);
+            return;
+        }
+
         // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
             throw new LoginException($jsonResult);
@@ -2183,7 +2339,7 @@ class eWayConnector
 
         // Also Check if return code is OK.
         $curlReturnInfo = curl_getinfo($ch);
-        if ($curlReturnInfo['http_code'] != 200)
+        if ($curlReturnInfo['http_code'] != 200 && $curlReturnInfo['http_code'] != 401)
         {
             if (!$this->oldWebServiceAddressUsed && $curlReturnInfo['http_code'] == 404)
             {
@@ -2227,12 +2383,12 @@ class eWayConnector
         $returnCode = $jsonResult->ReturnCode;
         
         // Session timed out, re-log again
-        if ($returnCode == 'rcBadSession') {
+        if ($returnCode == 'rcBadSession' || ($returnCode == 'rcBadAccessToken' && $this->doRefreshAccessToken())) {
             $this->reLogin();
             $completeTransmitObject['sessionId'] = $this->sessionId;
         }
         
-        if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
+        if ($returnCode == 'rcBadSession' || $returnCode == 'rcBadAccessToken' || $returnCode == 'rcDatabaseTimeout') {
             // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
             if ($repeatSession == true) {
                 return $this->doRequest($completeTransmitObject, $action, $version, false);
@@ -2244,6 +2400,20 @@ class eWayConnector
         }
         
         return $jsonResult;
+    }
+
+    private function doRefreshAccessToken()
+    {
+        $refreshTokenResponse = $this->refreshAccessToken();
+
+        if ($refreshTokenResponse && $refreshTokenResponse->access_token)
+        {
+            $this->accessToken = $refreshTokenResponse->access_token;
+            
+            return true;
+        }
+
+        return false;
     }
     
     private function upload($itemGuid, $filePath, $repeatSession = true)
@@ -2315,16 +2485,16 @@ class eWayConnector
 		fclose($targetFileHandle);
 	}
     
-    private function createPostRequest($url, $jsonObject)
+    private function createPostRequest($url, $data, $contentType = 'application/json')
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Accept: application/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$contentType, 'Accept: application/json', 'Authorization: Bearer '.$this->accessToken));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         
         return $ch;
     }
