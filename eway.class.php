@@ -1865,7 +1865,6 @@ class eWayConnector
         return $this->postRequest('SearchUsers', $user, $includeRelations);
     }
 
-
     /**
      * Gets all work flow models
      *
@@ -2194,6 +2193,22 @@ class eWayConnector
             throw new Exception('Empty date');
 
         return date('Y-m-d H:i:s', $date);
+    }
+
+    /**
+     * Ends active session.
+     */
+    public function logOut()
+    {
+        if (empty($this->sessionId))
+            return;
+        
+        $logout = array(
+            'sessionId' => $this->sessionId
+        );
+
+        $jsonObject = json_encode($logout, true);
+        $this->createPostRequest($this->createWebServiceUrl('LogOut'), $jsonObject);
     }
 
     public function getUserGuid()
