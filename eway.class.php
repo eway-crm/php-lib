@@ -2208,7 +2208,8 @@ class eWayConnector
         );
 
         $jsonObject = json_encode($logout, true);
-        $this->createPostRequest($this->createWebServiceUrl('LogOut'), $jsonObject);
+        $ch = $this->createPostRequest($this->createWebServiceUrl('LogOut'), $jsonObject);
+        $this->executeCurl($ch);
     }
 
     public function getUserGuid()
