@@ -3,12 +3,12 @@
 /**
  * eWayConnector class helps connect and manage operation for web service.
  *
- * @copyright 2014-2015 eWay System s.r.o.
- * @version 2.0
+ * @copyright 2014-2022 eWay System s.r.o.
+ * @version 2.4
  */
 class eWayConnector
 {
-    private $appVersion = 'PHP2.0';
+    private $appVersion;
     private $sessionId;
     private $baseWebServiceAddress;
     private $webServiceAddress;
@@ -19,6 +19,10 @@ class eWayConnector
     private $throwExceptionOnFail;
     private $wcfVersion = null;
     private $userGuid;
+    private $clientId;
+    private $clientSecret;
+    private $accessToken;
+    private $refreshToken;
 
     /**
      * Initialize eWayConnector class
@@ -29,11 +33,16 @@ class eWayConnector
      * @param $passwordAlreadyEncrypted - if true, user already encrypted password
      * @param $dieOnItemConflict If true, throws rcItemConflict when item has been changed before saving, if false, merges data
      * @param $throwExceptionOnFail If true, throws exception when the web service does not return rcSuccess
+     * @param $appVersion Application identifier (name and version)
+     * @param $clientId Client ID for OAuth
+     * @param $clientSecret Client Secret for OAuth
+     * @param $refreshToken Refresh Token used to get Access Token for OAuth
      * @throws Exception If web service address is empty
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true)
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.3',
+        $clientId = null, $clientSecret = null, $refreshToken = null)
     {
         if (empty($webServiceAddress))
             throw new Exception('Empty web service address');
@@ -41,10 +50,10 @@ class eWayConnector
         if (empty($username))
             throw new Exception('Empty username');
 
-        if (empty($password))
+        if (empty($password) && empty($clientId) && empty($clientSecret))
             throw new Exception('Empty password');
 
-        if( substr( $webServiceAddress, -4, 4 ) == '.svc' || substr( $webServiceAddress, -5, 5 ) == '.svc/' )
+        if (substr($webServiceAddress, -4, 4) == '.svc' || substr($webServiceAddress, -5, 5) == '.svc/')
         {
             $this->webServiceAddress = $webServiceAddress;
             $this->oldWebServiceAddressUsed = true;
@@ -52,20 +61,27 @@ class eWayConnector
         else
         {
             $this->webServiceAddress = $this->getApiServiceUrl($webServiceAddress);
-            $this->baseWebServiceAddress = $webServiceAddress;
+            $this->baseWebServiceAddress = trim($webServiceAddress, "/");
         }
      
         $this->username = $username;
         $this->dieOnItemConflict = $dieOnItemConflict;
         $this->throwExceptionOnFail = $throwExceptionOnFail;
+        $this->appVersion = $appVersion;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
+        $this->accessToken = $refreshToken;
+        $this->refreshToken = $refreshToken;
 
-        if ($passwordAlreadyEncrypted)
-            $this->passwordHash = $password;
-        else
-            $this->passwordHash = md5($password);
+        if (!empty($password)) {
+            if ($passwordAlreadyEncrypted)
+                $this->passwordHash = $password;
+            else
+                $this->passwordHash = md5($password);
+        }
     }
     
-        private function getApiServiceUrl($baseUri, $useOldUrl = false)
+    private function getApiServiceUrl($baseUri, $useOldUrl = false)
     {
         $path = ($useOldUrl) ? "WcfService/Service.svc" : ( ( substr($baseUri, 0, 7) == 'http://' ) ? "InsecureAPI.svc" : "API.svc");
         if (substr_compare($baseUri, '/', -1) === 0)
@@ -76,6 +92,142 @@ class eWayConnector
         {
             return $baseUri."/".$path;
         }
+    }
+
+    /**
+     * Encode data to Base64URL
+     * @param string $data
+     * @return boolean|string
+     */
+    public function base64url_encode($data)
+    {
+        // First of all you should encode $data to Base64 string
+        $b64 = base64_encode($data);
+
+        // Make sure you get a valid result, otherwise, return FALSE, as the base64_encode() function do
+        if ($b64 === false) {
+            return false;
+        }
+
+        // Convert Base64 to Base64URL by replacing + with - and / with _
+        $url = strtr($b64, '+/', '-_');
+
+        // Remove padding character from the end of line and return the Base64URL result
+        return rtrim($url, '=');
+    }
+
+    /**
+     * Generates code verifier for the OAuth flow.
+     */
+    public function generateCodeVerifier() 
+    {
+        return rtrim(base64_encode(md5(microtime())), "=");
+    }
+
+    /**
+     * Gets code challenge from previously generated code verifier.
+     */
+    public function getCodeChallenge($codeVerifier)
+    {
+        if (empty($codeVerifier))
+            throw new Exception('CodeVerifier is not specified!');
+        
+        return $this->base64url_encode(pack('H*', hash('sha256', $codeVerifier)));
+    }
+
+    /**
+     * Gets OAuth authorization URL.
+     */
+    public function getAuthorizationUrl($redirectUrl, $challenge, $userName = null, $userNameForced = false)
+    {
+        if (empty($redirectUrl))
+            throw new Exception('Redirect URL is not specified!');
+        
+        if (empty($this->clientId))
+            throw new Exception('ClientID is not specified!');
+
+        if (empty($this->clientSecret))
+            throw new Exception('ClientSecret is not specified!');
+        
+        $url = $this->baseWebServiceAddress."/auth/connect/authorize?client_id={$this->clientId}&scope=api offline_access&redirect_uri={$redirectUrl}&code_challenge=${challenge}&code_challenge_method=S256&response_type=code&prompt=login";
+
+        if (!empty($userName))
+        {
+            $url .= "&login_hint=".$userName;
+
+            if ($userNameForced)
+            {
+                $url .= "&login_forced=true";
+            }
+            else
+            {
+                $url .= "&login_forced=false";
+            }
+        }
+
+        return $url;
+    }
+
+    /**
+     * Finish OAuth authorization to get refresh token.
+     */
+    public function finishAuthorization($redirectUrl, $codeVerifier, $authorizationCode)
+    {
+        if (empty($this->clientId))
+            throw new Exception('ClientID is not specified!');
+
+        if (empty($this->clientSecret))
+            throw new Exception('ClientSecret is not specified!');
+
+        $params = array(
+            'code_verifier' => $codeVerifier,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'code' => $authorizationCode,
+            'redirect_uri' => $redirectUrl,
+            'grant_type' => 'authorization_code'
+        );
+
+        $response = $this->callTokenEndpoint($params);
+
+        if ($response)
+        {
+            $this->accessToken = $response->access_token;
+            $this->refreshToken = $response->refresh_token;
+        }
+
+        return $response;
+    }
+
+    /**
+     * Get new access token from refresh token.
+     */
+    public function refreshAccessToken()
+    {
+        if (empty($this->refreshToken))
+            throw new Exception('Refresh Token is not specified!');
+        
+        if (empty($this->clientId))
+            throw new Exception('ClientID is not specified!');
+
+        if (empty($this->clientSecret))
+            throw new Exception('ClientSecret is not specified!');
+        
+        $params = array(
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret,
+            'refresh_token' => $this->refreshToken,
+            'grant_type' => 'refresh_token'
+        );
+
+        return $this->callTokenEndpoint($params);
+    }
+
+    private function callTokenEndpoint($params)
+    {
+        $ch = $this->createPostRequest($this->baseWebServiceAddress.'/auth/connect/token', http_build_query($params), 'application/x-www-form-urlencoded');
+
+        return json_decode($this->executeCurl($ch));
     }
 
     /**
@@ -92,8 +244,8 @@ class eWayConnector
      * Gets additional fields by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getAdditionalFieldsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -118,7 +270,7 @@ class eWayConnector
      * Searches additional fields
      *
      * @param $additionalField Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If additionalField is empty
      * @return Json format with found additional fields
      */
@@ -159,8 +311,8 @@ class eWayConnector
      * Gets carts by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @param $omitGoodsInCart array of additional parameters (default: null)
      * @return Json format with items selected by guids
      */
@@ -192,7 +344,7 @@ class eWayConnector
      * Searches carts
      *
      * @param $cart Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If cart is empty
      * @return Json format with found carts
      */
@@ -234,8 +386,8 @@ class eWayConnector
      * Gets calendars by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getCalendarsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -260,7 +412,7 @@ class eWayConnector
      * Searches calendars
      *
      * @param $calendar Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If calendar is empty
      * @return Json format with found calendars
      */
@@ -316,8 +468,8 @@ class eWayConnector
      * Gets companies by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getCompaniesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -342,7 +494,7 @@ class eWayConnector
      * Searches companies
      *
      * @param $company Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If company is empty
      * @return Json format with found companies
      */
@@ -398,8 +550,8 @@ class eWayConnector
      * Gets contacts by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getContactsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -424,7 +576,7 @@ class eWayConnector
      * Searches contacts
      *
      * @param $contact Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If contact is empty
      * @return Json format with found contacts
      */
@@ -480,8 +632,8 @@ class eWayConnector
      * Gets Documents by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getDocumentsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -506,7 +658,7 @@ class eWayConnector
      * Searches documents
      *
      * @param $document Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If document is empty
      * @return Json format with found documents
      */
@@ -562,8 +714,8 @@ class eWayConnector
      * Gets emails by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getEmailsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -588,7 +740,7 @@ class eWayConnector
      * Searches emails
      *
      * @param $email Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If email is empty
      * @return Json format with found email
      */
@@ -630,8 +782,8 @@ class eWayConnector
      * Gets enum types by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getEnumTypesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -656,7 +808,7 @@ class eWayConnector
      * Searches enum types
      *
      * @param $enumType Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If enumType is empty
      * @return Json format with found enum values
      */
@@ -683,8 +835,8 @@ class eWayConnector
      * Gets enum values by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getEnumValuesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -709,7 +861,7 @@ class eWayConnector
      * Searches enum values
      *
      * @param $enumValue Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If enumValue is empty
      * @return Json format with found enum values
      */
@@ -736,8 +888,8 @@ class eWayConnector
      * Gets features by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getFeaturesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -762,7 +914,7 @@ class eWayConnector
      * Searches Features
      *
      * @param $features Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If features is empty
      * @return Json format with found features
      */
@@ -789,8 +941,8 @@ class eWayConnector
      * Gets additional flows by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getFlowsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -815,7 +967,7 @@ class eWayConnector
      * Searches Flows
      *
      * @param $flow Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If flow is empty
      * @return Json format with found flows
      */
@@ -842,8 +994,8 @@ class eWayConnector
      * Gets global settings by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getGlobalSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -868,7 +1020,7 @@ class eWayConnector
      * Searches Global settings
      *
      * @param $globalSetting Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If globalSetting is empty
      * @return Json format with found global settings
      */
@@ -909,8 +1061,8 @@ class eWayConnector
      * Gets additional goods by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getGoodsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -935,7 +1087,7 @@ class eWayConnector
      * Searches goods
      *
      * @param $good Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If good is empty
      * @return Json format with found goods
      */
@@ -992,8 +1144,8 @@ class eWayConnector
      * Gets goods in cart by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getGoodsInCartByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1018,7 +1170,7 @@ class eWayConnector
      * Searches goods in cart
      *
      * @param $goodInCart Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If goodInCart is empty
      * @return Json format with found good in cart
      */
@@ -1060,8 +1212,8 @@ class eWayConnector
      * Gets additional groups by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getGroupsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1086,7 +1238,7 @@ class eWayConnector
      * Searches groups
      *
      * @param $group Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If group is empty
      * @return Json format with found groups
      */
@@ -1142,8 +1294,8 @@ class eWayConnector
      * Gets journals by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getJournalsItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1168,7 +1320,7 @@ class eWayConnector
      * Searches journals
      *
      * @param $journal Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If journal is empty
      * @return Json format with found journals
      */
@@ -1224,8 +1376,8 @@ class eWayConnector
      * Gets leads by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getLeadsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1250,7 +1402,7 @@ class eWayConnector
      * Searches leads
      *
      * @param $lead Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If lead is empty
      * @return Json format with found leads
      */
@@ -1306,8 +1458,8 @@ class eWayConnector
      * Gets marketing campaigns by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getMerketingCampaignsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1332,7 +1484,7 @@ class eWayConnector
      * Searches marketing campaigns
      *
      * @param $marketingCampaign Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If marketing campaign is empty
      * @return Json format with found marketing campaigns
      */
@@ -1388,8 +1540,8 @@ class eWayConnector
      * Gets marketing lists by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getMarketingListsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1414,7 +1566,7 @@ class eWayConnector
      * Searches marketing lists records
      *
      * @param $marketingListRecord Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If marketing list record is empty
      * @return Json format with found marketing list records
      */
@@ -1470,8 +1622,8 @@ class eWayConnector
      * Gets projects by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getProjectsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1496,7 +1648,7 @@ class eWayConnector
      * Searches projects
      *
      * @param $projects Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If project is empty
      * @return Json format with found projects
      */
@@ -1538,8 +1690,8 @@ class eWayConnector
      * Gets sale prices by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getSalePricesByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1564,7 +1716,7 @@ class eWayConnector
      * Searches sale prices
      *
      * @param $salePrice Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If salePrice is empty
      * @return Json format with found sale prices
      */
@@ -1606,8 +1758,8 @@ class eWayConnector
      * Gets tasks by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getTasksByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1632,23 +1784,24 @@ class eWayConnector
      * Searches tasks
      *
      * @param $task Array with specified properties for search
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If task is empty
      * @return Json format with found tasks
      */
-    public function searchTasks($task)
+    public function searchTasks($task, $includeRelations = false)
     {
         if (empty($task))
             throw new InvalidArgumentException('Empty task');
 
         // Any search request is defined as POST
-        return $this->postRequest('SearchTasks', $task);
+        return $this->postRequest('SearchTasks', $task, $includeRelations);
     }
 
     /**
      * Saves task
      *
      * @param $task Task array data to save
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If task is empty
      * @return Json format with successful response
      */
@@ -1674,8 +1827,8 @@ class eWayConnector
      * Gets users by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getUsersByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1700,7 +1853,7 @@ class eWayConnector
      * Searches users
      *
      * @param $user Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If user is empty
      * @return Json format with found users
      */
@@ -1712,7 +1865,6 @@ class eWayConnector
         // Any search request is defined as POST
         return $this->postRequest('SearchUsers', $user, $includeRelations);
     }
-
 
     /**
      * Gets all work flow models
@@ -1728,8 +1880,8 @@ class eWayConnector
      * Gets workflow models by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getWorkflowModelsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1754,7 +1906,7 @@ class eWayConnector
      * Searches work flow models
      *
      * @param $workFlowModel Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If workFlowModel is empty
      * @return Json format with found work flow models
      */
@@ -1795,8 +1947,8 @@ class eWayConnector
      * Gets work reports by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getWorkReportsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1821,7 +1973,7 @@ class eWayConnector
      * Searches work reports
      *
      * @param $workReport Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @throws Exception If workReport is empty
      * @return Json format with found work reports
      */
@@ -1877,8 +2029,8 @@ class eWayConnector
      * Gets user settings by item guids
      *
      * @param $guids guids of items to get
-     * @param $includeFoeignKeys indicator wether you want to include foreign keys (default: true)
-     * @param $includeRelations indicator wether you want to include relations (default: false)
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
      * @return Json format with items selected by guids
      */
     public function getUserSettingsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
@@ -1903,7 +2055,7 @@ class eWayConnector
      * Searches user settings
      *
      * @param $workReport Array with specified properties for search
-     * @param $includeRelations indicator wether you want to include relations (default: false) 
+     * @param $includeRelations indicator whether you want to include relations (default: false) 
      * @throws Exception If userSettings is empty
      * @return Json format with found user settings
      */
@@ -2044,6 +2196,23 @@ class eWayConnector
         return date('Y-m-d H:i:s', $date);
     }
 
+    /**
+     * Ends active session.
+     */
+    public function logOut()
+    {
+        if (empty($this->sessionId))
+            return;
+        
+        $logout = array(
+            'sessionId' => $this->sessionId
+        );
+
+        $jsonObject = json_encode($logout, true);
+        $ch = $this->createPostRequest($this->createWebServiceUrl('LogOut'), $jsonObject);
+        $this->executeCurl($ch);
+    }
+
     public function getUserGuid()
     {
         if ($this->userGuid == NULL)
@@ -2052,13 +2221,21 @@ class eWayConnector
         }
         return $this->userGuid;
     }
+
+    private function getClientIp()
+    {
+        return $_SERVER['HTTP_CLIENT_IP'] 
+            ? : ($_SERVER['HTTP_X_FORWARDED_FOR'] 
+            ? : $_SERVER['REMOTE_ADDR']);
+    }
     
-    private function reLogin()
+    private function reLogin($repeatOnBadAccessToken = true)
     {
         $login = array(
             'userName' => $this->username,
             'passwordHash' => $this->passwordHash,
-            'appVersion' => $this->appVersion
+            'appVersion' => $this->appVersion,
+            'clientMachineIdentifier' => $this->getClientIp()
         );
 
         $jsonObject = json_encode($login, true);
@@ -2070,6 +2247,11 @@ class eWayConnector
         $this->wcfVersion = $jsonResult->WcfVersion;
         $this->userGuid = $jsonResult->UserItemGuid;
         
+        if ($returnCode == 'rcBadAccessToken' && $repeatOnBadAccessToken == true && $this->doRefreshAccessToken()) {
+            $this->reLogin(false);
+            return;
+        }
+
         // Check if web service has returned success.
         if ($returnCode != 'rcSuccess') {
             throw new LoginException($jsonResult);
@@ -2174,7 +2356,7 @@ class eWayConnector
 
         // Also Check if return code is OK.
         $curlReturnInfo = curl_getinfo($ch);
-        if ($curlReturnInfo['http_code'] != 200)
+        if ($curlReturnInfo['http_code'] != 200 && $curlReturnInfo['http_code'] != 401)
         {
             if (!$this->oldWebServiceAddressUsed && $curlReturnInfo['http_code'] == 404)
             {
@@ -2218,12 +2400,12 @@ class eWayConnector
         $returnCode = $jsonResult->ReturnCode;
         
         // Session timed out, re-log again
-        if ($returnCode == 'rcBadSession') {
+        if ($returnCode == 'rcBadSession' || ($returnCode == 'rcBadAccessToken' && $this->doRefreshAccessToken())) {
             $this->reLogin();
             $completeTransmitObject['sessionId'] = $this->sessionId;
         }
         
-        if ($returnCode == 'rcBadSession' || $returnCode == 'rcDatabaseTimeout') {
+        if ($returnCode == 'rcBadSession' || $returnCode == 'rcBadAccessToken' || $returnCode == 'rcDatabaseTimeout') {
             // For rcBadSession and rcDatabaseTimeout types of return code we'll try to perform action once again
             if ($repeatSession == true) {
                 return $this->doRequest($completeTransmitObject, $action, $version, false);
@@ -2235,6 +2417,20 @@ class eWayConnector
         }
         
         return $jsonResult;
+    }
+
+    private function doRefreshAccessToken()
+    {
+        $refreshTokenResponse = $this->refreshAccessToken();
+
+        if ($refreshTokenResponse && $refreshTokenResponse->access_token)
+        {
+            $this->accessToken = $refreshTokenResponse->access_token;
+            
+            return true;
+        }
+
+        return false;
     }
     
     private function upload($itemGuid, $filePath, $repeatSession = true)
@@ -2306,16 +2502,16 @@ class eWayConnector
 		fclose($targetFileHandle);
 	}
     
-    private function createPostRequest($url, $jsonObject)
+    private function createPostRequest($url, $data, $contentType = 'application/json')
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Accept: application/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$contentType, 'Accept: application/json', 'Authorization: Bearer '.$this->accessToken));
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonObject);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         
         return $ch;
     }
@@ -2374,7 +2570,7 @@ class LoginException extends ResponseException
 {
     public function __construct($object, $message ='', $code = 0, Exception $previous = null)
     {
-        parent::__construct($object, "LogIn", $code, $previous);
+        parent::__construct($object, $object->Description, $code, $previous);
     }
 }
 ?>
