@@ -820,6 +820,21 @@ class eWayConnector
         // Any search request is defined as POST
         return $this->postRequest('SearchEnumTypes', $enumType, $includeRelations);
     }
+
+    /**
+     * Saves enum type
+     *
+     * @param $enumType Enum type array data to save
+     * @throws Exception If enum type is empty
+     * @return Json format with successful response
+     */
+    public function saveEnumType($enumType)
+    {
+        if (empty($enumType))
+            throw new InvalidArgumentException('Empty enum type');
+
+        return $this->postRequest('SaveEnumType', $enumType);
+    }
     
     /**
      * Gets all enum values
