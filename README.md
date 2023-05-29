@@ -86,3 +86,6 @@ If you want to make sure no merge is done or you just want to really take the ve
 
 ## Folder names
 To ease understanding folder names, look [here](FolderNames.md).
+
+## Sessions
+This php class handles eWay-CRM API sessions automatically. It opens an API session once the first call is done. Use one instance of this class for all the calls you are going to make in order to not open a new session for each call. If you still get the error `There is too many sessions`, make sure you close the API session with `logOut()` method at the end of the class instance lifetime.
