@@ -4,7 +4,7 @@
  * eWayConnector class helps connect and manage operation for web service.
  *
  * @copyright 2014-2022 eWay System s.r.o.
- * @version 2.4
+ * @version 2.5
  */
 class eWayConnector
 {
