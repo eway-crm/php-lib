@@ -1865,6 +1865,88 @@ class eWayConnector
     }
 
     /**
+     * Deletes vacation
+     *
+     * @param $guid guid of item to be deleted
+     * @return Json format with deletion status
+     */
+    public function deleteVacation($guid)
+    {
+        if (empty($guid))
+            throw new InvalidArgumentException('Parameter $guid not specified');
+        
+        return $this->deleteItem('DeleteVacation', $guid);
+    }
+    
+    /**
+     * Gets all vacations
+     *
+     * @return Json format with all vacations
+     */
+    public function getVacations()
+    {
+        return $this->postRequest('GetVacations');
+    }
+    
+    /**
+     * Gets vacations by item guids
+     *
+     * @param $guids guids of items to get
+     * @param $includeFoeignKeys indicator whether you want to include foreign keys (default: true)
+     * @param $includeRelations indicator whether you want to include relations (default: false)
+     * @return Json format with items selected by guids
+     */
+    public function getVacationsByItemGuids($guids, $includeForeignKeys = true, $includeRelations = false)
+    {
+        if (empty($guids))
+            throw new InvalidArgumentException('Parameter $guids not specified');
+        
+        return $this->getItemsByItemGuids('GetVacationsByItemGuids', $guids, $includeForeignKeys, $includeRelations);
+    }
+    
+    /**
+     * Gets vacations identifiers
+     *
+     * @return Json format with all sale vacations identifiers
+     */
+    public function getVacationsIdentifiers()
+    {
+        return $this->getItemIdentifiers('GetVacationsIdentifiers');
+    }
+
+    /**
+     * Searches vacations
+     *
+     * @param $vacation Array with specified properties for search
+     * @param $includeRelations indicator whether you want to include relations (default: false)
+     * @throws Exception If vacation is empty
+     * @return Json format with found vacations
+     */
+    public function searchVacations($vacation, $includeRelations = false)
+    {
+        if (empty($vacation))
+            throw new InvalidArgumentException('Empty vacation');
+
+        // Any search request is defined as POST
+        return $this->postRequest('SearchVacations', $vacation, $includeRelations);
+    }
+
+    /**
+     * Saves work report
+     *
+     * @param $vacation work report array data to save
+     * @throws Exception If vacation is empty
+     * @return Json format with successful response
+     */
+    public function saveVacation($vacation)
+    {
+        if (empty($vacation))
+            throw new InvalidArgumentException('Empty vacation');
+
+        return $this->postRequest('SaveVacation', $vacation);
+    }
+
+    /**
      * Searches users
      *
      * @param $user Array with specified properties for search
