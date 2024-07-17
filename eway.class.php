@@ -4,7 +4,7 @@
  * eWayConnector class helps connect and manage operation for web service.
  *
  * @copyright 2014-2022 eWay System s.r.o.
- * @version 2.5
+ * @version 2.5.1
  */
 class eWayConnector
 {
@@ -41,7 +41,7 @@ class eWayConnector
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.3',
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.5.1',
         $clientId = null, $clientSecret = null, $refreshToken = null)
     {
         if (empty($webServiceAddress))
@@ -2464,7 +2464,7 @@ class eWayConnector
                 return $this->executeCurl($ch);
             }
             
-            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
+            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code'].', response: '.$result);
         }
 		
 		curl_close($ch); 
@@ -2584,15 +2584,15 @@ class eWayConnector
 		$result = curl_exec($ch);
         
         // Check if request has been executed successfully.
-        if ($result === false) {            
+        if ($result === false) {
             throw new Exception('Error occurred while communicating with service: '.curl_error($ch));
         }
 
         // Also Check if return code is OK.
         $curlReturnInfo = curl_getinfo($ch);
         if ($curlReturnInfo['http_code'] != 200)
-        {            
-            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code']);
+        {
+            throw new Exception('Error occurred while communicating with service with http code: '.$curlReturnInfo['http_code'].', response: '.$result);
         }
 		
 		curl_close($ch);
