@@ -22,6 +22,8 @@
     // Save the task
     $task_result = $connector->saveTask($task);
     
+    $GUID = trim(com_create_guid(), '{}');
+    
     // Save binary of the Document
     $connector->saveBinaryAttachment('Picture.PNG', $GUID);
     
