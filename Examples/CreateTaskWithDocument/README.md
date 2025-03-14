@@ -38,7 +38,9 @@ $document = array(
 			'FileAs' => 'Picture',
 			'DocName' => 'Picture',
 			'DocSize' => filesize('Picture.PNG'),
-			'Extension' => 'PNG'
+			'Extension' => 'PNG',
+			'CreationTime' => '2024-05-12T14:08:23',
+			'LastWriteTime' => '2025-01-31T23:12:01'
                   );
 
 // Save the Document
