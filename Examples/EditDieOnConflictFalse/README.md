@@ -6,7 +6,7 @@ We want to edit company that already exists and we don't care abou the dieOnItem
 ```php
 
 // Connect to API
-$connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
+$connector = new eWayConnector('https://free.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
 
 // Lets create new company to have something to edit
 $company = array(

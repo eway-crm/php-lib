@@ -20,7 +20,7 @@
                 </style>';
     
     // Create connector
-    $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
+    $connector = new eWayConnector('https://free.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
 
     // Get companies
     $output = $connector->getCompanies();

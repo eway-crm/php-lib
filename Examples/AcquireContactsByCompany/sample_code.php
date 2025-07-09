@@ -23,7 +23,7 @@
     $company_name = 'Chemel & Peterson LLC';
     
     // Connect to API
-    $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
+    $connector = new eWayConnector('https://free.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
     
     // Get data of the company ("true" parameter determines wether we get relation data of searched company)
     $object = $connector->searchCompanies(array('FileAs' => $company_name), true);

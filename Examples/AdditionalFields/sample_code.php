@@ -4,7 +4,7 @@
     require_once ('eway.class.php');
     
     // Connect to API
-    $connector = new eWayConnector('https://trial.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
+    $connector = new eWayConnector('https://free.eway-crm.com/31994', 'api', 'ApiTrial@eWay-CRM');
 
     //Prepare values for multiple select
     $enumValues = loadEnumValues('AF_29', $connector)->Data;
