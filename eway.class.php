@@ -4,7 +4,7 @@
  * eWayConnector class helps connect and manage operation for web service.
  *
  * @copyright 2014-2022 eWay System s.r.o.
- * @version 2.5.1
+ * @version 2.5.2
  */
 class eWayConnector
 {
@@ -41,7 +41,7 @@ class eWayConnector
      * @throws Exception If username is empty
      * @throws Exception If password is empty
      */
-    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.5.1',
+    function __construct($webServiceAddress, $username, $password, $passwordAlreadyEncrypted = false, $dieOnItemConflict = false, $throwExceptionOnFail = true, $appVersion = 'PHP2.5.2',
         $clientId = null, $clientSecret = null, $refreshToken = null)
     {
         if (empty($webServiceAddress))
@@ -2321,9 +2321,15 @@ class eWayConnector
 
     private function getClientIp()
     {
-        return $_SERVER['HTTP_CLIENT_IP'] 
-            ? : ($_SERVER['HTTP_X_FORWARDED_FOR'] 
-            ? : $_SERVER['REMOTE_ADDR']);
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            return $_SERVER['HTTP_CLIENT_IP'];
+        }
+
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+
+        return $_SERVER['REMOTE_ADDR'];
     }
     
     private function reLogin($repeatOnBadAccessToken = true)
